@@ -289,6 +289,16 @@ export function resolveGatewayAuth(params: {
 }
 
 export function assertGatewayAuthConfigured(auth: ResolvedGatewayAuth): void {
+  // OpenPaw Security: Warn when running without authentication
+  if (auth.mode === "none") {
+    console.warn(
+      "⚠️  SECURITY WARNING: Gateway running with auth mode 'none' - all connections allowed without authentication!",
+    );
+    console.warn(
+      "   For production use, set gateway.auth.mode to 'token' or 'password' in openpaw.json",
+    );
+  }
+
   if (auth.mode === "token" && !auth.token) {
     if (auth.allowTailscale) {
       return;
