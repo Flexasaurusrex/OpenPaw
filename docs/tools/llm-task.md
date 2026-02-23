@@ -11,8 +11,8 @@ title: "LLM Task"
 `llm-task` is an **optional plugin tool** that runs a JSON-only LLM task and
 returns structured output (optionally validated against JSON Schema).
 
-This is ideal for workflow engines like Lobster: you can add a single LLM step
-without writing custom OpenClaw code for each workflow.
+This is ideal for workflow engines like Cat: you can add a single LLM step
+without writing custom OpenPaw code for each workflow.
 
 ## Enable the plugin
 
@@ -85,10 +85,10 @@ outside the list is rejected.
 Returns `details.json` containing the parsed JSON (and validates against
 `schema` when provided).
 
-## Example: Lobster workflow step
+## Example: Cat workflow step
 
-```lobster
-openclaw.invoke --tool llm-task --action json --args-json '{
+```cat
+openpaw.invoke --tool llm-task --action json --args-json '{
   "prompt": "Given the input email, return intent and draft.",
   "input": {
     "subject": "Hello",

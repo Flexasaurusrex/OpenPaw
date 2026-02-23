@@ -49,14 +49,14 @@ async function expectBedrockAuthSource(params: {
 
 describe("getApiKeyForModel", () => {
   it("migrates legacy oauth.json into auth-profiles.json", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-oauth-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-oauth-"));
 
     try {
       const agentDir = path.join(tempDir, "agent");
       await withEnvAsync(
         {
-          OPENCLAW_STATE_DIR: tempDir,
-          OPENCLAW_AGENT_DIR: agentDir,
+          OPENPAW_STATE_DIR: tempDir,
+          OPENPAW_AGENT_DIR: agentDir,
           PI_CODING_AGENT_DIR: agentDir,
         },
         async () => {
@@ -74,7 +74,7 @@ describe("getApiKeyForModel", () => {
             api: "openai-codex-responses",
           } as Model<Api>;
 
-          const store = ensureAuthProfileStore(process.env.OPENCLAW_AGENT_DIR, {
+          const store = ensureAuthProfileStore(process.env.OPENPAW_AGENT_DIR, {
             allowKeychainPrompt: false,
           });
           const apiKey = await getApiKeyForModel({
@@ -90,7 +90,7 @@ describe("getApiKeyForModel", () => {
               },
             },
             store,
-            agentDir: process.env.OPENCLAW_AGENT_DIR,
+            agentDir: process.env.OPENPAW_AGENT_DIR,
           });
           expect(apiKey.apiKey).toBe(oauthFixture.access);
 
@@ -115,15 +115,15 @@ describe("getApiKeyForModel", () => {
   });
 
   it("suggests openai-codex when only Codex OAuth is configured", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-auth-"));
 
     try {
       const agentDir = path.join(tempDir, "agent");
       await withEnvAsync(
         {
           OPENAI_API_KEY: undefined,
-          OPENCLAW_STATE_DIR: tempDir,
-          OPENCLAW_AGENT_DIR: agentDir,
+          OPENPAW_STATE_DIR: tempDir,
+          OPENPAW_AGENT_DIR: agentDir,
           PI_CODING_AGENT_DIR: agentDir,
         },
         async () => {

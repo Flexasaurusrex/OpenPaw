@@ -1,4 +1,4 @@
-package ai.openclaw.android.gateway
+package ai.openpaw.android.gateway
 
 import android.content.Context
 import android.util.Base64
@@ -21,7 +21,7 @@ data class DeviceIdentity(
 
 class DeviceIdentityStore(context: Context) {
   private val json = Json { ignoreUnknownKeys = true }
-  private val identityFile = File(context.filesDir, "openclaw/identity/device.json")
+  private val identityFile = File(context.filesDir, "openpaw/identity/device.json")
 
   @Synchronized
   fun loadOrCreate(): DeviceIdentity {

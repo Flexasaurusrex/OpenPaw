@@ -1,6 +1,6 @@
-import OpenClawProtocol
+import OpenPawProtocol
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite(.serialized)
 @MainActor
@@ -12,7 +12,7 @@ struct SkillsSettingsSmokeTests {
             SkillStatus(
                 name: "Needs Setup",
                 description: "Missing bins and env",
-                source: "openclaw-managed",
+                source: "openpaw-managed",
                 filePath: "/tmp/skills/needs-setup",
                 baseDir: "/tmp/skills",
                 skillKey: "needs-setup",
@@ -39,7 +39,7 @@ struct SkillsSettingsSmokeTests {
             SkillStatus(
                 name: "Ready Skill",
                 description: "All set",
-                source: "openclaw-bundled",
+                source: "openpaw-bundled",
                 filePath: "/tmp/skills/ready",
                 baseDir: "/tmp/skills",
                 skillKey: "ready",
@@ -59,7 +59,7 @@ struct SkillsSettingsSmokeTests {
             SkillStatus(
                 name: "Disabled Skill",
                 description: "Disabled in config",
-                source: "openclaw-extra",
+                source: "openpaw-extra",
                 filePath: "/tmp/skills/disabled",
                 baseDir: "/tmp/skills",
                 skillKey: "disabled",
@@ -90,7 +90,7 @@ struct SkillsSettingsSmokeTests {
             SkillStatus(
                 name: "Local Skill",
                 description: "Local ready",
-                source: "openclaw-workspace",
+                source: "openpaw-workspace",
                 filePath: "/tmp/skills/local",
                 baseDir: "/tmp/skills",
                 skillKey: "local",

@@ -195,7 +195,7 @@ function onRelayClosed(reason) {
       setBadge(tabId, 'connecting')
       void chrome.action.setTitle({
         tabId,
-        title: 'OpenClaw Browser Relay: relay reconnecting…',
+        title: 'OpenPaw Browser Relay: relay reconnecting…',
       })
     }
   }
@@ -257,7 +257,7 @@ async function reannounceAttachedTabs() {
       setBadge(tabId, 'off')
       void chrome.action.setTitle({
         tabId,
-        title: 'OpenClaw Browser Relay (click to attach/detach)',
+        title: 'OpenPaw Browser Relay (click to attach/detach)',
       })
       continue
     }
@@ -284,7 +284,7 @@ async function reannounceAttachedTabs() {
       setBadge(tabId, 'on')
       void chrome.action.setTitle({
         tabId,
-        title: 'OpenClaw Browser Relay: attached (click to detach)',
+        title: 'OpenPaw Browser Relay: attached (click to detach)',
       })
     } catch {
       setBadge(tabId, 'on')
@@ -406,7 +406,7 @@ async function attachTab(tabId, opts = {}) {
   tabBySession.set(sessionId, tabId)
   void chrome.action.setTitle({
     tabId,
-    title: 'OpenClaw Browser Relay: attached (click to detach)',
+    title: 'OpenPaw Browser Relay: attached (click to detach)',
   })
 
   if (!opts.skipAttachedEvent) {
@@ -477,7 +477,7 @@ async function detachTab(tabId, reason) {
   setBadge(tabId, 'off')
   void chrome.action.setTitle({
     tabId,
-    title: 'OpenClaw Browser Relay (click to attach/detach)',
+    title: 'OpenPaw Browser Relay (click to attach/detach)',
   })
 
   await persistState()
@@ -506,7 +506,7 @@ async function connectOrToggleForActiveTab() {
     setBadge(tabId, 'connecting')
     void chrome.action.setTitle({
       tabId,
-      title: 'OpenClaw Browser Relay: connecting to local relay…',
+      title: 'OpenPaw Browser Relay: connecting to local relay…',
     })
 
     try {
@@ -517,7 +517,7 @@ async function connectOrToggleForActiveTab() {
       setBadge(tabId, 'error')
       void chrome.action.setTitle({
         tabId,
-        title: 'OpenClaw Browser Relay: relay not running (open options for setup)',
+        title: 'OpenPaw Browser Relay: relay not running (open options for setup)',
       })
       void maybeOpenHelpOnce()
       const message = err instanceof Error ? err.message : String(err)
@@ -645,7 +645,7 @@ function onDebuggerDetach(source, reason) {
     setBadge(tabId, 'connecting')
     void chrome.action.setTitle({
       tabId,
-      title: 'OpenClaw Browser Relay: re-attaching after navigation…',
+      title: 'OpenPaw Browser Relay: re-attaching after navigation…',
     })
 
     setTimeout(async () => {

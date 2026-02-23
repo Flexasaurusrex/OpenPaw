@@ -16,7 +16,7 @@ x-i18n:
 
 # 会话管理与压缩（深入了解）
 
-本文档解释 OpenClaw 如何端到端管理会话：
+本文档解释 OpenPaw 如何端到端管理会话：
 
 - **会话路由**（入站消息如何映射到 `sessionKey`）
 - **会话存储**（`sessions.json`）及其跟踪的内容
@@ -37,7 +37,7 @@ x-i18n:
 
 ## 事实来源：Gateway 网关
 
-OpenClaw 围绕一个拥有会话状态的单一 **Gateway 网关进程**设计。
+OpenPaw 围绕一个拥有会话状态的单一 **Gateway 网关进程**设计。
 
 - UI（macOS 应用、web 控制 UI、TUI）应该向 Gateway 网关查询会话列表和 token 计数。
 - 在远程模式下，会话文件在远程主机上；"检查你的本地 Mac 文件"不会反映 Gateway 网关正在使用的内容。
@@ -46,7 +46,7 @@ OpenClaw 围绕一个拥有会话状态的单一 **Gateway 网关进程**设计�
 
 ## 两个持久化层
 
-OpenClaw 在两个层中持久化会话：
+OpenPaw 在两个层中持久化会话：
 
 1. **会话存储（`sessions.json`）**
    - 键/值映射：`sessionKey -> SessionEntry`
@@ -64,11 +64,11 @@ OpenClaw 在两个层中持久化会话：
 
 在 Gateway 网关主机上，每个智能体：
 
-- 存储：`~/.openclaw/agents/<agentId>/sessions/sessions.json`
-- 记录：`~/.openclaw/agents/<agentId>/sessions/<sessionId>.jsonl`
+- 存储：`~/.openpaw/agents/<agentId>/sessions/sessions.json`
+- 记录：`~/.openpaw/agents/<agentId>/sessions/<sessionId>.jsonl`
   - Telegram 话题会话：`.../<sessionId>-topic-<threadId>.jsonl`
 
-OpenClaw 通过 `src/config/sessions.ts` 解析这些位置。
+OpenPaw 通过 `src/config/sessions.ts` 解析这些位置。
 
 ---
 
@@ -145,7 +145,7 @@ OpenClaw 通过 `src/config/sessions.ts` 解析这些位置。
 - `compaction`：持久化的压缩摘要，带有 `firstKeptEntryId` 和 `tokensBefore`
 - `branch_summary`：导航树分支时的持久化摘要
 
-OpenClaw 有意**不**"修复"记录；Gateway 网关使用 `SessionManager` 来读/写它们。
+OpenPaw 有意**不**"修复"记录；Gateway 网关使用 `SessionManager` 来读/写它们。
 
 ---
 
@@ -192,7 +192,7 @@ OpenClaw 有意**不**"修复"记录；Gateway 网关使用 `SessionManager` 来
 - `contextWindow` 是模型的上下文窗口
 - `reserveTokens` 是为提示 + 下一个模型输出保留的空间
 
-这些是 Pi 运行时语义（OpenClaw 消费事件，但 Pi 决定何时压缩）。
+这些是 Pi 运行时语义（OpenPaw 消费事件，但 Pi 决定何时压缩）。
 
 ---
 
@@ -210,12 +210,12 @@ Pi 的压缩设置位于 Pi 设置中：
 }
 ```
 
-OpenClaw 还为嵌入式运行强制执行安全下限：
+OpenPaw 还为嵌入式运行强制执行安全下限：
 
-- 如果 `compaction.reserveTokens < reserveTokensFloor`，OpenClaw 会提升它。
+- 如果 `compaction.reserveTokens < reserveTokensFloor`，OpenPaw 会提升它。
 - 默认下限是 `20000` 个 token。
 - 设置 `agents.defaults.compaction.reserveTokensFloor: 0` 以禁用下限。
-- 如果它已经更高，OpenClaw 不会改变它。
+- 如果它已经更高，OpenPaw 不会改变它。
 
 原因：为压缩变得不可避免之前的多回合"内务处理"（如记忆写入）留出足够的空间。
 
@@ -228,22 +228,22 @@ OpenClaw 还为嵌入式运行强制执行安全下限：
 你可以通过以下方式观察压缩和会话状态：
 
 - `/status`（在任何聊天会话中）
-- `openclaw status`（CLI）
-- `openclaw sessions` / `sessions --json`
+- `openpaw status`（CLI）
+- `openpaw sessions` / `sessions --json`
 - 详细模式：`🧹 Auto-compaction complete` + 压缩计数
 
 ---
 
 ## 静默内务处理（`NO_REPLY`）
 
-OpenClaw 支持用于后台任务的"静默"回合，用户不应该看到中间输出。
+OpenPaw 支持用于后台任务的"静默"回合，用户不应该看到中间输出。
 
 约定：
 
 - 助手以 `NO_REPLY` 开始其输出，表示"不要向用户发送回复"。
-- OpenClaw 在投递层剥离/抑制此内容。
+- OpenPaw 在投递层剥离/抑制此内容。
 
-从 `2026.1.10` 开始，当部分块以 `NO_REPLY` 开头时，OpenClaw 还会抑制**草稿/打字流式输出**，因此静默操作不会在回合中途泄漏部分输出。
+从 `2026.1.10` 开始，当部分块以 `NO_REPLY` 开头时，OpenPaw 还会抑制**草稿/打字流式输出**，因此静默操作不会在回合中途泄漏部分输出。
 
 ---
 
@@ -251,7 +251,7 @@ OpenClaw 支持用于后台任务的"静默"回合，用户不应该看到中间
 
 目标：在自动压缩发生之前，运行一个静默的智能体回合，将持久状态写入磁盘（例如智能体工作空间中的 `memory/YYYY-MM-DD.md`），这样压缩就不会擦除关键上下文。
 
-OpenClaw 使用**预阈值刷新**方法：
+OpenPaw 使用**预阈值刷新**方法：
 
 1. 监控会话上下文使用情况。
 2. 当它越过"软阈值"（低于 Pi 的压缩阈值）时，向智能体运行一个静默的"现在写入记忆"指令。
@@ -272,14 +272,14 @@ OpenClaw 使用**预阈值刷新**方法：
 - 当会话工作空间是只读时（`workspaceAccess: "ro"` 或 `"none"`），刷新会被跳过。
 - 参见[记忆](/concepts/memory)了解工作空间文件布局和写入模式。
 
-Pi 还在扩展 API 中公开了 `session_before_compact` 钩子，但 OpenClaw 的刷新逻辑目前位于 Gateway 网关端。
+Pi 还在扩展 API 中公开了 `session_before_compact` 钩子，但 OpenPaw 的刷新逻辑目前位于 Gateway 网关端。
 
 ---
 
 ## 故障排除检查清单
 
 - 会话键错误？从 [/concepts/session](/concepts/session) 开始，并在 `/status` 中确认 `sessionKey`。
-- 存储 vs 记录不匹配？从 `openclaw status` 确认 Gateway 网关主机和存储路径。
+- 存储 vs 记录不匹配？从 `openpaw status` 确认 Gateway 网关主机和存储路径。
 - 压缩过于频繁？检查：
   - 模型上下文窗口（太小）
   - 压缩设置（`reserveTokens` 对于模型窗口来说太高会导致更早的压缩）

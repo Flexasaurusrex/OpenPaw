@@ -11,14 +11,14 @@ const ciWorkers = isWindows ? 2 : 3;
 
 export default defineConfig({
   resolve: {
-    // Keep this ordered: the base `openclaw/plugin-sdk` alias is a prefix match.
+    // Keep this ordered: the base `openpaw/plugin-sdk` alias is a prefix match.
     alias: [
       {
-        find: "openclaw/plugin-sdk/account-id",
+        find: "openpaw/plugin-sdk/account-id",
         replacement: path.join(repoRoot, "src", "plugin-sdk", "account-id.ts"),
       },
       {
-        find: "openclaw/plugin-sdk",
+        find: "openpaw/plugin-sdk",
         replacement: path.join(repoRoot, "src", "plugin-sdk", "index.ts"),
       },
     ],
@@ -47,7 +47,7 @@ export default defineConfig({
       "apps/macos/.build/**",
       "**/node_modules/**",
       "**/vendor/**",
-      "dist/OpenClaw.app/**",
+      "dist/OpenPaw.app/**",
       "**/*.live.test.ts",
       "**/*.e2e.test.ts",
     ],

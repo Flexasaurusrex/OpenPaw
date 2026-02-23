@@ -1,5 +1,5 @@
 import os from "node:os";
-import type { OpenClawConfig } from "../config/types.js";
+import type { OpenPawConfig } from "../config/types.js";
 import { isCarrierGradeNatIpv4Address, isRfc1918Ipv4Address } from "../shared/net/ip.js";
 
 const DEFAULT_GATEWAY_PORT = 18789;
@@ -87,8 +87,8 @@ function normalizeUrl(raw: string, schemeFallback: "ws" | "wss"): string | null 
   return `${schemeFallback}://${withoutPath}`;
 }
 
-function resolveGatewayPort(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): number {
-  const envRaw = env.OPENCLAW_GATEWAY_PORT?.trim() || env.CLAWDBOT_GATEWAY_PORT?.trim();
+function resolveGatewayPort(cfg: OpenPawConfig, env: NodeJS.ProcessEnv): number {
+  const envRaw = env.OPENPAW_GATEWAY_PORT?.trim() || env.PAWBOT_GATEWAY_PORT?.trim();
   if (envRaw) {
     const parsed = Number.parseInt(envRaw, 10);
     if (Number.isFinite(parsed) && parsed > 0) {
@@ -103,7 +103,7 @@ function resolveGatewayPort(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): number
 }
 
 function resolveScheme(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   opts?: {
     forceSecure?: boolean;
   },
@@ -213,15 +213,15 @@ async function resolveTailnetHost(
   return null;
 }
 
-function resolveAuth(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): ResolveAuthResult {
+function resolveAuth(cfg: OpenPawConfig, env: NodeJS.ProcessEnv): ResolveAuthResult {
   const mode = cfg.gateway?.auth?.mode;
   const token =
-    env.OPENCLAW_GATEWAY_TOKEN?.trim() ||
-    env.CLAWDBOT_GATEWAY_TOKEN?.trim() ||
+    env.OPENPAW_GATEWAY_TOKEN?.trim() ||
+    env.PAWBOT_GATEWAY_TOKEN?.trim() ||
     cfg.gateway?.auth?.token?.trim();
   const password =
-    env.OPENCLAW_GATEWAY_PASSWORD?.trim() ||
-    env.CLAWDBOT_GATEWAY_PASSWORD?.trim() ||
+    env.OPENPAW_GATEWAY_PASSWORD?.trim() ||
+    env.PAWBOT_GATEWAY_PASSWORD?.trim() ||
     cfg.gateway?.auth?.password?.trim();
 
   if (mode === "password") {
@@ -246,7 +246,7 @@ function resolveAuth(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): ResolveAuthRe
 }
 
 async function resolveGatewayUrl(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   opts: {
     env: NodeJS.ProcessEnv;
     publicUrl?: string;
@@ -327,7 +327,7 @@ export function encodePairingSetupCode(payload: PairingSetupPayload): string {
 }
 
 export async function resolvePairingSetupFromConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   options: ResolvePairingSetupOptions = {},
 ): Promise<PairingSetupResolution> {
   const env = options.env ?? process.env;

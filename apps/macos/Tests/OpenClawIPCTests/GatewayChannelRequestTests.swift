@@ -1,8 +1,8 @@
-import OpenClawKit
+import OpenPawKit
 import Foundation
 import os
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite struct GatewayChannelRequestTests {
     private final class FakeWebSocketTask: WebSocketTasking, @unchecked Sendable {

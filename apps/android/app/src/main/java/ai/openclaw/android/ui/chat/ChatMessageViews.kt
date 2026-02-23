@@ -1,4 +1,4 @@
-package ai.openclaw.android.ui.chat
+package ai.openpaw.android.ui.chat
 
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -31,10 +31,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
-import ai.openclaw.android.chat.ChatMessage
-import ai.openclaw.android.chat.ChatMessageContent
-import ai.openclaw.android.chat.ChatPendingToolCall
-import ai.openclaw.android.tools.ToolDisplayRegistry
+import ai.openpaw.android.chat.ChatMessage
+import ai.openpaw.android.chat.ChatMessageContent
+import ai.openpaw.android.chat.ChatPendingToolCall
+import ai.openpaw.android.tools.ToolDisplayRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.compose.ui.platform.LocalContext

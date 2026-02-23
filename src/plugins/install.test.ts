@@ -25,7 +25,7 @@ let installPluginFromNpmSpec: typeof import("./install.js").installPluginFromNpm
 let runCommandWithTimeout: typeof import("../process/exec.js").runCommandWithTimeout;
 
 function makeTempDir() {
-  const dir = path.join(os.tmpdir(), `openclaw-plugin-install-${randomUUID()}`);
+  const dir = path.join(os.tmpdir(), `openpaw-plugin-install-${randomUUID()}`);
   fs.mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;
@@ -66,7 +66,7 @@ function writePluginPackage(params: {
       {
         name: params.name,
         version: params.version,
-        openclaw: { extensions: params.extensions },
+        openpaw: { extensions: params.extensions },
       },
       null,
       2,
@@ -84,7 +84,7 @@ async function createVoiceCallArchive(params: {
   const pkgDir = path.join(params.workDir, "package");
   writePluginPackage({
     pkgDir,
-    name: "@openclaw/voice-call",
+    name: "@openpaw/voice-call",
     version: params.version,
     extensions: ["./dist/index.js"],
   });
@@ -118,9 +118,9 @@ async function createZipperArchiveBuffer(): Promise<Buffer> {
   zip.file(
     "package/package.json",
     JSON.stringify({
-      name: "@openclaw/zipper",
+      name: "@openpaw/zipper",
       version: "0.0.1",
-      openclaw: { extensions: ["./dist/index.js"] },
+      openpaw: { extensions: ["./dist/index.js"] },
     }),
   );
   zip.file("package/dist/index.js", "export {};");
@@ -175,9 +175,9 @@ function setupInstallPluginFromDirFixture(params?: { devDependencies?: Record<st
   fs.writeFileSync(
     path.join(pluginDir, "package.json"),
     JSON.stringify({
-      name: "@openclaw/test-plugin",
+      name: "@openpaw/test-plugin",
       version: "0.0.1",
-      openclaw: { extensions: ["./dist/index.js"] },
+      openpaw: { extensions: ["./dist/index.js"] },
       dependencies: { "left-pad": "1.3.0" },
       ...(params?.devDependencies ? { devDependencies: params.devDependencies } : {}),
     }),
@@ -208,7 +208,7 @@ async function expectArchiveInstallReservedSegmentRejection(params: {
     packageJson: {
       name: params.packageName,
       version: "0.0.1",
-      openclaw: { extensions: ["./dist/index.js"] },
+      openpaw: { extensions: ["./dist/index.js"] },
     },
     outName: params.outName,
     withDistIndex: true,
@@ -271,7 +271,7 @@ beforeEach(() => {
 });
 
 describe("installPluginFromArchive", () => {
-  it("installs into ~/.openclaw/extensions and uses unscoped id", async () => {
+  it("installs into ~/.openpaw/extensions and uses unscoped id", async () => {
     const { stateDir, archivePath, extensionsDir } = await setupVoiceCallArchiveInstall({
       outName: "plugin.tgz",
       version: "0.0.1",
@@ -380,16 +380,16 @@ describe("installPluginFromArchive", () => {
     });
   });
 
-  it("rejects packages without openclaw.extensions", async () => {
+  it("rejects packages without openpaw.extensions", async () => {
     const result = await installArchivePackageAndReturnResult({
-      packageJson: { name: "@openclaw/nope", version: "0.0.1" },
+      packageJson: { name: "@openpaw/nope", version: "0.0.1" },
       outName: "bad.tgz",
     });
     expect(result.ok).toBe(false);
     if (result.ok) {
       return;
     }
-    expect(result.error).toContain("openclaw.extensions");
+    expect(result.error).toContain("openpaw.extensions");
   });
 
   it("warns when plugin contains dangerous code patterns", async () => {
@@ -400,7 +400,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "dangerous-plugin",
         version: "1.0.0",
-        openclaw: { extensions: ["index.js"] },
+        openpaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -423,7 +423,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-entry-plugin",
         version: "1.0.0",
-        openclaw: { extensions: [".hidden/index.js"] },
+        openpaw: { extensions: [".hidden/index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -450,7 +450,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "scan-fail-plugin",
         version: "1.0.0",
-        openclaw: { extensions: ["index.js"] },
+        openpaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};");
@@ -481,7 +481,7 @@ describe("installPluginFromDir", () => {
   it("strips workspace devDependencies before npm install", async () => {
     const { pluginDir, extensionsDir } = setupInstallPluginFromDirFixture({
       devDependencies: {
-        openclaw: "workspace:*",
+        openpaw: "workspace:*",
         vitest: "^3.0.0",
       },
     });
@@ -510,7 +510,7 @@ describe("installPluginFromDir", () => {
     ) as {
       devDependencies?: Record<string, string>;
     };
-    expect(manifest.devDependencies?.openclaw).toBeUndefined();
+    expect(manifest.devDependencies?.openpaw).toBeUndefined();
     expect(manifest.devDependencies?.vitest).toBe("^3.0.0");
   });
 });
@@ -535,8 +535,8 @@ describe("installPluginFromNpmSpec", () => {
           code: 0,
           stdout: JSON.stringify([
             {
-              id: "@openclaw/voice-call@0.0.1",
-              name: "@openclaw/voice-call",
+              id: "@openpaw/voice-call@0.0.1",
+              name: "@openpaw/voice-call",
               version: "0.0.1",
               filename: packedName,
               integrity: "sha512-plugin-test",
@@ -553,7 +553,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@openpaw/voice-call@0.0.1",
       extensionsDir,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -561,12 +561,12 @@ describe("installPluginFromNpmSpec", () => {
     if (!result.ok) {
       return;
     }
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.1");
+    expect(result.npmResolution?.resolvedSpec).toBe("@openpaw/voice-call@0.0.1");
     expect(result.npmResolution?.integrity).toBe("sha512-plugin-test");
 
     expectSingleNpmPackIgnoreScriptsCall({
       calls: run.mock.calls,
-      expectedSpec: "@openclaw/voice-call@0.0.1",
+      expectedSpec: "@openpaw/voice-call@0.0.1",
     });
 
     expect(packTmpDir).not.toBe("");
@@ -580,8 +580,8 @@ describe("installPluginFromNpmSpec", () => {
   it("aborts when integrity drift callback rejects the fetched artifact", async () => {
     const run = vi.mocked(runCommandWithTimeout);
     mockNpmPackMetadataResult(run, {
-      id: "@openclaw/voice-call@0.0.1",
-      name: "@openclaw/voice-call",
+      id: "@openpaw/voice-call@0.0.1",
+      name: "@openpaw/voice-call",
       version: "0.0.1",
       filename: "voice-call-0.0.1.tgz",
       integrity: "sha512-new",
@@ -590,7 +590,7 @@ describe("installPluginFromNpmSpec", () => {
 
     const onIntegrityDrift = vi.fn(async () => false);
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@openpaw/voice-call@0.0.1",
       expectedIntegrity: "sha512-old",
       onIntegrityDrift,
     });

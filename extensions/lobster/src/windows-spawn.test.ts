@@ -8,14 +8,14 @@ import {
   setProcessPlatform,
   snapshotPlatformPathEnv,
 } from "./test-helpers.js";
-import { resolveWindowsLobsterSpawn } from "./windows-spawn.js";
+import { resolveWindowsCatSpawn } from "./windows-spawn.js";
 
-describe("resolveWindowsLobsterSpawn", () => {
+describe("resolveWindowsCatSpawn", () => {
   let tempDir = "";
   const originalProcessState = snapshotPlatformPathEnv();
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-lobster-win-spawn-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-cat-win-spawn-"));
     setProcessPlatform("win32");
   });
 
@@ -28,66 +28,66 @@ describe("resolveWindowsLobsterSpawn", () => {
   });
 
   it("unwraps cmd shim with %dp0% token", async () => {
-    const scriptPath = path.join(tempDir, "shim-dist", "lobster-cli.cjs");
-    const shimPath = path.join(tempDir, "shim", "lobster.cmd");
+    const scriptPath = path.join(tempDir, "shim-dist", "cat-cli.cjs");
+    const shimPath = path.join(tempDir, "shim", "cat.cmd");
     await createWindowsCmdShimFixture({
       shimPath,
       scriptPath,
-      shimLine: `"%dp0%\\..\\shim-dist\\lobster-cli.cjs" %*`,
+      shimLine: `"%dp0%\\..\\shim-dist\\cat-cli.cjs" %*`,
     });
 
-    const target = resolveWindowsLobsterSpawn(shimPath, ["run", "noop"], process.env);
+    const target = resolveWindowsCatSpawn(shimPath, ["run", "noop"], process.env);
     expect(target.command).toBe(process.execPath);
     expect(target.argv).toEqual([scriptPath, "run", "noop"]);
     expect(target.windowsHide).toBe(true);
   });
 
   it("unwraps cmd shim with %~dp0% token", async () => {
-    const scriptPath = path.join(tempDir, "shim-dist", "lobster-cli.cjs");
-    const shimPath = path.join(tempDir, "shim", "lobster.cmd");
+    const scriptPath = path.join(tempDir, "shim-dist", "cat-cli.cjs");
+    const shimPath = path.join(tempDir, "shim", "cat.cmd");
     await createWindowsCmdShimFixture({
       shimPath,
       scriptPath,
-      shimLine: `"%~dp0%\\..\\shim-dist\\lobster-cli.cjs" %*`,
+      shimLine: `"%~dp0%\\..\\shim-dist\\cat-cli.cjs" %*`,
     });
 
-    const target = resolveWindowsLobsterSpawn(shimPath, ["run", "noop"], process.env);
+    const target = resolveWindowsCatSpawn(shimPath, ["run", "noop"], process.env);
     expect(target.command).toBe(process.execPath);
     expect(target.argv).toEqual([scriptPath, "run", "noop"]);
     expect(target.windowsHide).toBe(true);
   });
 
-  it("ignores node.exe shim entries and picks lobster script", async () => {
+  it("ignores node.exe shim entries and picks cat script", async () => {
     const shimDir = path.join(tempDir, "shim-with-node");
-    const scriptPath = path.join(tempDir, "shim-dist-node", "lobster-cli.cjs");
-    const shimPath = path.join(shimDir, "lobster.cmd");
+    const scriptPath = path.join(tempDir, "shim-dist-node", "cat-cli.cjs");
+    const shimPath = path.join(shimDir, "cat.cmd");
     await fs.mkdir(path.dirname(scriptPath), { recursive: true });
     await fs.mkdir(shimDir, { recursive: true });
     await fs.writeFile(path.join(shimDir, "node.exe"), "", "utf8");
     await fs.writeFile(scriptPath, "module.exports = {};\n", "utf8");
     await fs.writeFile(
       shimPath,
-      `@echo off\r\n"%~dp0%\\node.exe" "%~dp0%\\..\\shim-dist-node\\lobster-cli.cjs" %*\r\n`,
+      `@echo off\r\n"%~dp0%\\node.exe" "%~dp0%\\..\\shim-dist-node\\cat-cli.cjs" %*\r\n`,
       "utf8",
     );
 
-    const target = resolveWindowsLobsterSpawn(shimPath, ["run", "noop"], process.env);
+    const target = resolveWindowsCatSpawn(shimPath, ["run", "noop"], process.env);
     expect(target.command).toBe(process.execPath);
     expect(target.argv).toEqual([scriptPath, "run", "noop"]);
     expect(target.windowsHide).toBe(true);
   });
 
-  it("resolves lobster.cmd from PATH and unwraps npm layout shim", async () => {
+  it("resolves cat.cmd from PATH and unwraps npm layout shim", async () => {
     const binDir = path.join(tempDir, "node_modules", ".bin");
-    const packageDir = path.join(tempDir, "node_modules", "lobster");
+    const packageDir = path.join(tempDir, "node_modules", "cat");
     const scriptPath = path.join(packageDir, "dist", "cli.js");
-    const shimPath = path.join(binDir, "lobster.cmd");
+    const shimPath = path.join(binDir, "cat.cmd");
     await fs.mkdir(path.dirname(scriptPath), { recursive: true });
     await fs.mkdir(binDir, { recursive: true });
     await fs.writeFile(shimPath, "@echo off\r\n", "utf8");
     await fs.writeFile(
       path.join(packageDir, "package.json"),
-      JSON.stringify({ name: "lobster", version: "0.0.0", bin: { lobster: "dist/cli.js" } }),
+      JSON.stringify({ name: "cat", version: "0.0.0", bin: { cat: "dist/cli.js" } }),
       "utf8",
     );
     await fs.writeFile(scriptPath, "module.exports = {};\n", "utf8");
@@ -97,18 +97,18 @@ describe("resolveWindowsLobsterSpawn", () => {
       PATH: `${binDir};${process.env.PATH ?? ""}`,
       PATHEXT: ".CMD;.EXE",
     };
-    const target = resolveWindowsLobsterSpawn("lobster", ["run", "noop"], env);
+    const target = resolveWindowsCatSpawn("cat", ["run", "noop"], env);
     expect(target.command).toBe(process.execPath);
     expect(target.argv).toEqual([scriptPath, "run", "noop"]);
     expect(target.windowsHide).toBe(true);
   });
 
   it("fails fast when wrapper cannot be resolved without shell execution", async () => {
-    const badShimPath = path.join(tempDir, "bad-shim", "lobster.cmd");
+    const badShimPath = path.join(tempDir, "bad-shim", "cat.cmd");
     await fs.mkdir(path.dirname(badShimPath), { recursive: true });
     await fs.writeFile(badShimPath, "@echo off\r\nREM no entrypoint\r\n", "utf8");
 
-    expect(() => resolveWindowsLobsterSpawn(badShimPath, ["run", "noop"], process.env)).toThrow(
+    expect(() => resolveWindowsCatSpawn(badShimPath, ["run", "noop"], process.env)).toThrow(
       /without shell execution/,
     );
   });

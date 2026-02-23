@@ -50,7 +50,7 @@ async function expectResetBlockedForNonOwner(params: {
   };
   cfg.session = {
     ...cfg.session,
-    store: join(tmpdir(), `openclaw-session-test-${Date.now()}.json`),
+    store: join(tmpdir(), `openpaw-session-test-${Date.now()}.json`),
   };
   const res = await getReplyFromConfig(
     {

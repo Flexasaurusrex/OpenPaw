@@ -1,6 +1,6 @@
 import SwiftUI
 import Foundation
-import OpenClawKit
+import OpenPawKit
 import os
 import UIKit
 import BackgroundTasks
@@ -14,10 +14,10 @@ private struct PendingWatchPromptAction {
 }
 
 @MainActor
-final class OpenClawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
-    private let logger = Logger(subsystem: "ai.openclaw.ios", category: "Push")
-    private let backgroundWakeLogger = Logger(subsystem: "ai.openclaw.ios", category: "BackgroundWake")
-    private static let wakeRefreshTaskIdentifier = "ai.openclaw.ios.bgrefresh"
+final class OpenPawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
+    private let logger = Logger(subsystem: "ai.openpaw.ios", category: "Push")
+    private let backgroundWakeLogger = Logger(subsystem: "ai.openpaw.ios", category: "BackgroundWake")
+    private static let wakeRefreshTaskIdentifier = "ai.openpaw.ios.bgrefresh"
     private var backgroundWakeTask: Task<Bool, Never>?
     private var pendingAPNsDeviceToken: Data?
     private var pendingWatchPromptActions: [PendingWatchPromptAction] = []
@@ -233,22 +233,22 @@ final class OpenClawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrenc
 }
 
 enum WatchPromptNotificationBridge {
-    static let typeKey = "openclaw.type"
+    static let typeKey = "openpaw.type"
     static let typeValue = "watch.prompt"
-    static let promptIDKey = "openclaw.watch.promptId"
-    static let sessionKeyKey = "openclaw.watch.sessionKey"
-    static let actionPrimaryIDKey = "openclaw.watch.action.primary.id"
-    static let actionPrimaryLabelKey = "openclaw.watch.action.primary.label"
-    static let actionSecondaryIDKey = "openclaw.watch.action.secondary.id"
-    static let actionSecondaryLabelKey = "openclaw.watch.action.secondary.label"
-    static let actionPrimaryIdentifier = "openclaw.watch.action.primary"
-    static let actionSecondaryIdentifier = "openclaw.watch.action.secondary"
-    static let categoryPrefix = "openclaw.watch.prompt.category."
+    static let promptIDKey = "openpaw.watch.promptId"
+    static let sessionKeyKey = "openpaw.watch.sessionKey"
+    static let actionPrimaryIDKey = "openpaw.watch.action.primary.id"
+    static let actionPrimaryLabelKey = "openpaw.watch.action.primary.label"
+    static let actionSecondaryIDKey = "openpaw.watch.action.secondary.id"
+    static let actionSecondaryLabelKey = "openpaw.watch.action.secondary.label"
+    static let actionPrimaryIdentifier = "openpaw.watch.action.primary"
+    static let actionSecondaryIdentifier = "openpaw.watch.action.secondary"
+    static let categoryPrefix = "openpaw.watch.prompt.category."
 
     @MainActor
     static func scheduleMirroredWatchPromptNotificationIfNeeded(
         invokeID: String,
-        params: OpenClawWatchNotifyParams,
+        params: OpenPawWatchNotifyParams,
         sendResult: WatchNotificationSendResult) async
     {
         guard sendResult.queuedForDelivery || !sendResult.deliveredImmediately else { return }
@@ -258,11 +258,11 @@ enum WatchPromptNotificationBridge {
         guard !title.isEmpty || !body.isEmpty else { return }
         guard await self.requestNotificationAuthorizationIfNeeded() else { return }
 
-        let normalizedActions = (params.actions ?? []).compactMap { action -> OpenClawWatchAction? in
+        let normalizedActions = (params.actions ?? []).compactMap { action -> OpenPawWatchAction? in
             let id = action.id.trimmingCharacters(in: .whitespacesAndNewlines)
             let label = action.label.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !id.isEmpty, !label.isEmpty else { return nil }
-            return OpenClawWatchAction(id: id, label: label, style: action.style)
+            return OpenPawWatchAction(id: id, label: label, style: action.style)
         }
         let primaryAction = normalizedActions.first
         let secondaryAction = normalizedActions.dropFirst().first
@@ -299,7 +299,7 @@ enum WatchPromptNotificationBridge {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = title.isEmpty ? "OpenClaw" : title
+        content.title = title.isEmpty ? "OpenPaw" : title
         content.body = body
         content.sound = .default
         content.userInfo = userInfo
@@ -325,8 +325,8 @@ enum WatchPromptNotificationBridge {
     }
 
     private static func categoryActions(
-        primaryAction: OpenClawWatchAction,
-        secondaryAction: OpenClawWatchAction?) -> [UNNotificationAction]
+        primaryAction: OpenPawWatchAction,
+        secondaryAction: OpenPawWatchAction?) -> [UNNotificationAction]
     {
         var actions: [UNNotificationAction] = [
             UNNotificationAction(
@@ -448,10 +448,10 @@ extension NodeAppModel {
 }
 
 @main
-struct OpenClawApp: App {
+struct OpenPawApp: App {
     @State private var appModel: NodeAppModel
     @State private var gatewayController: GatewayConnectionController
-    @UIApplicationDelegateAdaptor(OpenClawAppDelegate.self) private var appDelegate
+    @UIApplicationDelegateAdaptor(OpenPawAppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -483,9 +483,9 @@ struct OpenClawApp: App {
     }
 }
 
-extension OpenClawApp {
+extension OpenPawApp {
     private static func installUncaughtExceptionLogger() {
-        NSLog("OpenClaw: installing uncaught exception handler")
+        NSLog("OpenPaw: installing uncaught exception handler")
         NSSetUncaughtExceptionHandler { exception in
             // Useful when the app hits NSExceptions from SwiftUI/WebKit internals; these do not
             // produce a normal Swift error backtrace.

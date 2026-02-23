@@ -5,8 +5,8 @@ import { captureEnv } from "../test-utils/env.js";
 let envSnapshot: ReturnType<typeof captureEnv>;
 
 beforeAll(() => {
-  envSnapshot = captureEnv(["OPENCLAW_PROFILE"]);
-  process.env.OPENCLAW_PROFILE = "isolated";
+  envSnapshot = captureEnv(["OPENPAW_PROFILE"]);
+  process.env.OPENPAW_PROFILE = "isolated";
 });
 
 afterAll(() => {
@@ -154,7 +154,7 @@ vi.mock("../memory/manager.js", () => ({
         files: 2,
         chunks: 3,
         dirty: false,
-        workspaceDir: "/tmp/openclaw",
+        workspaceDir: "/tmp/openpaw",
         dbPath: "/tmp/memory.sqlite",
         provider: "openai",
         model: "text-embedding-3-small",
@@ -245,8 +245,8 @@ vi.mock("../gateway/session-utils.js", async (importOriginal) => {
     listAgentsForGateway: mocks.listAgentsForGateway,
   };
 });
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRoot: vi.fn().mockResolvedValue("/tmp/openclaw"),
+vi.mock("../infra/openpaw-root.js", () => ({
+  resolveOpenPawPackageRoot: vi.fn().mockResolvedValue("/tmp/openpaw"),
 }));
 vi.mock("../infra/os-summary.js", () => ({
   resolveOsSummary: () => ({
@@ -258,11 +258,11 @@ vi.mock("../infra/os-summary.js", () => ({
 }));
 vi.mock("../infra/update-check.js", () => ({
   checkUpdateStatus: vi.fn().mockResolvedValue({
-    root: "/tmp/openclaw",
+    root: "/tmp/openpaw",
     installKind: "git",
     packageManager: "pnpm",
     git: {
-      root: "/tmp/openclaw",
+      root: "/tmp/openpaw",
       branch: "main",
       upstream: "origin/main",
       dirty: false,
@@ -273,8 +273,8 @@ vi.mock("../infra/update-check.js", () => ({
     deps: {
       manager: "pnpm",
       status: "ok",
-      lockfilePath: "/tmp/openclaw/pnpm-lock.yaml",
-      markerPath: "/tmp/openclaw/node_modules/.modules.yaml",
+      lockfilePath: "/tmp/openpaw/pnpm-lock.yaml",
+      markerPath: "/tmp/openpaw/node_modules/.modules.yaml",
     },
     registry: { latestVersion: "0.0.0" },
   }),
@@ -378,7 +378,7 @@ describe("statusCommand", () => {
     runtimeLogMock.mockClear();
     await statusCommand({}, runtime as never);
     const logs = runtimeLogMock.mock.calls.map((c: unknown[]) => String(c[0]));
-    expect(logs.some((l: string) => l.includes("OpenClaw status"))).toBe(true);
+    expect(logs.some((l: string) => l.includes("OpenPaw status"))).toBe(true);
     expect(logs.some((l: string) => l.includes("Overview"))).toBe(true);
     expect(logs.some((l: string) => l.includes("Security audit"))).toBe(true);
     expect(logs.some((l: string) => l.includes("Summary:"))).toBe(true);
@@ -399,17 +399,17 @@ describe("statusCommand", () => {
     expect(
       logs.some(
         (l: string) =>
-          l.includes("openclaw status --all") ||
-          l.includes("openclaw --profile isolated status --all") ||
-          l.includes("openclaw status --all") ||
-          l.includes("openclaw --profile isolated status --all"),
+          l.includes("openpaw status --all") ||
+          l.includes("openpaw --profile isolated status --all") ||
+          l.includes("openpaw status --all") ||
+          l.includes("openpaw --profile isolated status --all"),
       ),
     ).toBe(true);
   });
 
   it("shows gateway auth when reachable", async () => {
-    const prevToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "abcd1234";
+    const prevToken = process.env.OPENPAW_GATEWAY_TOKEN;
+    process.env.OPENPAW_GATEWAY_TOKEN = "abcd1234";
     try {
       mocks.probeGateway.mockResolvedValueOnce({
         ok: true,
@@ -428,9 +428,9 @@ describe("statusCommand", () => {
       expect(logs.some((l: string) => l.includes("auth token"))).toBe(true);
     } finally {
       if (prevToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.OPENPAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = prevToken;
+        process.env.OPENPAW_GATEWAY_TOKEN = prevToken;
       }
     }
   });

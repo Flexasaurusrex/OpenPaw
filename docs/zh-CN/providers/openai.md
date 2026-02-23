@@ -1,8 +1,8 @@
 ---
 read_when:
-  - 你想在 OpenClaw 中使用 OpenAI 模型
+  - 你想在 OpenPaw 中使用 OpenAI 模型
   - 你想使用 Codex 订阅认证而非 API 密钥
-summary: 在 OpenClaw 中通过 API 密钥或 Codex 订阅使用 OpenAI
+summary: 在 OpenPaw 中通过 API 密钥或 Codex 订阅使用 OpenAI
 title: OpenAI
 x-i18n:
   generated_at: "2026-02-01T21:35:10Z"
@@ -25,9 +25,9 @@ OpenAI 提供 GPT 模型的开发者 API。Codex 支持**ChatGPT 登录**进行�
 ### CLI 设置
 
 ```bash
-openclaw onboard --auth-choice openai-api-key
+openpaw onboard --auth-choice openai-api-key
 # 或非交互式
-openclaw onboard --openai-api-key "$OPENAI_API_KEY"
+openpaw onboard --openai-api-key "$OPENAI_API_KEY"
 ```
 
 ### 配置片段
@@ -48,10 +48,10 @@ Codex 云端需要 ChatGPT 登录，而 Codex CLI 支持 ChatGPT 或 API 密钥�
 
 ```bash
 # 在向导中运行 Codex OAuth
-openclaw onboard --auth-choice openai-codex
+openpaw onboard --auth-choice openai-codex
 
 # 或直接运行 OAuth
-openclaw models auth login --provider openai-codex
+openpaw models auth login --provider openai-codex
 ```
 
 ### 配置片段

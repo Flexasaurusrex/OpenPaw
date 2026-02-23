@@ -1,23 +1,23 @@
 import Foundation
-import OpenClawKit
+import OpenPawKit
 import Testing
 
 @Suite struct DeepLinksSecurityTests {
     @Test func gatewayDeepLinkRejectsInsecureNonLoopbackWs() {
         let url = URL(
-            string: "openclaw://gateway?host=attacker.example&port=18789&tls=0&token=abc")!
+            string: "openpaw://gateway?host=attacker.example&port=18789&tls=0&token=abc")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func gatewayDeepLinkRejectsInsecurePrefixBypassHost() {
         let url = URL(
-            string: "openclaw://gateway?host=127.attacker.example&port=18789&tls=0&token=abc")!
+            string: "openpaw://gateway?host=127.attacker.example&port=18789&tls=0&token=abc")!
         #expect(DeepLinkParser.parse(url) == nil)
     }
 
     @Test func gatewayDeepLinkAllowsLoopbackWs() {
         let url = URL(
-            string: "openclaw://gateway?host=127.0.0.1&port=18789&tls=0&token=abc")!
+            string: "openpaw://gateway?host=127.0.0.1&port=18789&tls=0&token=abc")!
         #expect(
             DeepLinkParser.parse(url) == .gateway(
                 .init(host: "127.0.0.1", port: 18789, tls: false, token: "abc", password: nil)))

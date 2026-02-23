@@ -1,4 +1,4 @@
-package ai.openclaw.android
+package ai.openpaw.android
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -19,14 +19,14 @@ class InstallResultReceiver : BroadcastReceiver() {
         if (confirmIntent != null) {
           confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
           context.startActivity(confirmIntent)
-          Log.w("openclaw", "app.update: user confirmation requested, launching install dialog")
+          Log.w("openpaw", "app.update: user confirmation requested, launching install dialog")
         }
       }
       PackageInstaller.STATUS_SUCCESS -> {
-        Log.w("openclaw", "app.update: install SUCCESS")
+        Log.w("openpaw", "app.update: install SUCCESS")
       }
       else -> {
-        Log.e("openclaw", "app.update: install FAILED status=$status message=$message")
+        Log.e("openpaw", "app.update: install FAILED status=$status message=$message")
       }
     }
   }

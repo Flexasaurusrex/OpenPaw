@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { resolveGatewayCredentialsFromConfig } from "./credentials.js";
 
 export function resolveGatewayProbeAuth(params: {
-  cfg: OpenClawConfig;
+  cfg: OpenPawConfig;
   mode: "local" | "remote";
   env?: NodeJS.ProcessEnv;
 }): { token?: string; password?: string } {

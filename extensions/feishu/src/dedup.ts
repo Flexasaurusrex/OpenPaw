@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { createDedupeCache, createPersistentDedupe } from "openclaw/plugin-sdk";
+import { createDedupeCache, createPersistentDedupe } from "openpaw/plugin-sdk";
 
 // Persistent TTL: 24 hours — survives restarts & WebSocket reconnects.
 const DEDUP_TTL_MS = 24 * 60 * 60 * 1000;
@@ -10,14 +10,14 @@ const FILE_MAX_ENTRIES = 10_000;
 const memoryDedupe = createDedupeCache({ ttlMs: DEDUP_TTL_MS, maxSize: MEMORY_MAX_SIZE });
 
 function resolveStateDirFromEnv(env: NodeJS.ProcessEnv = process.env): string {
-  const stateOverride = env.OPENCLAW_STATE_DIR?.trim() || env.CLAWDBOT_STATE_DIR?.trim();
+  const stateOverride = env.OPENPAW_STATE_DIR?.trim() || env.PAWBOT_STATE_DIR?.trim();
   if (stateOverride) {
     return stateOverride;
   }
   if (env.VITEST || env.NODE_ENV === "test") {
-    return path.join(os.tmpdir(), ["openclaw-vitest", String(process.pid)].join("-"));
+    return path.join(os.tmpdir(), ["openpaw-vitest", String(process.pid)].join("-"));
   }
-  return path.join(os.homedir(), ".openclaw");
+  return path.join(os.homedir(), ".openpaw");
 }
 
 function resolveNamespaceFilePath(namespace: string): string {

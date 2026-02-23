@@ -6,7 +6,7 @@ import CryptoKit
 import EventKit
 import Foundation
 import Darwin
-import OpenClawKit
+import OpenPawKit
 import Network
 import Observation
 import Photos
@@ -753,7 +753,7 @@ final class GatewayConnectionController {
         if manualClientId?.isEmpty == false {
             return manualClientId!
         }
-        return "openclaw-ios"
+        return "openpaw-ios"
     }
 
     private func resolveManualPort(host: String, port: Int, useTLS: Bool) -> Int? {
@@ -783,32 +783,32 @@ final class GatewayConnectionController {
     }
 
     private func currentCaps() -> [String] {
-        var caps = [OpenClawCapability.canvas.rawValue, OpenClawCapability.screen.rawValue]
+        var caps = [OpenPawCapability.canvas.rawValue, OpenPawCapability.screen.rawValue]
 
         // Default-on: if the key doesn't exist yet, treat it as enabled.
         let cameraEnabled =
             UserDefaults.standard.object(forKey: "camera.enabled") == nil
                 ? true
                 : UserDefaults.standard.bool(forKey: "camera.enabled")
-        if cameraEnabled { caps.append(OpenClawCapability.camera.rawValue) }
+        if cameraEnabled { caps.append(OpenPawCapability.camera.rawValue) }
 
         let voiceWakeEnabled = UserDefaults.standard.bool(forKey: VoiceWakePreferences.enabledKey)
-        if voiceWakeEnabled { caps.append(OpenClawCapability.voiceWake.rawValue) }
+        if voiceWakeEnabled { caps.append(OpenPawCapability.voiceWake.rawValue) }
 
         let locationModeRaw = UserDefaults.standard.string(forKey: "location.enabledMode") ?? "off"
-        let locationMode = OpenClawLocationMode(rawValue: locationModeRaw) ?? .off
-        if locationMode != .off { caps.append(OpenClawCapability.location.rawValue) }
+        let locationMode = OpenPawLocationMode(rawValue: locationModeRaw) ?? .off
+        if locationMode != .off { caps.append(OpenPawCapability.location.rawValue) }
 
-        caps.append(OpenClawCapability.device.rawValue)
+        caps.append(OpenPawCapability.device.rawValue)
         if WatchMessagingService.isSupportedOnDevice() {
-            caps.append(OpenClawCapability.watch.rawValue)
+            caps.append(OpenPawCapability.watch.rawValue)
         }
-        caps.append(OpenClawCapability.photos.rawValue)
-        caps.append(OpenClawCapability.contacts.rawValue)
-        caps.append(OpenClawCapability.calendar.rawValue)
-        caps.append(OpenClawCapability.reminders.rawValue)
+        caps.append(OpenPawCapability.photos.rawValue)
+        caps.append(OpenPawCapability.contacts.rawValue)
+        caps.append(OpenPawCapability.calendar.rawValue)
+        caps.append(OpenPawCapability.reminders.rawValue)
         if Self.motionAvailable() {
-            caps.append(OpenClawCapability.motion.rawValue)
+            caps.append(OpenPawCapability.motion.rawValue)
         }
 
         return caps
@@ -816,58 +816,58 @@ final class GatewayConnectionController {
 
     private func currentCommands() -> [String] {
         var commands: [String] = [
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
-            OpenClawCanvasA2UICommand.reset.rawValue,
-            OpenClawScreenCommand.record.rawValue,
-            OpenClawSystemCommand.notify.rawValue,
-            OpenClawChatCommand.push.rawValue,
-            OpenClawTalkCommand.pttStart.rawValue,
-            OpenClawTalkCommand.pttStop.rawValue,
-            OpenClawTalkCommand.pttCancel.rawValue,
-            OpenClawTalkCommand.pttOnce.rawValue,
+            OpenPawCanvasCommand.present.rawValue,
+            OpenPawCanvasCommand.hide.rawValue,
+            OpenPawCanvasCommand.navigate.rawValue,
+            OpenPawCanvasCommand.evalJS.rawValue,
+            OpenPawCanvasCommand.snapshot.rawValue,
+            OpenPawCanvasA2UICommand.push.rawValue,
+            OpenPawCanvasA2UICommand.pushJSONL.rawValue,
+            OpenPawCanvasA2UICommand.reset.rawValue,
+            OpenPawScreenCommand.record.rawValue,
+            OpenPawSystemCommand.notify.rawValue,
+            OpenPawChatCommand.push.rawValue,
+            OpenPawTalkCommand.pttStart.rawValue,
+            OpenPawTalkCommand.pttStop.rawValue,
+            OpenPawTalkCommand.pttCancel.rawValue,
+            OpenPawTalkCommand.pttOnce.rawValue,
         ]
 
         let caps = Set(self.currentCaps())
-        if caps.contains(OpenClawCapability.camera.rawValue) {
-            commands.append(OpenClawCameraCommand.list.rawValue)
-            commands.append(OpenClawCameraCommand.snap.rawValue)
-            commands.append(OpenClawCameraCommand.clip.rawValue)
+        if caps.contains(OpenPawCapability.camera.rawValue) {
+            commands.append(OpenPawCameraCommand.list.rawValue)
+            commands.append(OpenPawCameraCommand.snap.rawValue)
+            commands.append(OpenPawCameraCommand.clip.rawValue)
         }
-        if caps.contains(OpenClawCapability.location.rawValue) {
-            commands.append(OpenClawLocationCommand.get.rawValue)
+        if caps.contains(OpenPawCapability.location.rawValue) {
+            commands.append(OpenPawLocationCommand.get.rawValue)
         }
-        if caps.contains(OpenClawCapability.device.rawValue) {
-            commands.append(OpenClawDeviceCommand.status.rawValue)
-            commands.append(OpenClawDeviceCommand.info.rawValue)
+        if caps.contains(OpenPawCapability.device.rawValue) {
+            commands.append(OpenPawDeviceCommand.status.rawValue)
+            commands.append(OpenPawDeviceCommand.info.rawValue)
         }
-        if caps.contains(OpenClawCapability.watch.rawValue) {
-            commands.append(OpenClawWatchCommand.status.rawValue)
-            commands.append(OpenClawWatchCommand.notify.rawValue)
+        if caps.contains(OpenPawCapability.watch.rawValue) {
+            commands.append(OpenPawWatchCommand.status.rawValue)
+            commands.append(OpenPawWatchCommand.notify.rawValue)
         }
-        if caps.contains(OpenClawCapability.photos.rawValue) {
-            commands.append(OpenClawPhotosCommand.latest.rawValue)
+        if caps.contains(OpenPawCapability.photos.rawValue) {
+            commands.append(OpenPawPhotosCommand.latest.rawValue)
         }
-        if caps.contains(OpenClawCapability.contacts.rawValue) {
-            commands.append(OpenClawContactsCommand.search.rawValue)
-            commands.append(OpenClawContactsCommand.add.rawValue)
+        if caps.contains(OpenPawCapability.contacts.rawValue) {
+            commands.append(OpenPawContactsCommand.search.rawValue)
+            commands.append(OpenPawContactsCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.calendar.rawValue) {
-            commands.append(OpenClawCalendarCommand.events.rawValue)
-            commands.append(OpenClawCalendarCommand.add.rawValue)
+        if caps.contains(OpenPawCapability.calendar.rawValue) {
+            commands.append(OpenPawCalendarCommand.events.rawValue)
+            commands.append(OpenPawCalendarCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.reminders.rawValue) {
-            commands.append(OpenClawRemindersCommand.list.rawValue)
-            commands.append(OpenClawRemindersCommand.add.rawValue)
+        if caps.contains(OpenPawCapability.reminders.rawValue) {
+            commands.append(OpenPawRemindersCommand.list.rawValue)
+            commands.append(OpenPawRemindersCommand.add.rawValue)
         }
-        if caps.contains(OpenClawCapability.motion.rawValue) {
-            commands.append(OpenClawMotionCommand.activity.rawValue)
-            commands.append(OpenClawMotionCommand.pedometer.rawValue)
+        if caps.contains(OpenPawCapability.motion.rawValue) {
+            commands.append(OpenPawMotionCommand.activity.rawValue)
+            commands.append(OpenPawMotionCommand.pedometer.rawValue)
         }
 
         return commands

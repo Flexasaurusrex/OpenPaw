@@ -1,10 +1,10 @@
 import AppKit
 import Foundation
 import Observation
-import OpenClawDiscovery
-import OpenClawIPC
-import OpenClawKit
-import OpenClawProtocol
+import OpenPawDiscovery
+import OpenPawIPC
+import OpenPawKit
+import OpenPawProtocol
 import OSLog
 import UserNotifications
 
@@ -22,7 +22,7 @@ enum NodePairingReconcilePolicy {
 final class NodePairingApprovalPrompter {
     static let shared = NodePairingApprovalPrompter()
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "node-pairing")
+    private let logger = Logger(subsystem: "ai.openpaw", category: "node-pairing")
     private var task: Task<Void, Never>?
     private var reconcileTask: Task<Void, Never>?
     private var reconcileOnceTask: Task<Void, Never>?

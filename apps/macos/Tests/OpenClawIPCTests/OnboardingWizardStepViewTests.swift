@@ -1,9 +1,9 @@
-import OpenClawProtocol
+import OpenPawProtocol
 import SwiftUI
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
-private typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
+private typealias ProtoAnyCodable = OpenPawProtocol.AnyCodable
 
 @Suite(.serialized)
 @MainActor

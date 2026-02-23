@@ -101,17 +101,17 @@ async function cleanupCronTestRun(params: {
   }
   testState.cronEnabled = undefined;
   if (params.prevSkipCron === undefined) {
-    delete process.env.OPENCLAW_SKIP_CRON;
+    delete process.env.OPENPAW_SKIP_CRON;
     return;
   }
-  process.env.OPENCLAW_SKIP_CRON = params.prevSkipCron;
+  process.env.OPENPAW_SKIP_CRON = params.prevSkipCron;
 }
 
 describe("gateway server cron", () => {
   test("handles cron CRUD, normalization, and patch semantics", { timeout: 120_000 }, async () => {
-    const prevSkipCron = process.env.OPENCLAW_SKIP_CRON;
-    process.env.OPENCLAW_SKIP_CRON = "0";
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-cron-"));
+    const prevSkipCron = process.env.OPENPAW_SKIP_CRON;
+    process.env.OPENPAW_SKIP_CRON = "0";
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-gw-cron-"));
     testState.cronStorePath = path.join(dir, "cron", "jobs.json");
     testState.sessionConfig = { mainKey: "primary" };
     testState.cronEnabled = false;
@@ -385,9 +385,9 @@ describe("gateway server cron", () => {
   });
 
   test("writes cron run history and auto-runs due jobs", async () => {
-    const prevSkipCron = process.env.OPENCLAW_SKIP_CRON;
-    process.env.OPENCLAW_SKIP_CRON = "0";
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-cron-log-"));
+    const prevSkipCron = process.env.OPENPAW_SKIP_CRON;
+    process.env.OPENPAW_SKIP_CRON = "0";
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-gw-cron-log-"));
     testState.cronStorePath = path.join(dir, "cron", "jobs.json");
     testState.cronEnabled = undefined;
     await fs.mkdir(path.dirname(testState.cronStorePath), { recursive: true });
@@ -489,9 +489,9 @@ describe("gateway server cron", () => {
   }, 45_000);
 
   test("posts webhooks for delivery mode and legacy notify fallback only when summary exists", async () => {
-    const prevSkipCron = process.env.OPENCLAW_SKIP_CRON;
-    process.env.OPENCLAW_SKIP_CRON = "0";
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-cron-webhook-"));
+    const prevSkipCron = process.env.OPENPAW_SKIP_CRON;
+    process.env.OPENPAW_SKIP_CRON = "0";
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-gw-cron-webhook-"));
     testState.cronStorePath = path.join(dir, "cron", "jobs.json");
     testState.cronEnabled = false;
     await fs.mkdir(path.dirname(testState.cronStorePath), { recursive: true });
@@ -514,7 +514,7 @@ describe("gateway server cron", () => {
       JSON.stringify({ version: 1, jobs: [legacyNotifyJob] }),
     );
 
-    const configPath = process.env.OPENCLAW_CONFIG_PATH;
+    const configPath = process.env.OPENPAW_CONFIG_PATH;
     expect(typeof configPath).toBe("string");
     await fs.mkdir(path.dirname(configPath as string), { recursive: true });
     await fs.writeFile(

@@ -1,4 +1,4 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import ai.openclaw.android.BuildConfig
+import ai.openpaw.android.BuildConfig
 import kotlin.coroutines.resume
 
 class CanvasController {
@@ -84,12 +84,12 @@ class CanvasController {
     withWebViewOnMain { wv ->
       if (currentUrl == null) {
         if (BuildConfig.DEBUG) {
-          Log.d("OpenClawCanvas", "load scaffold: $scaffoldAssetUrl")
+          Log.d("OpenPawCanvas", "load scaffold: $scaffoldAssetUrl")
         }
         wv.loadUrl(scaffoldAssetUrl)
       } else {
         if (BuildConfig.DEBUG) {
-          Log.d("OpenClawCanvas", "load url: $currentUrl")
+          Log.d("OpenPawCanvas", "load url: $currentUrl")
         }
         wv.loadUrl(currentUrl)
       }
@@ -106,7 +106,7 @@ class CanvasController {
       val js = """
         (() => {
           try {
-            const api = globalThis.__openclaw;
+            const api = globalThis.__openpaw;
             if (!api) return;
             if (typeof api.setDebugStatusEnabled === 'function') {
               api.setDebugStatusEnabled(${if (enabled) "true" else "false"});

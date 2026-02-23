@@ -1,8 +1,8 @@
 import { vi } from "vitest";
 
 type SessionsSpawnTestConfig = ReturnType<(typeof import("../config/config.js"))["loadConfig"]>;
-type CreateOpenClawTools = (typeof import("./openclaw-tools.js"))["createOpenClawTools"];
-export type CreateOpenClawToolsOpts = Parameters<CreateOpenClawTools>[0];
+type CreateOpenPawTools = (typeof import("./openpaw-tools.js"))["createOpenPawTools"];
+export type CreateOpenPawToolsOpts = Parameters<CreateOpenPawTools>[0];
 export type GatewayRequest = { method?: string; params?: unknown };
 export type AgentWaitCall = { runId?: string; timeoutMs?: number };
 type SessionsSpawnGatewayMockOptions = {
@@ -55,10 +55,10 @@ export function setSessionsSpawnConfigOverride(next: SessionsSpawnTestConfig): v
   hoisted.state.configOverride = next;
 }
 
-export async function getSessionsSpawnTool(opts: CreateOpenClawToolsOpts) {
+export async function getSessionsSpawnTool(opts: CreateOpenPawToolsOpts) {
   // Dynamic import: ensure harness mocks are installed before tool modules load.
-  const { createOpenClawTools } = await import("./openclaw-tools.js");
-  const tool = createOpenClawTools(opts).find((candidate) => candidate.name === "sessions_spawn");
+  const { createOpenPawTools } = await import("./openpaw-tools.js");
+  const tool = createOpenPawTools(opts).find((candidate) => candidate.name === "sessions_spawn");
   if (!tool) {
     throw new Error("missing sessions_spawn tool");
   }

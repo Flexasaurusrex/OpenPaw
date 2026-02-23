@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
 import { resolveStateDir } from "../config/paths.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -15,7 +15,7 @@ const log = createSubsystemLogger("agent-scope");
 
 export { resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 
-type AgentEntry = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number];
+type AgentEntry = NonNullable<NonNullable<OpenPawConfig["agents"]>["list"]>[number];
 
 type ResolvedAgentConfig = {
   name?: string;
@@ -35,7 +35,7 @@ type ResolvedAgentConfig = {
 
 let defaultAgentWarned = false;
 
-export function listAgentEntries(cfg: OpenClawConfig): AgentEntry[] {
+export function listAgentEntries(cfg: OpenPawConfig): AgentEntry[] {
   const list = cfg.agents?.list;
   if (!Array.isArray(list)) {
     return [];
@@ -43,7 +43,7 @@ export function listAgentEntries(cfg: OpenClawConfig): AgentEntry[] {
   return list.filter((entry): entry is AgentEntry => Boolean(entry && typeof entry === "object"));
 }
 
-export function listAgentIds(cfg: OpenClawConfig): string[] {
+export function listAgentIds(cfg: OpenPawConfig): string[] {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0) {
     return [DEFAULT_AGENT_ID];
@@ -61,7 +61,7 @@ export function listAgentIds(cfg: OpenClawConfig): string[] {
   return ids.length > 0 ? ids : [DEFAULT_AGENT_ID];
 }
 
-export function resolveDefaultAgentId(cfg: OpenClawConfig): string {
+export function resolveDefaultAgentId(cfg: OpenPawConfig): string {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0) {
     return DEFAULT_AGENT_ID;
@@ -77,7 +77,7 @@ export function resolveDefaultAgentId(cfg: OpenClawConfig): string {
 
 export function resolveSessionAgentIds(params: {
   sessionKey?: string;
-  config?: OpenClawConfig;
+  config?: OpenPawConfig;
   agentId?: string;
 }): {
   defaultAgentId: string;
@@ -97,18 +97,18 @@ export function resolveSessionAgentIds(params: {
 
 export function resolveSessionAgentId(params: {
   sessionKey?: string;
-  config?: OpenClawConfig;
+  config?: OpenPawConfig;
 }): string {
   return resolveSessionAgentIds(params).sessionAgentId;
 }
 
-function resolveAgentEntry(cfg: OpenClawConfig, agentId: string): AgentEntry | undefined {
+function resolveAgentEntry(cfg: OpenPawConfig, agentId: string): AgentEntry | undefined {
   const id = normalizeAgentId(agentId);
   return listAgentEntries(cfg).find((entry) => normalizeAgentId(entry.id) === id);
 }
 
 export function resolveAgentConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   agentId: string,
 ): ResolvedAgentConfig | undefined {
   const id = normalizeAgentId(agentId);
@@ -137,7 +137,7 @@ export function resolveAgentConfig(
 }
 
 export function resolveAgentSkillsFilter(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   agentId: string,
 ): string[] | undefined {
   return normalizeSkillFilter(resolveAgentConfig(cfg, agentId)?.skills);
@@ -160,7 +160,7 @@ function resolveModelPrimary(raw: unknown): string | undefined {
 }
 
 export function resolveAgentExplicitModelPrimary(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   agentId: string,
 ): string | undefined {
   const raw = resolveAgentConfig(cfg, agentId)?.model;
@@ -168,7 +168,7 @@ export function resolveAgentExplicitModelPrimary(
 }
 
 export function resolveAgentEffectiveModelPrimary(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   agentId: string,
 ): string | undefined {
   return (
@@ -178,12 +178,12 @@ export function resolveAgentEffectiveModelPrimary(
 }
 
 // Backward-compatible alias. Prefer explicit/effective helpers at new call sites.
-export function resolveAgentModelPrimary(cfg: OpenClawConfig, agentId: string): string | undefined {
+export function resolveAgentModelPrimary(cfg: OpenPawConfig, agentId: string): string | undefined {
   return resolveAgentExplicitModelPrimary(cfg, agentId);
 }
 
 export function resolveAgentModelFallbacksOverride(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   agentId: string,
 ): string[] | undefined {
   const raw = resolveAgentConfig(cfg, agentId)?.model;
@@ -198,7 +198,7 @@ export function resolveAgentModelFallbacksOverride(
 }
 
 export function resolveEffectiveModelFallbacks(params: {
-  cfg: OpenClawConfig;
+  cfg: OpenPawConfig;
   agentId: string;
   hasSessionModelOverride: boolean;
 }): string[] | undefined {
@@ -210,7 +210,7 @@ export function resolveEffectiveModelFallbacks(params: {
   return agentFallbacksOverride ?? defaultFallbacks;
 }
 
-export function resolveAgentWorkspaceDir(cfg: OpenClawConfig, agentId: string) {
+export function resolveAgentWorkspaceDir(cfg: OpenPawConfig, agentId: string) {
   const id = normalizeAgentId(agentId);
   const configured = resolveAgentConfig(cfg, id)?.workspace?.trim();
   if (configured) {
@@ -228,7 +228,7 @@ export function resolveAgentWorkspaceDir(cfg: OpenClawConfig, agentId: string) {
   return path.join(stateDir, `workspace-${id}`);
 }
 
-export function resolveAgentDir(cfg: OpenClawConfig, agentId: string) {
+export function resolveAgentDir(cfg: OpenPawConfig, agentId: string) {
   const id = normalizeAgentId(agentId);
   const configured = resolveAgentConfig(cfg, id)?.agentDir?.trim();
   if (configured) {

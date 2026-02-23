@@ -41,12 +41,12 @@ Android 直接连接到 Gateway 网关 WebSocket（默认 `ws://<host>:18789`）
   - 使用 mDNS/NSD 的同一局域网，**或**
   - 使用 Wide-Area Bonjour / unicast DNS-SD 的同一 Tailscale tailnet（见下文），**或**
   - 手动 Gateway 网关主机/端口（回退方案）
-- 你可以在 Gateway 网关机器上运行 CLI（`openclaw`）（或通过 SSH）。
+- 你可以在 Gateway 网关机器上运行 CLI（`openpaw`）（或通过 SSH）。
 
 ### 1）启动 Gateway 网关
 
 ```bash
-openclaw gateway --port 18789 --verbose
+openpaw gateway --port 18789 --verbose
 ```
 
 在日志中确认你看到类似内容：
@@ -55,7 +55,7 @@ openclaw gateway --port 18789 --verbose
 
 对于仅 tailnet 设置（推荐用于维也纳 ⇄ 伦敦），将 Gateway 网关绑定到 tailnet IP：
 
-- 在 Gateway 网关主机的 `~/.openclaw/openclaw.json` 中设置 `gateway.bind: "tailnet"`。
+- 在 Gateway 网关主机的 `~/.openpaw/openpaw.json` 中设置 `gateway.bind: "tailnet"`。
 - 重启 Gateway 网关 / macOS 菜单栏应用。
 
 ### 2）验证发现（可选）
@@ -63,7 +63,7 @@ openclaw gateway --port 18789 --verbose
 从 Gateway 网关机器：
 
 ```bash
-dns-sd -B _openclaw-gw._tcp local.
+dns-sd -B _openpaw-gw._tcp local.
 ```
 
 更多调试说明：[Bonjour](/gateway/bonjour)。
@@ -72,7 +72,7 @@ dns-sd -B _openclaw-gw._tcp local.
 
 Android NSD/mDNS 发现无法跨网络。如果你的 Android 节点和 Gateway 网关在不同网络但通过 Tailscale 连接，请改用 Wide-Area Bonjour / unicast DNS-SD：
 
-1. 在 Gateway 网关主机上设置 DNS-SD 区域（示例 `openclaw.internal.`）并发布 `_openclaw-gw._tcp` 记录。
+1. 在 Gateway 网关主机上设置 DNS-SD 区域（示例 `openpaw.internal.`）并发布 `_openpaw-gw._tcp` 记录。
 2. 配置 Tailscale split DNS，将你选择的域指向该 DNS 服务器。
 
 详情和示例 CoreDNS 配置：[Bonjour](/gateway/bonjour)。
@@ -96,8 +96,8 @@ Android NSD/mDNS 发现无法跨网络。如果你的 Android 节点和 Gateway 
 在 Gateway 网关机器上：
 
 ```bash
-openclaw nodes pending
-openclaw nodes approve <requestId>
+openpaw nodes pending
+openpaw nodes approve <requestId>
 ```
 
 配对详情：[Gateway 网关配对](/gateway/pairing)。
@@ -106,11 +106,11 @@ openclaw nodes approve <requestId>
 
 - 通过节点状态：
   ```bash
-  openclaw nodes status
+  openpaw nodes status
   ```
 - 通过 Gateway 网关：
   ```bash
-  openclaw gateway call node.list --params "{}"
+  openpaw gateway call node.list --params "{}"
   ```
 
 ### 6）聊天 + 历史
@@ -129,18 +129,18 @@ Android 节点的 Chat 面板使用 Gateway 网关的**主会话键**（`main`�
 
 注意：节点使用 `canvasHost.port`（默认 `18793`）上的独立 canvas 主机。
 
-1. 在 Gateway 网关主机上创建 `~/.openclaw/workspace/canvas/index.html`。
+1. 在 Gateway 网关主机上创建 `~/.openpaw/workspace/canvas/index.html`。
 
 2. 将节点导航到它（局域网）：
 
 ```bash
-openclaw nodes invoke --node "<Android Node>" --command canvas.navigate --params '{"url":"http://<gateway-hostname>.local:18793/__openclaw__/canvas/"}'
+openpaw nodes invoke --node "<Android Node>" --command canvas.navigate --params '{"url":"http://<gateway-hostname>.local:18793/__openpaw__/canvas/"}'
 ```
 
-Tailnet（可选）：如果两个设备都在 Tailscale 上，使用 MagicDNS 名称或 tailnet IP 而不是 `.local`，例如 `http://<gateway-magicdns>:18793/__openclaw__/canvas/`。
+Tailnet（可选）：如果两个设备都在 Tailscale 上，使用 MagicDNS 名称或 tailnet IP 而不是 `.local`，例如 `http://<gateway-magicdns>:18793/__openpaw__/canvas/`。
 
 此服务器将实时重载客户端注入 HTML 并在文件更改时重新加载。
-A2UI 主机位于 `http://<gateway-host>:18793/__openclaw__/a2ui/`。
+A2UI 主机位于 `http://<gateway-host>:18793/__openpaw__/a2ui/`。
 
 Canvas 命令（仅前台）：
 

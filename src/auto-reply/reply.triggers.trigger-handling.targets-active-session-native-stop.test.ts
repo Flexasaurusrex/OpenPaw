@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { loadSessionStore, resolveSessionKey } from "../config/sessions.js";
 import {
   getAbortEmbeddedPiRunMock,
@@ -21,16 +21,16 @@ import { HEARTBEAT_TOKEN } from "./tokens.js";
 let getReplyFromConfig: typeof import("./reply.js").getReplyFromConfig;
 let previousFastTestEnv: string | undefined;
 beforeAll(async () => {
-  previousFastTestEnv = process.env.OPENCLAW_TEST_FAST;
-  process.env.OPENCLAW_TEST_FAST = "1";
+  previousFastTestEnv = process.env.OPENPAW_TEST_FAST;
+  process.env.OPENPAW_TEST_FAST = "1";
   ({ getReplyFromConfig } = await import("./reply.js"));
 });
 afterAll(() => {
   if (previousFastTestEnv === undefined) {
-    delete process.env.OPENCLAW_TEST_FAST;
+    delete process.env.OPENPAW_TEST_FAST;
     return;
   }
-  process.env.OPENCLAW_TEST_FAST = previousFastTestEnv;
+  process.env.OPENPAW_TEST_FAST = previousFastTestEnv;
 });
 
 installTriggerHandlingE2eTestHooks();
@@ -85,7 +85,7 @@ describe("trigger handling", () => {
       const res = await getReplyFromConfig(BASE_MESSAGE, {}, makeCfg(home));
 
       expect(maybeReplyText(res)).toBe(
-        "⚠️ Agent failed before reply: sandbox is not defined.\nLogs: openclaw logs --follow",
+        "⚠️ Agent failed before reply: sandbox is not defined.\nLogs: openpaw logs --follow",
       );
       expect(runEmbeddedPiAgentMock).toHaveBeenCalledOnce();
     });
@@ -189,7 +189,7 @@ describe("trigger handling", () => {
 
   it("runs /compact as a gated command", async () => {
     await withTempHome(async (home) => {
-      const storePath = join(tmpdir(), `openclaw-session-test-${Date.now()}.json`);
+      const storePath = join(tmpdir(), `openpaw-session-test-${Date.now()}.json`);
       const cfg = makeCfg(home);
       cfg.session = { ...cfg.session, store: storePath };
       mockSuccessfulCompaction();
@@ -444,7 +444,7 @@ describe("trigger handling", () => {
 
   it("uses the target agent model for native /status", async () => {
     await withTempHome(async (home) => {
-      const cfg = makeCfg(home) as unknown as OpenClawConfig;
+      const cfg = makeCfg(home) as unknown as OpenPawConfig;
       cfg.agents = {
         ...cfg.agents,
         list: [{ id: "coding", model: "minimax/MiniMax-M2.1" }],

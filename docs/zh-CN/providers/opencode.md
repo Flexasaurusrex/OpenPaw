@@ -2,7 +2,7 @@
 read_when:
   - 你想通过 OpenCode Zen 访问模型
   - 你想要一个适合编程的精选模型列表
-summary: 在 OpenClaw 中使用 OpenCode Zen（精选模型）
+summary: 在 OpenPaw 中使用 OpenCode Zen（精选模型）
 title: OpenCode Zen
 x-i18n:
   generated_at: "2026-02-01T21:35:16Z"
@@ -20,9 +20,9 @@ OpenCode Zen 是由 OpenCode 团队推荐的一组**精选模型列表**，适�
 ## CLI 设置
 
 ```bash
-openclaw onboard --auth-choice opencode-zen
+openpaw onboard --auth-choice opencode-zen
 # 或非交互式
-openclaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
+openpaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
 ```
 
 ## 配置片段

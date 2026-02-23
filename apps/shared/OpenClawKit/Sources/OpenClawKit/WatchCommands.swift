@@ -1,17 +1,17 @@
 import Foundation
 
-public enum OpenClawWatchCommand: String, Codable, Sendable {
+public enum OpenPawWatchCommand: String, Codable, Sendable {
     case status = "watch.status"
     case notify = "watch.notify"
 }
 
-public enum OpenClawWatchRisk: String, Codable, Sendable, Equatable {
+public enum OpenPawWatchRisk: String, Codable, Sendable, Equatable {
     case low
     case medium
     case high
 }
 
-public struct OpenClawWatchAction: Codable, Sendable, Equatable {
+public struct OpenPawWatchAction: Codable, Sendable, Equatable {
     public var id: String
     public var label: String
     public var style: String?
@@ -23,7 +23,7 @@ public struct OpenClawWatchAction: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawWatchStatusPayload: Codable, Sendable, Equatable {
+public struct OpenPawWatchStatusPayload: Codable, Sendable, Equatable {
     public var supported: Bool
     public var paired: Bool
     public var appInstalled: Bool
@@ -45,29 +45,29 @@ public struct OpenClawWatchStatusPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawWatchNotifyParams: Codable, Sendable, Equatable {
+public struct OpenPawWatchNotifyParams: Codable, Sendable, Equatable {
     public var title: String
     public var body: String
-    public var priority: OpenClawNotificationPriority?
+    public var priority: OpenPawNotificationPriority?
     public var promptId: String?
     public var sessionKey: String?
     public var kind: String?
     public var details: String?
     public var expiresAtMs: Int?
-    public var risk: OpenClawWatchRisk?
-    public var actions: [OpenClawWatchAction]?
+    public var risk: OpenPawWatchRisk?
+    public var actions: [OpenPawWatchAction]?
 
     public init(
         title: String,
         body: String,
-        priority: OpenClawNotificationPriority? = nil,
+        priority: OpenPawNotificationPriority? = nil,
         promptId: String? = nil,
         sessionKey: String? = nil,
         kind: String? = nil,
         details: String? = nil,
         expiresAtMs: Int? = nil,
-        risk: OpenClawWatchRisk? = nil,
-        actions: [OpenClawWatchAction]? = nil)
+        risk: OpenPawWatchRisk? = nil,
+        actions: [OpenPawWatchAction]? = nil)
     {
         self.title = title
         self.body = body
@@ -82,7 +82,7 @@ public struct OpenClawWatchNotifyParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawWatchNotifyPayload: Codable, Sendable, Equatable {
+public struct OpenPawWatchNotifyPayload: Codable, Sendable, Equatable {
     public var deliveredImmediately: Bool
     public var queuedForDelivery: Bool
     public var transport: String

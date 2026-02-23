@@ -1,27 +1,27 @@
 <?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>OpenClaw</title>
+        <title>OpenPaw</title>
         <item>
             <title>2026.2.14</title>
             <pubDate>Sun, 15 Feb 2026 04:24:34 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/openpaw/openpaw/main/appcast.xml</link>
             <sparkle:version>202602140</sparkle:version>
             <sparkle:shortVersionString>2026.2.14</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.14</h2>
+            <description><![CDATA[<h2>OpenPaw 2026.2.14</h2>
 <h3>Changes</h3>
 <ul>
-<li>Telegram: add poll sending via <code>openclaw message poll</code> (duration seconds, silent delivery, anonymity controls). (#16209) Thanks @robbyczgw-cla.</li>
-<li>Slack/Discord: add <code>dmPolicy</code> + <code>allowFrom</code> config aliases for DM access control; legacy <code>dm.policy</code> + <code>dm.allowFrom</code> keys remain supported and <code>openclaw doctor --fix</code> can migrate them.</li>
+<li>Telegram: add poll sending via <code>openpaw message poll</code> (duration seconds, silent delivery, anonymity controls). (#16209) Thanks @robbyczgw-cla.</li>
+<li>Slack/Discord: add <code>dmPolicy</code> + <code>allowFrom</code> config aliases for DM access control; legacy <code>dm.policy</code> + <code>dm.allowFrom</code> keys remain supported and <code>openpaw doctor --fix</code> can migrate them.</li>
 <li>Discord: allow exec approval prompts to target channels or both DM+channel via <code>channels.discord.execApprovals.target</code>. (#16051) Thanks @leonnardo.</li>
 <li>Sandbox: add <code>sandbox.browser.binds</code> to configure browser-container bind mounts separately from exec containers. (#16230) Thanks @seheepeak.</li>
 <li>Discord: add debug logging for message routing decisions to improve <code>--debug</code> tracing. (#16202) Thanks @jayleekr.</li>
 </ul>
 <h3>Fixes</h3>
 <ul>
-<li>CLI/Plugins: ensure <code>openclaw message send</code> exits after successful delivery across plugin-backed channels so one-shot sends do not hang. (#16491) Thanks @yinghaosang.</li>
-<li>CLI/Plugins: run registered plugin <code>gateway_stop</code> hooks before <code>openclaw message</code> exits (success and failure paths), so plugin-backed channels can clean up one-shot CLI resources. (#16580) Thanks @gumadeiras.</li>
+<li>CLI/Plugins: ensure <code>openpaw message send</code> exits after successful delivery across plugin-backed channels so one-shot sends do not hang. (#16491) Thanks @yinghaosang.</li>
+<li>CLI/Plugins: run registered plugin <code>gateway_stop</code> hooks before <code>openpaw message</code> exits (success and failure paths), so plugin-backed channels can clean up one-shot CLI resources. (#16580) Thanks @gumadeiras.</li>
 <li>WhatsApp: honor per-account <code>dmPolicy</code> overrides (account-level settings now take precedence over channel defaults for inbound DMs). (#10082) Thanks @mcaxtr.</li>
 <li>Telegram: when <code>channels.telegram.commands.native</code> is <code>false</code>, exclude plugin commands from <code>setMyCommands</code> menu registration while keeping plugin slash handlers callable. (#15132) Thanks @Glucksberg.</li>
 <li>LINE: return 200 OK for Developers Console "Verify" requests (<code>{"events":[]}</code>) without <code>X-Line-Signature</code>, while still requiring signatures for real deliveries. (#16582) Thanks @arosstale.</li>
@@ -34,8 +34,8 @@
 <li>BlueBubbles: include sender identity in group chat envelopes and pass clean message text to the agent prompt, aligning with iMessage/Signal formatting. (#16210) Thanks @zerone0x.</li>
 <li>CLI: fix lazy core command registration so top-level maintenance commands (<code>doctor</code>, <code>dashboard</code>, <code>reset</code>, <code>uninstall</code>) resolve correctly instead of exposing a non-functional <code>maintenance</code> placeholder command.</li>
 <li>CLI/Dashboard: when <code>gateway.bind=lan</code>, generate localhost dashboard URLs to satisfy browser secure-context requirements while preserving non-LAN bind behavior. (#16434) Thanks @BinHPdev.</li>
-<li>TUI/Gateway: resolve local gateway target URL from <code>gateway.bind</code> mode (tailnet/lan) instead of hardcoded localhost so <code>openclaw tui</code> connects when gateway is non-loopback. (#16299) Thanks @cortexuvula.</li>
-<li>TUI: honor explicit <code>--session <key></code> in <code>openclaw tui</code> even when <code>session.scope</code> is <code>global</code>, so named sessions no longer collapse into shared global history. (#16575) Thanks @cinqu.</li>
+<li>TUI/Gateway: resolve local gateway target URL from <code>gateway.bind</code> mode (tailnet/lan) instead of hardcoded localhost so <code>openpaw tui</code> connects when gateway is non-loopback. (#16299) Thanks @cortexuvula.</li>
+<li>TUI: honor explicit <code>--session <key></code> in <code>openpaw tui</code> even when <code>session.scope</code> is <code>global</code>, so named sessions no longer collapse into shared global history. (#16575) Thanks @cinqu.</li>
 <li>TUI: use available terminal width for session name display in searchable select lists. (#16238) Thanks @robbyczgw-cla.</li>
 <li>TUI: refactor searchable select list description layout and add regression coverage for ANSI-highlight width bounds.</li>
 <li>TUI: preserve in-flight streaming replies when a different run finalizes concurrently (avoid clearing active run or reloading history mid-stream). (#10704) Thanks @axschr73.</li>
@@ -50,7 +50,7 @@
 <li>Discord: prefer gateway guild id when logging inbound messages so cached-miss guilds do not appear as <code>guild=dm</code>. Thanks @thewilloftheshadow.</li>
 <li>Discord: treat empty per-guild <code>channels: {}</code> config maps as no channel allowlist (not deny-all), so <code>groupPolicy: "open"</code> guilds without explicit channel entries continue to receive messages. (#16714) Thanks @xqliu.</li>
 <li>Models/CLI: guard <code>models status</code> string trimming paths to prevent crashes from malformed non-string config values. (#16395) Thanks @BinHPdev.</li>
-<li>Gateway/Subagents: preserve queued announce items and summary state on delivery errors, retry failed announce drains, and avoid dropping unsent announcements on timeout/failure. (#16729) Thanks @Clawdette-Workspace.</li>
+<li>Gateway/Subagents: preserve queued announce items and summary state on delivery errors, retry failed announce drains, and avoid dropping unsent announcements on timeout/failure. (#16729) Thanks @Pawette-Workspace.</li>
 <li>Gateway/Sessions: abort active embedded runs and clear queued session work before <code>sessions.reset</code>, returning unavailable if the run does not stop in time. (#16576) Thanks @Grynn.</li>
 <li>Sessions/Agents: harden transcript path resolution for mismatched agent context by preserving explicit store roots and adding safe absolute-path fallback to the correct agent sessions directory. (#16288) Thanks @robbyczgw-cla.</li>
 <li>Agents: add a safety timeout around embedded <code>session.compact()</code> to ensure stalled compaction runs settle and release blocked session lanes. (#16331) Thanks @BinHPdev.</li>
@@ -88,7 +88,7 @@
 <li>Outbound/Memory: bound directory cache growth with max-size eviction and proactive TTL pruning to prevent long-running gateways from accumulating unbounded directory entries. (#5140) Thanks @coygeek and @vignesh07.</li>
 <li>Skills/Memory: remove disconnected nodes from remote-skills cache to prevent stale node metadata from accumulating over long uptimes. (#6760) Thanks @coygeek.</li>
 <li>Sandbox/Tools: make sandbox file tools bind-mount aware (including absolute container paths) and enforce read-only bind semantics for writes. (#16379) Thanks @tasaankaeris.</li>
-<li>Media/Security: allow local media reads from OpenClaw state <code>workspace/</code> and <code>sandboxes/</code> roots by default so generated workspace media can be delivered without unsafe global path bypasses. (#15541) Thanks @lanceji.</li>
+<li>Media/Security: allow local media reads from OpenPaw state <code>workspace/</code> and <code>sandboxes/</code> roots by default so generated workspace media can be delivered without unsafe global path bypasses. (#15541) Thanks @lanceji.</li>
 <li>Media/Security: harden local media allowlist bypasses by requiring an explicit <code>readFile</code> override when callers mark paths as validated, and reject filesystem-root <code>localRoots</code> entries. (#16739)</li>
 <li>Discord/Security: harden voice message media loading (SSRF + allowed-local-root checks) so tool-supplied paths/URLs cannot be used to probe internal URLs or read arbitrary local files.</li>
 <li>Security/BlueBubbles: require explicit <code>mediaLocalRoots</code> allowlists for local outbound media path reads to prevent local file disclosure. (#16322) Thanks @mbelinky.</li>
@@ -98,7 +98,7 @@
 <li>Security/Zalo: reject ambiguous shared-path webhook routing when multiple webhook targets match the same secret.</li>
 <li>Security/Nostr: require loopback source and block cross-origin profile mutation/import attempts. Thanks @vincentkoc.</li>
 <li>Security/Signal: harden signal-cli archive extraction during install to prevent path traversal outside the install root.</li>
-<li>Security/Hooks: restrict hook transform modules to <code>~/.openclaw/hooks/transforms</code> (prevents path traversal/escape module loads via config). Config note: <code>hooks.transformsDir</code> must now be within that directory. Thanks @akhmittra.</li>
+<li>Security/Hooks: restrict hook transform modules to <code>~/.openpaw/hooks/transforms</code> (prevents path traversal/escape module loads via config). Config note: <code>hooks.transformsDir</code> must now be within that directory. Thanks @akhmittra.</li>
 <li>Security/Hooks: ignore hook package manifest entries that point outside the package directory (prevents out-of-tree handler loads during hook discovery).</li>
 <li>Security/Archive: enforce archive extraction entry/size limits to prevent resource exhaustion from high-expansion ZIP/TAR archives. Thanks @vincentkoc.</li>
 <li>Security/Media: reject oversized base64-backed input media before decoding to avoid large allocations. Thanks @vincentkoc.</li>
@@ -108,7 +108,7 @@
 <li>Security/iMessage: keep DM pairing-store identities out of group allowlist authorization (prevents cross-context command authorization). Thanks @vincentkoc.</li>
 <li>Security/Google Chat: deprecate <code>users/<email></code> allowlists (treat <code>users/...</code> as immutable user id only); keep raw email allowlists for usability. Thanks @vincentkoc.</li>
 <li>Security/Google Chat: reject ambiguous shared-path webhook routing when multiple webhook targets verify successfully (prevents cross-account policy-context misrouting). Thanks @vincentkoc.</li>
-<li>Telegram/Security: require numeric Telegram sender IDs for allowlist authorization (reject <code>@username</code> principals), auto-resolve <code>@username</code> to IDs in <code>openclaw doctor --fix</code> (when possible), and warn in <code>openclaw security audit</code> when legacy configs contain usernames. Thanks @vincentkoc.</li>
+<li>Telegram/Security: require numeric Telegram sender IDs for allowlist authorization (reject <code>@username</code> principals), auto-resolve <code>@username</code> to IDs in <code>openpaw doctor --fix</code> (when possible), and warn in <code>openpaw security audit</code> when legacy configs contain usernames. Thanks @vincentkoc.</li>
 <li>Telegram/Security: reject Telegram webhook startup when <code>webhookSecret</code> is missing or empty (prevents unauthenticated webhook request forgery). Thanks @yueyueL.</li>
 <li>Security/Windows: avoid shell invocation when spawning child processes to prevent cmd.exe metacharacter injection via untrusted CLI arguments (e.g. agent prompt text).</li>
 <li>Telegram: set webhook callback timeout handling to <code>onTimeout: "return"</code> (10s) so long-running update processing no longer emits webhook 500s and retry storms. (#16763) Thanks @chansearrington.</li>
@@ -118,7 +118,7 @@
 <li>Security/Agents: enforce workspace-root path bounds for <code>apply_patch</code> in non-sandbox mode to block traversal and symlink escape writes. Thanks @p80n-sec.</li>
 <li>Security/Agents: enforce symlink-escape checks for <code>apply_patch</code> delete hunks under <code>workspaceOnly</code>, while still allowing deleting the symlink itself. Thanks @p80n-sec.</li>
 <li>Security/Agents (macOS): prevent shell injection when writing Claude CLI keychain credentials. (#15924) Thanks @aether-ai-agent.</li>
-<li>macOS: hard-limit unkeyed <code>openclaw://agent</code> deep links and ignore <code>deliver</code> / <code>to</code> / <code>channel</code> unless a valid unattended key is provided. Thanks @Cillian-Collins.</li>
+<li>macOS: hard-limit unkeyed <code>openpaw://agent</code> deep links and ignore <code>deliver</code> / <code>to</code> / <code>channel</code> unless a valid unattended key is provided. Thanks @Cillian-Collins.</li>
 <li>Scripts/Security: validate GitHub logins and avoid shell invocation in <code>scripts/update-clawtributors.ts</code> to prevent command injection via malicious commit records. Thanks @scanleale.</li>
 <li>Security: fix Chutes manual OAuth login state validation by requiring the full redirect URL (reject code-only pastes) (thanks @aether-ai-agent).</li>
 <li>Security/Gateway: harden tool-supplied <code>gatewayUrl</code> overrides by restricting them to loopback or the configured <code>gateway.remote.url</code>. Thanks @p80n-sec.</li>
@@ -136,18 +136,18 @@
 <li>Security/Voice Call: require valid Twilio webhook signatures even when ngrok free tier loopback compatibility mode is enabled. Thanks @p80n-sec.</li>
 <li>Security/Discovery: stop treating Bonjour TXT records as authoritative routing (prefer resolved service endpoints) and prevent discovery from overriding stored TLS pins; autoconnect now requires a previously trusted gateway. Thanks @simecek.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openpaw/openpaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.14/OpenClaw-2026.2.14.zip" length="22914034" type="application/octet-stream" sparkle:edSignature="lR3nuq46/akMIN8RFDpMkTE0VOVoDVG53Xts589LryMGEtUvJxRQDtHBXfx7ZvToTq6CFKG+L5Kq/4rUspMoAQ=="/>
+            <enclosure url="https://github.com/openpaw/openpaw/releases/download/v2026.2.14/OpenPaw-2026.2.14.zip" length="22914034" type="application/octet-stream" sparkle:edSignature="lR3nuq46/akMIN8RFDpMkTE0VOVoDVG53Xts589LryMGEtUvJxRQDtHBXfx7ZvToTq6CFKG+L5Kq/4rUspMoAQ=="/>
         </item>
         <item>
             <title>2026.2.15</title>
             <pubDate>Mon, 16 Feb 2026 05:04:34 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/openpaw/openpaw/main/appcast.xml</link>
             <sparkle:version>202602150</sparkle:version>
             <sparkle:shortVersionString>2026.2.15</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.15</h2>
+            <description><![CDATA[<h2>OpenPaw 2026.2.15</h2>
 <h3>Changes</h3>
 <ul>
 <li>Discord: unlock rich interactive agent prompts with Components v2 (buttons, selects, modals, and attachment-backed file blocks) so for native interaction through Discord. Thanks @thewilloftheshadow.</li>
@@ -204,23 +204,23 @@
 <li>TUI: preserve copy-sensitive long tokens (URLs/paths/file-like identifiers) during wrapping and overflow sanitization so wrapped output no longer inserts spaces that corrupt copy/paste values. (#17515, #17466, #17505) Thanks @abe238, @trevorpan, and @JasonCry.</li>
 <li>CLI/Build: make legacy daemon CLI compatibility shim generation tolerant of minimal tsdown daemon export sets, while preserving restart/register compatibility aliases and surfacing explicit errors for unavailable legacy daemon commands. Thanks @vignesh07.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openpaw/openpaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.15/OpenClaw-2026.2.15.zip" length="22896513" type="application/octet-stream" sparkle:edSignature="MLGsd2NeHXFRH1Or0bFQnAjqfuuJDuhl1mvKFIqTQcRvwbeyvOyyLXrqSbmaOgJR3wBQBKLs6jYQ9dQ/3R8RCg=="/>
+            <enclosure url="https://github.com/openpaw/openpaw/releases/download/v2026.2.15/OpenPaw-2026.2.15.zip" length="22896513" type="application/octet-stream" sparkle:edSignature="MLGsd2NeHXFRH1Or0bFQnAjqfuuJDuhl1mvKFIqTQcRvwbeyvOyyLXrqSbmaOgJR3wBQBKLs6jYQ9dQ/3R8RCg=="/>
         </item>
         <item>
             <title>2026.2.22</title>
             <pubDate>Mon, 23 Feb 2026 01:51:13 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/openpaw/openpaw/main/appcast.xml</link>
             <sparkle:version>14126</sparkle:version>
             <sparkle:shortVersionString>2026.2.22</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.22</h2>
+            <description><![CDATA[<h2>OpenPaw 2026.2.22</h2>
 <h3>Changes</h3>
 <ul>
 <li>Provider/Mistral: add support for the Mistral provider, including memory embeddings and voice support. (#23845) Thanks @vincentkoc.</li>
 <li>Update/Core: add an optional built-in auto-updater for package installs (<code>update.auto.*</code>), default-off, with stable rollout delay+jitter and beta hourly cadence.</li>
-<li>CLI/Update: add <code>openclaw update --dry-run</code> to preview channel/tag/target/restart actions without mutating config, installing, syncing plugins, or restarting.</li>
+<li>CLI/Update: add <code>openpaw update --dry-run</code> to preview channel/tag/target/restart actions without mutating config, installing, syncing plugins, or restarting.</li>
 <li>Config/UI: add tag-aware settings filtering and broaden config labels/help copy so fields are easier to discover and understand in the dashboard config screen.</li>
 <li>Channels/Synology Chat: add a native Synology Chat channel plugin with webhook ingress, direct-message routing, outbound send/media support, per-account config, and DM policy controls. (#23012)</li>
 <li>iOS/Talk: prefetch TTS segments and suppress expected speech-cancellation errors for smoother talk playback. (#22833) Thanks @ngutman.</li>
@@ -237,16 +237,16 @@
 </ul>
 <h3>Breaking</h3>
 <ul>
-<li><strong>BREAKING:</strong> tool-failure replies now hide raw error details by default. OpenClaw still sends a failure summary, but detailed error suffixes (for example provider/runtime messages and local path fragments) now require <code>/verbose on</code> or <code>/verbose full</code>.</li>
+<li><strong>BREAKING:</strong> tool-failure replies now hide raw error details by default. OpenPaw still sends a failure summary, but detailed error suffixes (for example provider/runtime messages and local path fragments) now require <code>/verbose on</code> or <code>/verbose full</code>.</li>
 <li><strong>BREAKING:</strong> CLI local onboarding now sets <code>session.dmScope</code> to <code>per-channel-peer</code> by default for new/implicit DM scope configuration. If you depend on shared DM continuity across senders, explicitly set <code>session.dmScope</code> to <code>main</code>. (#23468) Thanks @bmendonca3.</li>
-<li><strong>BREAKING:</strong> unify channel preview-streaming config to <code>channels.<channel>.streaming</code> with enum values <code>off | partial | block | progress</code>, and move Slack native stream toggle to <code>channels.slack.nativeStreaming</code>. Legacy keys (<code>streamMode</code>, Slack boolean <code>streaming</code>) are still read and migrated by <code>openclaw doctor --fix</code>, but canonical saved config/docs now use the unified names.</li>
+<li><strong>BREAKING:</strong> unify channel preview-streaming config to <code>channels.<channel>.streaming</code> with enum values <code>off | partial | block | progress</code>, and move Slack native stream toggle to <code>channels.slack.nativeStreaming</code>. Legacy keys (<code>streamMode</code>, Slack boolean <code>streaming</code>) are still read and migrated by <code>openpaw doctor --fix</code>, but canonical saved config/docs now use the unified names.</li>
 <li><strong>BREAKING:</strong> remove legacy Gateway device-auth signature <code>v1</code>. Device-auth clients must now sign <code>v2</code> payloads with the per-connection <code>connect.challenge</code> nonce and send <code>device.nonce</code>; nonce-less connects are rejected.</li>
 </ul>
 <h3>Fixes</h3>
 <ul>
-<li>Security/CLI: redact sensitive values in <code>openclaw config get</code> output before printing config paths, preventing credential leakage to terminal output/history. (#13683) Thanks @SleuthCo.</li>
-<li>Install/Discord Voice: make <code>@discordjs/opus</code> an optional dependency so <code>openclaw</code> install/update no longer hard-fails when native Opus builds fail, while keeping <code>opusscript</code> as the runtime fallback decoder for Discord voice flows. (#23737, #23733, #23703) Thanks @jeadland, @Sheetaa, and @Breakyman.</li>
-<li>Docker/Setup: precreate <code>$OPENCLAW_CONFIG_DIR/identity</code> during <code>docker-setup.sh</code> so CLI commands that need device identity (for example <code>devices list</code>) avoid <code>EACCES ... /home/node/.openclaw/identity</code> failures on restrictive bind mounts. (#23948) Thanks @ackson-beep.</li>
+<li>Security/CLI: redact sensitive values in <code>openpaw config get</code> output before printing config paths, preventing credential leakage to terminal output/history. (#13683) Thanks @SleuthCo.</li>
+<li>Install/Discord Voice: make <code>@discordjs/opus</code> an optional dependency so <code>openpaw</code> install/update no longer hard-fails when native Opus builds fail, while keeping <code>opusscript</code> as the runtime fallback decoder for Discord voice flows. (#23737, #23733, #23703) Thanks @jeadland, @Sheetaa, and @Breakyman.</li>
+<li>Docker/Setup: precreate <code>$OPENPAW_CONFIG_DIR/identity</code> during <code>docker-setup.sh</code> so CLI commands that need device identity (for example <code>devices list</code>) avoid <code>EACCES ... /home/node/.openpaw/identity</code> failures on restrictive bind mounts. (#23948) Thanks @ackson-beep.</li>
 <li>Exec/Background: stop applying the default exec timeout to background sessions (<code>background: true</code> or explicit <code>yieldMs</code>) when no explicit timeout is set, so long-running background jobs are no longer terminated at the default timeout boundary. (#23303)</li>
 <li>Slack/Threading: sessions: keep parent-session forking and thread-history context active beyond first turn by removing first-turn-only gates in session init, thread-history fetch, and reply prompt context injection. (#23843, #23090) Thanks @vincentkoc and @Taskle.</li>
 <li>Slack/Threading: respect <code>replyToMode</code> when Slack auto-populates top-level <code>thread_ts</code>, and ignore inline <code>replyToId</code> directive tags when <code>replyToMode</code> is <code>off</code> so thread forcing stays disabled unless explicitly configured. (#23839, #23320, #23513) Thanks @vincentkoc and @dorukardahan.</li>
@@ -271,7 +271,7 @@
 <li>Gateway/Pairing: auto-approve loopback <code>scope-upgrade</code> pairing requests (including device-token reconnects) so local clients do not disconnect on pairing-required scope elevation. (#23708) Thanks @widingmarcus-cyber.</li>
 <li>Gateway/Scopes: include <code>operator.read</code> and <code>operator.write</code> in default operator connect scope bundles across CLI, Control UI, and macOS clients so write-scoped announce/sub-agent follow-up calls no longer hit <code>pairing required</code> disconnects on loopback gateways. (#22582) thanks @YuzuruS.</li>
 <li>Gateway/Pairing: treat operator.admin pairing tokens as satisfying operator.write requests so legacy devices stop looping through scope-upgrade prompts introduced in 2026.2.19. (#23125, #23006) Thanks @vignesh07.</li>
-<li>Gateway/Restart: fix restart-loop edge cases by keeping <code>openclaw.mjs -> dist/entry.js</code> bootstrap detection explicit, reacquiring the gateway lock for in-process restart fallback paths, and tightening restart-loop regression coverage. (#23416) Thanks @jeffwnli.</li>
+<li>Gateway/Restart: fix restart-loop edge cases by keeping <code>openpaw.mjs -> dist/entry.js</code> bootstrap detection explicit, reacquiring the gateway lock for in-process restart fallback paths, and tightening restart-loop regression coverage. (#23416) Thanks @jeffwnli.</li>
 <li>Gateway/Lock: use optional gateway-port reachability as a primary stale-lock liveness signal (and wire gateway run-loop lock acquisition to the resolved port), reducing false "already running" lockouts after unclean exits. (#23760) Thanks @Operative-001.</li>
 <li>Delivery/Queue: quarantine queue entries immediately on known permanent delivery errors (for example invalid recipients or missing conversation references) by moving them to <code>failed/</code> instead of retrying on every restart. (#23794) Thanks @aldoeliacim.</li>
 <li>Cron/Status: split execution outcome (<code>lastRunStatus</code>) from delivery outcome (<code>lastDeliveryStatus</code>) in persisted cron state, finished events, and run history so failed/unknown announcement delivery is visible without conflating it with run errors.</li>
@@ -287,11 +287,11 @@
 <li>Cron/Run log: clean up settled per-path run-log write queue entries so long-running cron uptime does not retain stale promise bookkeeping in memory.</li>
 <li>Cron/Isolation: force fresh session IDs for isolated cron runs so <code>sessionTarget="isolated"</code> executions never reuse prior run context. (#23470) Thanks @echoVic.</li>
 <li>Plugins/Install: strip <code>workspace:*</code> devDependency entries from copied plugin manifests before <code>npm install --omit=dev</code>, preventing <code>EUNSUPPORTEDPROTOCOL</code> install failures for npm-published channel plugins (including Feishu and MS Teams).</li>
-<li>Feishu/Plugins: restore bundled Feishu SDK availability for global installs and strip <code>openclaw: workspace:*</code> from plugin <code>devDependencies</code> during plugin-version sync so npm-installed Feishu plugins do not fail dependency install. (#23611, #23645, #23603)</li>
+<li>Feishu/Plugins: restore bundled Feishu SDK availability for global installs and strip <code>openpaw: workspace:*</code> from plugin <code>devDependencies</code> during plugin-version sync so npm-installed Feishu plugins do not fail dependency install. (#23611, #23645, #23603)</li>
 <li>Config/Channels: auto-enable built-in channels by writing <code>channels.<id>.enabled=true</code> (not <code>plugins.entries.<id></code>), and stop adding built-ins to <code>plugins.allow</code>, preventing <code>plugins.entries.telegram: plugin not found</code> validation failures.</li>
 <li>Config/Channels: when <code>plugins.allow</code> is active, auto-enable/enable flows now also allowlist configured built-in channels so <code>channels.<id>.enabled=true</code> cannot remain blocked by restrictive plugin allowlists.</li>
-<li>Plugins/Discovery: ignore scanned extension backup/disabled directory patterns (for example <code>.backup-*</code>, <code>.bak</code>, <code>.disabled*</code>) and move updater backup directories under <code>.openclaw-install-backups</code>, preventing duplicate plugin-id collisions from archived copies.</li>
-<li>Plugins/CLI: make <code>openclaw plugins enable</code> and plugin install/link flows update allowlists via shared plugin-enable policy so enabled plugins are not left disabled by allowlist mismatch. (#23190) Thanks @downwind7clawd-ctrl.</li>
+<li>Plugins/Discovery: ignore scanned extension backup/disabled directory patterns (for example <code>.backup-*</code>, <code>.bak</code>, <code>.disabled*</code>) and move updater backup directories under <code>.openpaw-install-backups</code>, preventing duplicate plugin-id collisions from archived copies.</li>
+<li>Plugins/CLI: make <code>openpaw plugins enable</code> and plugin install/link flows update allowlists via shared plugin-enable policy so enabled plugins are not left disabled by allowlist mismatch. (#23190) Thanks @downwind7paw-ctrl.</li>
 <li>Security/Voice Call: harden media stream WebSocket handling against pre-auth idle-connection DoS by adding strict pre-start timeouts, pending/per-IP connection limits, and total connection caps for streaming endpoints. This ships in the next npm release. Thanks @jiseoung for reporting.</li>
 <li>Security/Sessions: redact sensitive token patterns from <code>sessions_history</code> tool output and surface <code>contentRedacted</code> metadata when masking occurs. (#16928) Thanks @aether-ai-agent.</li>
 <li>Security/Exec: stop trusting <code>PATH</code>-derived directories for safe-bin allowlist checks, add explicit <code>tools.exec.safeBinTrustedDirs</code>, and pin safe-bin shell execution to resolved absolute executable paths to prevent binary-shadowing approval bypasses. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
@@ -307,7 +307,7 @@
 <li>Agents/Workspace guard: map sandbox container-workdir file-tool paths (for example <code>/workspace/...</code> and <code>file:///workspace/...</code>) to host workspace roots before workspace-only validation, preventing false <code>Path escapes sandbox root</code> rejections for sandbox file tools. (#9560)</li>
 <li>Gateway/Exec approvals: expire approval requests immediately when no approval-capable gateway clients are connected and no forwarding targets are available, avoiding delayed approvals after restarts/offline approver windows. (#22144)</li>
 <li>Security/Exec approvals: when approving wrapper commands with allow-always in allowlist mode, persist inner executable paths for known dispatch wrappers (<code>env</code>, <code>nice</code>, <code>nohup</code>, <code>stdbuf</code>, <code>timeout</code>) and fail closed (no persisted entry) when wrapper unwrapping is not safe, preventing wrapper-path approval bypasses. Thanks @tdjackey for reporting.</li>
-<li>Node/macOS exec host: default headless macOS node <code>system.run</code> to local execution and only route through the companion app when <code>OPENCLAW_NODE_EXEC_HOST=app</code> is explicitly set, avoiding companion-app filesystem namespace mismatches during exec. (#23547)</li>
+<li>Node/macOS exec host: default headless macOS node <code>system.run</code> to local execution and only route through the companion app when <code>OPENPAW_NODE_EXEC_HOST=app</code> is explicitly set, avoiding companion-app filesystem namespace mismatches during exec. (#23547)</li>
 <li>Sandbox/Media: map container workspace paths (<code>/workspace/...</code> and <code>file:///workspace/...</code>) back to the host sandbox root for outbound media validation, preventing false deny errors for sandbox-generated local media. (#23083) Thanks @echo931.</li>
 <li>Sandbox/Docker: apply custom bind mounts after workspace mounts and prioritize bind-source resolution on overlapping paths, so explicit workspace binds are no longer ignored. (#22669) Thanks @tasaankaeris.</li>
 <li>Exec approvals/Forwarding: restore Discord text forwarding when component approvals are not configured, and carry request snapshots through resolve events so resolved notices still forward after cache misses/restarts. (#22988) Thanks @bubmiller.</li>
@@ -321,7 +321,7 @@
 <li>Hooks/Loader: avoid redundant hook-module recompilation on gateway restart by skipping cache-busting for bundled hooks and using stable file metadata keys (<code>mtime+size</code>) for mutable workspace/managed/plugin hook imports. (#16953) Thanks @mudrii.</li>
 <li>Hooks/Cron: suppress duplicate main-session events for delivered hook turns and mark <code>SILENT_REPLY_TOKEN</code> (<code>NO_REPLY</code>) early exits as delivered to prevent hook context pollution. (#20678) Thanks @JonathanWorks.</li>
 <li>Providers/OpenRouter: inject <code>cache_control</code> on system prompts for OpenRouter Anthropic models to improve prompt-cache reuse. (#17473) Thanks @rrenamed.</li>
-<li>Installer/Smoke tests: remove legacy <code>OPENCLAW_USE_GUM</code> overrides from docker install-smoke runs so tests exercise installer auto TTY detection behavior directly.</li>
+<li>Installer/Smoke tests: remove legacy <code>OPENPAW_USE_GUM</code> overrides from docker install-smoke runs so tests exercise installer auto TTY detection behavior directly.</li>
 <li>Providers/OpenRouter: allow pass-through OpenRouter and Opencode model IDs in live model filtering so custom routed model IDs are treated as modern refs. (#14312) Thanks @Joly0.</li>
 <li>Providers/OpenRouter: default reasoning to enabled when the selected model advertises <code>reasoning: true</code> and no session/directive override is set. (#22513) Thanks @zwffff.</li>
 <li>Providers/OpenRouter: map <code>/think</code> levels to <code>reasoning.effort</code> in embedded runs while preserving explicit <code>reasoning.max_tokens</code> payloads. (#17236) Thanks @robbyczgw-cla.</li>
@@ -351,26 +351,26 @@
 <li>Channels/Dedupe: centralize plugin dedupe primitives in plugin SDK (memory + persistent), move Feishu inbound dedupe to a namespace-scoped persistent store, and reuse shared dedupe cache logic for Zalo webhook replay + Tlon processed-message tracking to reduce duplicate handling during reconnect/replay paths. (#23377) Thanks @SidQin-cyber.</li>
 <li>Channels/Delivery: remove hardcoded WhatsApp delivery fallbacks; require explicit/session channel context or auto-pick the sole configured channel when unambiguous. (#23357) Thanks @lbo728.</li>
 <li>ACP/Gateway: wait for gateway hello before opening ACP requests, and fail fast on pre-hello connect failures to avoid startup hangs and early <code>gateway not connected</code> request races. (#23390) Thanks @janckerchen.</li>
-<li>Gateway/Auth: preserve <code>OPENCLAW_GATEWAY_PASSWORD</code> env override precedence for remote gateway call credentials after shared resolver refactors, preventing stale configured remote passwords from overriding runtime secret rotation.</li>
+<li>Gateway/Auth: preserve <code>OPENPAW_GATEWAY_PASSWORD</code> env override precedence for remote gateway call credentials after shared resolver refactors, preventing stale configured remote passwords from overriding runtime secret rotation.</li>
 <li>Gateway/Auth: preserve shared-token <code>gateway token mismatch</code> auth errors when <code>auth.token</code> fallback device-token checks fail, and reserve <code>device token mismatch</code> guidance for explicit <code>auth.deviceToken</code> failures.</li>
 <li>Gateway/Tools: when agent tools pass an allowlisted <code>gatewayUrl</code> override, resolve local override tokens from env/config fallback but keep remote overrides strict to <code>gateway.remote.token</code>, preventing local token leakage to remote targets.</li>
 <li>Gateway/Client: keep cached device-auth tokens on <code>device token mismatch</code> closes when the client used explicit shared token/password credentials, avoiding accidental pairing-token churn during explicit-auth failures.</li>
 <li>Node host/Exec: keep strict Windows allowlist behavior for <code>cmd.exe /c</code> shell-wrapper runs, and return explicit approval guidance when blocked (<code>SYSTEM_RUN_DENIED: allowlist miss</code>).</li>
 <li>Control UI: show pairing-required guidance (commands + mobile tokenized URL reminder) when the dashboard disconnects with <code>1008 pairing required</code>.</li>
-<li>Security/Audit: add <code>openclaw security audit</code> detection for open group policies that expose runtime/filesystem tools without sandbox/workspace guards (<code>security.exposure.open_groups_with_runtime_or_fs</code>).</li>
+<li>Security/Audit: add <code>openpaw security audit</code> detection for open group policies that expose runtime/filesystem tools without sandbox/workspace guards (<code>security.exposure.open_groups_with_runtime_or_fs</code>).</li>
 <li>Security/Audit: make <code>gateway.real_ip_fallback_enabled</code> severity conditional for loopback trusted-proxy setups (warn for loopback-only <code>trustedProxies</code>, critical when non-loopback proxies are trusted). (#23428) Thanks @bmendonca3.</li>
 <li>Security/Exec env: block request-scoped <code>HOME</code> and <code>ZDOTDIR</code> overrides in host exec env sanitizers (Node + macOS), preventing shell startup-file execution before allowlist-evaluated command bodies. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
 <li>Security/Exec env: block <code>SHELLOPTS</code>/<code>PS4</code> in host exec env sanitizers and restrict shell-wrapper (<code>bash|sh|zsh ... -c/-lc</code>) request env overrides to a small explicit allowlist (<code>TERM</code>, <code>LANG</code>, <code>LC_*</code>, <code>COLORTERM</code>, <code>NO_COLOR</code>, <code>FORCE_COLOR</code>) on both node host and macOS companion paths, preventing xtrace prompt command-substitution allowlist bypasses. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
 <li>WhatsApp/Security: enforce <code>allowFrom</code> for direct-message outbound targets in all send modes (including <code>mode: "explicit"</code>), preventing sends to non-allowlisted numbers. (#20108) Thanks @zahlmann.</li>
 <li>Security/Exec approvals: fail closed on shell line continuations (<code>\\\n</code>/<code>\\\r\n</code>) and treat shell-wrapper execution as approval-required in allowlist mode, preventing <code>$\\</code> newline command-substitution bypasses. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
-<li>Security/Gateway: emit a startup security warning when insecure/dangerous config flags are enabled (including <code>gateway.controlUi.dangerouslyDisableDeviceAuth=true</code>) and point operators to <code>openclaw security audit</code>.</li>
+<li>Security/Gateway: emit a startup security warning when insecure/dangerous config flags are enabled (including <code>gateway.controlUi.dangerouslyDisableDeviceAuth=true</code>) and point operators to <code>openpaw security audit</code>.</li>
 <li>Security/Hooks auth: normalize hook auth rate-limit client IP keys so IPv4 and IPv4-mapped IPv6 addresses share one throttle bucket, preventing dual-form auth-attempt budget bypasses. This ships in the next npm release. Thanks @aether-ai-agent for reporting.</li>
 <li>Security/Exec approvals: treat <code>env</code> and shell-dispatch wrappers as transparent during allowlist analysis on node-host and macOS companion paths so policy checks match the effective executable/inline shell payload instead of the wrapper binary, blocking wrapper-smuggled allowlist bypasses. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
 <li>Security/Exec approvals: require explicit safe-bin profiles for <code>tools.exec.safeBins</code> entries in allowlist mode (remove generic safe-bin profile fallback), and add <code>tools.exec.safeBinProfiles</code> for safe custom binaries so unprofiled interpreter-style entries cannot be treated as stdin-safe. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
 <li>Security/Channels: harden Slack external menu token handling by switching to CSPRNG tokens, validating token shape, requiring user identity for external option lookups, and avoiding fabricated timestamp <code>trigger_id</code> fallbacks; also switch Tlon Urbit channel IDs to CSPRNG UUIDs, centralize secure ID/token generation via shared infra helpers, and add a guardrail test to block new runtime <code>Date.now()+Math.random()</code> token/id patterns.</li>
 <li>Security/Hooks transforms: enforce symlink-safe containment for webhook transform module paths (including <code>hooks.transformsDir</code> and <code>hooks.mappings[].transform.module</code>) by resolving existing-path ancestors via realpath before import, while preserving in-root symlink support; add regression coverage for both escape and allow cases. This ships in the next npm release. Thanks @aether-ai-agent for reporting.</li>
 <li>Telegram/WSL2: disable <code>autoSelectFamily</code> by default on WSL2 and memoize WSL2 detection in Telegram network decision logic to avoid repeated sync <code>/proc/version</code> probes on fetch/send paths. (#21916) Thanks @MizukiMachine.</li>
-<li>Telegram/Network: default Node 22+ DNS result ordering to <code>ipv4first</code> for Telegram fetch paths and add <code>OPENCLAW_TELEGRAM_DNS_RESULT_ORDER</code>/<code>channels.telegram.network.dnsResultOrder</code> overrides to reduce IPv6-path fetch failures. (#5405) Thanks @Glucksberg.</li>
+<li>Telegram/Network: default Node 22+ DNS result ordering to <code>ipv4first</code> for Telegram fetch paths and add <code>OPENPAW_TELEGRAM_DNS_RESULT_ORDER</code>/<code>channels.telegram.network.dnsResultOrder</code> overrides to reduce IPv6-path fetch failures. (#5405) Thanks @Glucksberg.</li>
 <li>Telegram/Forward bursts: coalesce forwarded text+media updates through a dedicated forward lane debounce window that works with default inbound debounce config, while keeping forwarded control commands immediate. (#19476) thanks @napetrov.</li>
 <li>Telegram/Streaming: preserve archived draft preview mapping after flush and clean superseded reasoning preview bubbles so multi-message preview finals no longer cross-edit or orphan stale messages under send/rotation races. (#23202) Thanks @obviyus.</li>
 <li>Telegram/Replies: scope messaging-tool text/media dedupe to same-target sends only, so cross-target tool sends can no longer silently suppress Telegram final replies.</li>
@@ -409,11 +409,11 @@
 <li>Memory/QMD: add optional <code>memory.qmd.mcporter</code> search routing so QMD <code>query/search/vsearch</code> can run through mcporter keep-alive flows (including multi-collection paths) to reduce cold starts, while keeping searches on agent-scoped QMD state for consistent recall. (#19617) Thanks @nicole-luxe and @vignesh07.</li>
 <li>Infra/Network: classify undici <code>TypeError: fetch failed</code> as transient in unhandled-rejection detection even when nested causes are unclassified, preventing avoidable gateway crash loops on flaky networks. (#14345) Thanks @Unayung.</li>
 <li>Telegram/Retry: classify undici <code>TypeError: fetch failed</code> as recoverable in both polling and send retry paths so transient fetch failures no longer fail fast. (#16699) thanks @Glucksberg.</li>
-<li>Docs/Telegram: correct Node 22+ network defaults (<code>autoSelectFamily</code>, <code>dnsResultOrder</code>) and clarify Telegram setup does not use positional <code>openclaw channels login telegram</code>. (#23609) Thanks @ryanbastic.</li>
+<li>Docs/Telegram: correct Node 22+ network defaults (<code>autoSelectFamily</code>, <code>dnsResultOrder</code>) and clarify Telegram setup does not use positional <code>openpaw channels login telegram</code>. (#23609) Thanks @ryanbastic.</li>
 <li>BlueBubbles/DM history: restore DM backfill context with account-scoped rolling history, bounded backfill retries, and safer history payload limits. (#20302) Thanks @Ryan-Haines.</li>
 <li>BlueBubbles/Private API cache: treat unknown (<code>null</code>) private-API cache status as disabled for send/attachment/reply flows to avoid stale-cache 500s, and log a warning when reply/effect features are requested while capability is unknown. (#23459) Thanks @echoVic.</li>
 <li>BlueBubbles/Webhooks: accept inbound/reaction webhook payloads when BlueBubbles omits <code>handle</code> but provides DM <code>chatGuid</code>, and harden payload extraction for array/string-wrapped message bodies so valid webhook events no longer get rejected as unparseable. (#23275) Thanks @toph31.</li>
-<li>Security/Audit: add <code>openclaw security audit</code> finding <code>gateway.nodes.allow_commands_dangerous</code> for risky <code>gateway.nodes.allowCommands</code> overrides, with severity upgraded to critical on remote gateway exposure.</li>
+<li>Security/Audit: add <code>openpaw security audit</code> finding <code>gateway.nodes.allow_commands_dangerous</code> for risky <code>gateway.nodes.allowCommands</code> overrides, with severity upgraded to critical on remote gateway exposure.</li>
 <li>Gateway/Control plane: reduce cross-client write limiter contention by adding <code>connId</code> fallback keying when device ID and client IP are both unavailable.</li>
 <li>Security/Config: block prototype-key traversal during config merge patch and legacy migration merge helpers (<code>__proto__</code>, <code>constructor</code>, <code>prototype</code>) to prevent prototype pollution during config mutation flows. (#22968) Thanks @Clawborn.</li>
 <li>Security/Shell env: validate login-shell executable paths for shell-env fallback (<code>/etc/shells</code> + trusted prefixes), block <code>SHELL</code>/<code>HOME</code>/<code>ZDOTDIR</code> in config env ingestion before fallback execution, and sanitize fallback shell exec env to pin <code>HOME</code> to the real user home while dropping <code>ZDOTDIR</code> and other dangerous startup vars. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
@@ -429,7 +429,7 @@
 <li>Security/Archive: block zip symlink escapes during archive extraction.</li>
 <li>Security/Media sandbox: keep tmp media allowance for absolute tmp paths only and enforce symlink-escape checks before sandbox-validated reads, preventing tmp symlink exfiltration and relative <code>../</code> sandbox escapes when sandboxes live under tmp. (#17892) Thanks @dashed.</li>
 <li>Browser/Upload: accept canonical in-root upload paths when the configured uploads directory is a symlink alias (for example <code>/tmp</code> -> <code>/private/tmp</code> on macOS), so browser upload validation no longer rejects valid files during client->server revalidation. (#23300, #23222, #22848) Thanks @bgaither4, @parkerati, and @Nabsku.</li>
-<li>Security/Discord: add <code>openclaw security audit</code> warnings for name/tag-based Discord allowlist entries (DM allowlists, guild/channel <code>users</code>, and pairing-store entries), highlighting slug-collision risk while keeping name-based matching supported, and canonicalize resolved Discord allowlist names to IDs at runtime without rewriting config files. Thanks @tdjackey for reporting.</li>
+<li>Security/Discord: add <code>openpaw security audit</code> warnings for name/tag-based Discord allowlist entries (DM allowlists, guild/channel <code>users</code>, and pairing-store entries), highlighting slug-collision risk while keeping name-based matching supported, and canonicalize resolved Discord allowlist names to IDs at runtime without rewriting config files. Thanks @tdjackey for reporting.</li>
 <li>Security/Gateway: block node-role connections when device identity metadata is missing.</li>
 <li>Security/Media: enforce inbound media byte limits during download/read across Discord, Telegram, Zalo, Microsoft Teams, and BlueBubbles to prevent oversized payload memory spikes before rejection. This ships in the next npm release. Thanks @tdjackey for reporting.</li>
 <li>Media/Understanding: preserve <code>application/pdf</code> MIME classification during text-like file heuristics so PDF uploads use PDF extraction paths instead of being inlined as raw text. (#23191) Thanks @claudeplay2026-byte.</li>
@@ -451,9 +451,9 @@
 <li>Gateway/Daemon: verify gateway health after daemon restart.</li>
 <li>Agents/UI text: stop rewriting normal assistant billing/payment language outside explicit error contexts. (#17834) Thanks @niceysam.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openpaw/openpaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.22-beta.1/OpenClaw-2026.2.22.zip" length="23096856" type="application/octet-stream" sparkle:edSignature="aoVaCQPj9ajiSD+OjMZdUOyNzACFlMxU7m4ns+4LF1eWaizGLGHk4S0OPnHVQ+DAQY2DCHua+z4F0SMI6o01DA=="/>
+            <enclosure url="https://github.com/openpaw/openpaw/releases/download/v2026.2.22-beta.1/OpenPaw-2026.2.22.zip" length="23096856" type="application/octet-stream" sparkle:edSignature="aoVaCQPj9ajiSD+OjMZdUOyNzACFlMxU7m4ns+4LF1eWaizGLGHk4S0OPnHVQ+DAQY2DCHua+z4F0SMI6o01DA=="/>
         </item>
     </channel>
 </rss>

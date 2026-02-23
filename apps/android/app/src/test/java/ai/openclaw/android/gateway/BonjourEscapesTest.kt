@@ -1,4 +1,4 @@
-package ai.openclaw.android.gateway
+package ai.openpaw.android.gateway
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -12,7 +12,7 @@ class BonjourEscapesTest {
 
   @Test
   fun decodeDecodesDecimalEscapes() {
-    assertEquals("OpenClaw Gateway", BonjourEscapes.decode("OpenClaw\\032Gateway"))
+    assertEquals("OpenPaw Gateway", BonjourEscapes.decode("OpenPaw\\032Gateway"))
     assertEquals("A B", BonjourEscapes.decode("A\\032B"))
     assertEquals("Peter\u2019s Mac", BonjourEscapes.decode("Peter\\226\\128\\153s Mac"))
   }

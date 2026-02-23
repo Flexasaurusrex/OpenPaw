@@ -1,18 +1,18 @@
 import AppKit
-import OpenClawChatUI
+import OpenPawChatUI
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite(.serialized)
 @MainActor
 struct WebChatSwiftUISmokeTests {
-    private struct TestTransport: OpenClawChatTransport, Sendable {
-        func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
+    private struct TestTransport: OpenPawChatTransport, Sendable {
+        func requestHistory(sessionKey: String) async throws -> OpenPawChatHistoryPayload {
             let json = """
             {"sessionKey":"\(sessionKey)","sessionId":null,"messages":[],"thinkingLevel":"off"}
             """
-            return try JSONDecoder().decode(OpenClawChatHistoryPayload.self, from: Data(json.utf8))
+            return try JSONDecoder().decode(OpenPawChatHistoryPayload.self, from: Data(json.utf8))
         }
 
         func sendMessage(
@@ -20,17 +20,17 @@ struct WebChatSwiftUISmokeTests {
             message _: String,
             thinking _: String,
             idempotencyKey _: String,
-            attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+            attachments _: [OpenPawChatAttachmentPayload]) async throws -> OpenPawChatSendResponse
         {
             let json = """
             {"runId":"\(UUID().uuidString)","status":"ok"}
             """
-            return try JSONDecoder().decode(OpenClawChatSendResponse.self, from: Data(json.utf8))
+            return try JSONDecoder().decode(OpenPawChatSendResponse.self, from: Data(json.utf8))
         }
 
         func requestHealth(timeoutMs _: Int) async throws -> Bool { true }
 
-        func events() -> AsyncStream<OpenClawChatTransportEvent> {
+        func events() -> AsyncStream<OpenPawChatTransportEvent> {
             AsyncStream { continuation in
                 continuation.finish()
             }

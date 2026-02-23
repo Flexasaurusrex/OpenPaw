@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 
 export type ExplicitGatewayAuth = {
   token?: string;
@@ -36,28 +36,28 @@ function readGatewayTokenEnv(
   env: NodeJS.ProcessEnv,
   includeLegacyEnv: boolean,
 ): string | undefined {
-  const primary = trimToUndefined(env.OPENCLAW_GATEWAY_TOKEN);
+  const primary = trimToUndefined(env.OPENPAW_GATEWAY_TOKEN);
   if (primary) {
     return primary;
   }
   if (!includeLegacyEnv) {
     return undefined;
   }
-  return trimToUndefined(env.CLAWDBOT_GATEWAY_TOKEN);
+  return trimToUndefined(env.PAWBOT_GATEWAY_TOKEN);
 }
 
 function readGatewayPasswordEnv(
   env: NodeJS.ProcessEnv,
   includeLegacyEnv: boolean,
 ): string | undefined {
-  const primary = trimToUndefined(env.OPENCLAW_GATEWAY_PASSWORD);
+  const primary = trimToUndefined(env.OPENPAW_GATEWAY_PASSWORD);
   if (primary) {
     return primary;
   }
   if (!includeLegacyEnv) {
     return undefined;
   }
-  return trimToUndefined(env.CLAWDBOT_GATEWAY_PASSWORD);
+  return trimToUndefined(env.PAWBOT_GATEWAY_PASSWORD);
 }
 
 export function resolveGatewayCredentialsFromValues(params: {
@@ -90,7 +90,7 @@ export function resolveGatewayCredentialsFromValues(params: {
 }
 
 export function resolveGatewayCredentialsFromConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: OpenPawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;

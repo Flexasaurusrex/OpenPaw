@@ -1,4 +1,4 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.Manifest
 import android.content.Context
@@ -25,7 +25,7 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.graphics.scale
-import ai.openclaw.android.PermissionRequester
+import ai.openpaw.android.PermissionRequester
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
@@ -188,7 +188,7 @@ class CameraCaptureManager(private val context: Context) {
       android.util.Log.w("CameraCaptureManager", "clip: warming up camera 1.5s...")
       kotlinx.coroutines.delay(1_500)
 
-      val file = File.createTempFile("openclaw-clip-", ".mp4")
+      val file = File.createTempFile("openpaw-clip-", ".mp4")
       val outputOptions = FileOutputOptions.Builder(file).build()
 
       val finalized = kotlinx.coroutines.CompletableDeferred<VideoRecordEvent.Finalize>()
@@ -333,7 +333,7 @@ private suspend fun Context.cameraProvider(): ProcessCameraProvider =
 /** Returns (jpegBytes, exifOrientation) so caller can rotate the decoded bitmap. */
 private suspend fun ImageCapture.takeJpegWithExif(executor: Executor): Pair<ByteArray, Int> =
   suspendCancellableCoroutine { cont ->
-    val file = File.createTempFile("openclaw-snap-", ".jpg")
+    val file = File.createTempFile("openpaw-snap-", ".jpg")
     val options = ImageCapture.OutputFileOptions.Builder(file).build()
     takePicture(
       options,

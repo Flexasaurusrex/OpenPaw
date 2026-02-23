@@ -1,9 +1,9 @@
 {
-  "name": "@openclaw/lobster",
+  "name": "@openpaw/cat",
   "version": "2026.2.23",
-  "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
+  "description": "Cat workflow tool plugin (typed pipelines + resumable approvals)",
   "type": "module",
-  "openclaw": {
+  "openpaw": {
     "extensions": [
       "./index.ts"
     ]

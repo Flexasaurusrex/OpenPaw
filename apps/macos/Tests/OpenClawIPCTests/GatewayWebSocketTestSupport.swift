@@ -1,4 +1,4 @@
-import OpenClawKit
+import OpenPawKit
 import Foundation
 
 extension WebSocketTasking {

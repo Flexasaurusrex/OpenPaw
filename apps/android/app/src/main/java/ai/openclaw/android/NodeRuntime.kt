@@ -1,25 +1,25 @@
-package ai.openclaw.android
+package ai.openpaw.android
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
-import ai.openclaw.android.chat.ChatController
-import ai.openclaw.android.chat.ChatMessage
-import ai.openclaw.android.chat.ChatPendingToolCall
-import ai.openclaw.android.chat.ChatSessionEntry
-import ai.openclaw.android.chat.OutgoingAttachment
-import ai.openclaw.android.gateway.DeviceAuthStore
-import ai.openclaw.android.gateway.DeviceIdentityStore
-import ai.openclaw.android.gateway.GatewayDiscovery
-import ai.openclaw.android.gateway.GatewayEndpoint
-import ai.openclaw.android.gateway.GatewaySession
-import ai.openclaw.android.gateway.probeGatewayTlsFingerprint
-import ai.openclaw.android.node.*
-import ai.openclaw.android.protocol.OpenClawCanvasA2UIAction
-import ai.openclaw.android.voice.TalkModeManager
-import ai.openclaw.android.voice.VoiceWakeManager
+import ai.openpaw.android.chat.ChatController
+import ai.openpaw.android.chat.ChatMessage
+import ai.openpaw.android.chat.ChatPendingToolCall
+import ai.openpaw.android.chat.ChatSessionEntry
+import ai.openpaw.android.chat.OutgoingAttachment
+import ai.openpaw.android.gateway.DeviceAuthStore
+import ai.openpaw.android.gateway.DeviceIdentityStore
+import ai.openpaw.android.gateway.GatewayDiscovery
+import ai.openpaw.android.gateway.GatewayEndpoint
+import ai.openpaw.android.gateway.GatewaySession
+import ai.openpaw.android.gateway.probeGatewayTlsFingerprint
+import ai.openpaw.android.node.*
+import ai.openpaw.android.protocol.OpenPawCanvasA2UIAction
+import ai.openpaw.android.voice.TalkModeManager
+import ai.openpaw.android.voice.VoiceWakeManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -619,7 +619,7 @@ class NodeRuntime(context: Context) {
       val actionId = (userActionObj["id"] as? JsonPrimitive)?.content?.trim().orEmpty().ifEmpty {
         java.util.UUID.randomUUID().toString()
       }
-      val name = OpenClawCanvasA2UIAction.extractActionName(userActionObj) ?: return@launch
+      val name = OpenPawCanvasA2UIAction.extractActionName(userActionObj) ?: return@launch
 
       val surfaceId =
         (userActionObj["surfaceId"] as? JsonPrimitive)?.content?.trim().orEmpty().ifEmpty { "main" }
@@ -629,7 +629,7 @@ class NodeRuntime(context: Context) {
 
       val sessionKey = resolveMainSessionKey()
       val message =
-        OpenClawCanvasA2UIAction.formatAgentMessage(
+        OpenPawCanvasA2UIAction.formatAgentMessage(
           actionName = name,
           sessionKey = sessionKey,
           surfaceId = surfaceId,
@@ -663,7 +663,7 @@ class NodeRuntime(context: Context) {
 
       try {
         canvas.eval(
-          OpenClawCanvasA2UIAction.jsDispatchA2UIActionStatus(
+          OpenPawCanvasA2UIAction.jsDispatchA2UIActionStatus(
             actionId = actionId,
             ok = connected && error == null,
             error = error,

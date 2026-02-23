@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { normalizeTestText } from "../../test/helpers/normalize-text.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { resolveSessionKey } from "../config/sessions.js";
 import {
   createBlockReplyCollector,
@@ -296,7 +296,7 @@ describe("trigger handling", () => {
             },
           },
         },
-      } as unknown as OpenClawConfig;
+      } as unknown as OpenPawConfig;
       const res = await getReplyFromConfig(modelStatusCtx, {}, cfg);
 
       const text = Array.isArray(res) ? res[0]?.text : res?.text;
@@ -329,7 +329,7 @@ describe("trigger handling", () => {
   it("rejects /restart when explicitly disabled", async () => {
     await withTempHome(async (home) => {
       const runEmbeddedPiAgentMock = getRunEmbeddedPiAgentMock();
-      const cfg = { ...makeCfg(home), commands: { restart: false } } as OpenClawConfig;
+      const cfg = { ...makeCfg(home), commands: { restart: false } } as OpenPawConfig;
       const res = await getReplyFromConfig(
         {
           Body: "/restart",
@@ -360,7 +360,7 @@ describe("trigger handling", () => {
         makeCfg(home),
       );
       const text = Array.isArray(res) ? res[0]?.text : res?.text;
-      expect(text).toContain("OpenClaw");
+      expect(text).toContain("OpenPaw");
       expect(runEmbeddedPiAgentMock).not.toHaveBeenCalled();
     });
   });
@@ -369,7 +369,7 @@ describe("trigger handling", () => {
     await withTempHome(async (home) => {
       const runEmbeddedPiAgentMock = getRunEmbeddedPiAgentMock();
       const cfg = makeCfg(home);
-      const agentDir = join(home, ".openclaw", "agents", "main", "agent");
+      const agentDir = join(home, ".openpaw", "agents", "main", "agent");
       await mkdir(agentDir, { recursive: true });
       await writeFile(
         join(agentDir, "auth-profiles.json"),

@@ -1,12 +1,12 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
-import ai.openclaw.android.LocationMode
-import ai.openclaw.android.gateway.GatewaySession
+import ai.openpaw.android.LocationMode
+import ai.openpaw.android.gateway.GatewaySession
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject

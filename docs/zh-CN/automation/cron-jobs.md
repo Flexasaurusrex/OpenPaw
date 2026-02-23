@@ -25,7 +25,7 @@ x-i18n:
 ## 简要概述
 
 - 定时任务运行在 **Gateway网关内部**（而非模型内部）。
-- 任务持久化存储在 `~/.openclaw/cron/` 下，因此重启不会丢失计划。
+- 任务持久化存储在 `~/.openpaw/cron/` 下，因此重启不会丢失计划。
 - 两种执行方式：
   - **主会话**：入队一个系统事件，然后在下一次心跳时运行。
   - **隔离式**：在 `cron:<jobId>` 中运行专用智能体轮次，可投递摘要（默认 announce）或不投递。
@@ -36,7 +36,7 @@ x-i18n:
 创建一个一次性提醒，验证其存在，然后立即运行：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Reminder" \
   --at "2026-02-01T16:00:00Z" \
   --session main \
@@ -44,15 +44,15 @@ openclaw cron add \
   --wake now \
   --delete-after-run
 
-openclaw cron list
-openclaw cron run <job-id> --force
-openclaw cron runs --id <job-id>
+openpaw cron list
+openpaw cron run <job-id> --force
+openpaw cron runs --id <job-id>
 ```
 
 调度一个带投递功能的周期性隔离任务：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Morning brief" \
   --cron "0 7 * * *" \
   --tz "America/Los_Angeles" \
@@ -69,7 +69,7 @@ openclaw cron add \
 
 ## 定时任务的存储位置
 
-定时任务默认持久化存储在 Gateway网关主机的 `~/.openclaw/cron/jobs.json` 中。Gateway网关将文件加载到内存中，并在更改时写回，因此仅在 Gateway网关停止时手动编辑才是安全的。请优先使用 `openclaw cron add/edit` 或定时任务工具调用 API 进行更改。
+定时任务默认持久化存储在 Gateway网关主机的 `~/.openpaw/cron/jobs.json` 中。Gateway网关将文件加载到内存中，并在更改时写回，因此仅在 Gateway网关停止时手动编辑才是安全的。请优先使用 `openpaw cron add/edit` 或定时任务工具调用 API 进行更改。
 
 ## 新手友好概述
 
@@ -276,8 +276,8 @@ Telegram 通过 `message_thread_id` 支持论坛主题。对于定时任务投�
 
 ## 存储与历史
 
-- 任务存储：`~/.openclaw/cron/jobs.json`（Gateway网关管理的 JSON）。
-- 运行历史：`~/.openclaw/cron/runs/<jobId>.jsonl`（JSONL，自动清理）。
+- 任务存储：`~/.openpaw/cron/jobs.json`（Gateway网关管理的 JSON）。
+- 运行历史：`~/.openpaw/cron/runs/<jobId>.jsonl`（JSONL，自动清理）。
 - 覆盖存储路径：配置中的 `cron.store`。
 
 ## 配置
@@ -286,7 +286,7 @@ Telegram 通过 `message_thread_id` 支持论坛主题。对于定时任务投�
 {
   cron: {
     enabled: true, // 默认 true
-    store: "~/.openclaw/cron/jobs.json",
+    store: "~/.openpaw/cron/jobs.json",
     maxConcurrentRuns: 1, // 默认 1
   },
 }
@@ -295,14 +295,14 @@ Telegram 通过 `message_thread_id` 支持论坛主题。对于定时任务投�
 完全禁用定时任务：
 
 - `cron.enabled: false`（配置）
-- `OPENCLAW_SKIP_CRON=1`（环境变量）
+- `OPENPAW_SKIP_CRON=1`（环境变量）
 
 ## CLI 快速开始
 
 一次性提醒（UTC ISO，成功后自动删除）：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Send reminder" \
   --at "2026-01-12T18:00:00Z" \
   --session main \
@@ -314,7 +314,7 @@ openclaw cron add \
 一次性提醒（主会话，立即唤醒）：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Calendar check" \
   --at "20m" \
   --session main \
@@ -325,7 +325,7 @@ openclaw cron add \
 周期性隔离任务（投递到 WhatsApp）：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Morning status" \
   --cron "0 7 * * *" \
   --tz "America/Los_Angeles" \
@@ -339,7 +339,7 @@ openclaw cron add \
 周期性隔离任务（投递到 Telegram 主题）：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Nightly summary (topic)" \
   --cron "0 22 * * *" \
   --tz "America/Los_Angeles" \
@@ -353,7 +353,7 @@ openclaw cron add \
 带模型和思维覆盖的隔离任务：
 
 ```bash
-openclaw cron add \
+openpaw cron add \
   --name "Deep analysis" \
   --cron "0 6 * * 1" \
   --tz "America/Los_Angeles" \
@@ -370,23 +370,23 @@ openclaw cron add \
 
 ```bash
 # 将任务绑定到智能体 "ops"（如果该智能体不存在则回退到默认智能体）
-openclaw cron add --name "Ops sweep" --cron "0 6 * * *" --session isolated --message "Check ops queue" --agent ops
+openpaw cron add --name "Ops sweep" --cron "0 6 * * *" --session isolated --message "Check ops queue" --agent ops
 
 # 切换或清除现有任务的智能体
-openclaw cron edit <jobId> --agent ops
-openclaw cron edit <jobId> --clear-agent
+openpaw cron edit <jobId> --agent ops
+openpaw cron edit <jobId> --clear-agent
 ```
 
 手动运行（调试）：
 
 ```bash
-openclaw cron run <jobId> --force
+openpaw cron run <jobId> --force
 ```
 
 编辑现有任务（补丁字段）：
 
 ```bash
-openclaw cron edit <jobId> \
+openpaw cron edit <jobId> \
   --message "Updated prompt" \
   --model "opus" \
   --thinking low
@@ -395,26 +395,26 @@ openclaw cron edit <jobId> \
 运行历史：
 
 ```bash
-openclaw cron runs --id <jobId> --limit 50
+openpaw cron runs --id <jobId> --limit 50
 ```
 
 不创建任务直接发送系统事件：
 
 ```bash
-openclaw system event --mode now --text "Next heartbeat: check battery."
+openpaw system event --mode now --text "Next heartbeat: check battery."
 ```
 
 ## Gateway网关 API 接口
 
 - `cron.list`、`cron.status`、`cron.add`、`cron.update`、`cron.remove`
 - `cron.run`（强制或到期）、`cron.runs`
-  如需不创建任务直接发送系统事件，请使用 [`openclaw system event`](/cli/system)。
+  如需不创建任务直接发送系统事件，请使用 [`openpaw system event`](/cli/system)。
 
 ## 故障排除
 
 ### "没有任何任务运行"
 
-- 检查定时任务是否已启用：`cron.enabled` 和 `OPENCLAW_SKIP_CRON`。
+- 检查定时任务是否已启用：`cron.enabled` 和 `OPENPAW_SKIP_CRON`。
 - 检查 Gateway网关是否持续运行（定时任务运行在 Gateway网关进程内部）。
 - 对于 `cron` 调度：确认时区（`--tz`）与主机时区的关系。
 

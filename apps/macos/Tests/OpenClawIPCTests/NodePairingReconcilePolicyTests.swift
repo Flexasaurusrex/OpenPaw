@@ -1,5 +1,5 @@
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite struct NodePairingReconcilePolicyTests {
     @Test func policyPollsOnlyWhenActive() {

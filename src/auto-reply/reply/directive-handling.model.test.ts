@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ModelAliasIndex } from "../../agents/model-selection.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { OpenPawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions.js";
 import { handleDirectiveOnly } from "./directive-handling.impl.js";
 import { parseInlineDirectives } from "./directive-handling.js";
@@ -32,17 +32,17 @@ function baseAliasIndex(): ModelAliasIndex {
   return { byAlias: new Map(), byKey: new Map() };
 }
 
-function baseConfig(): OpenClawConfig {
+function baseConfig(): OpenPawConfig {
   return {
     commands: { text: true },
     agents: { defaults: {} },
-  } as unknown as OpenClawConfig;
+  } as unknown as OpenPawConfig;
 }
 
 describe("/model chat UX", () => {
   it("shows summary for /model with no args", async () => {
     const directives = parseInlineDirectives("/model");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const reply = await maybeHandleModelDirectiveInfo({
       directives,
@@ -65,7 +65,7 @@ describe("/model chat UX", () => {
 
   it("shows active runtime model when different from selected model", async () => {
     const directives = parseInlineDirectives("/model");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const reply = await maybeHandleModelDirectiveInfo({
       directives,
@@ -91,7 +91,7 @@ describe("/model chat UX", () => {
 
   it("auto-applies closest match for typos", () => {
     const directives = parseInlineDirectives("/model anthropic/claud-opus-4-5");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const resolved = resolveModelSelectionFromDirective({
       directives,
@@ -115,7 +115,7 @@ describe("/model chat UX", () => {
 
   it("rejects numeric /model selections with a guided error", () => {
     const directives = parseInlineDirectives("/model 99");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const resolved = resolveModelSelectionFromDirective({
       directives,
@@ -136,7 +136,7 @@ describe("/model chat UX", () => {
 
   it("treats explicit default /model selection as resettable default", () => {
     const directives = parseInlineDirectives("/model anthropic/claude-opus-4-5");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const resolved = resolveModelSelectionFromDirective({
       directives,
@@ -160,7 +160,7 @@ describe("/model chat UX", () => {
 
   it("keeps openrouter provider/model split for exact selections", () => {
     const directives = parseInlineDirectives("/model openrouter/anthropic/claude-opus-4-5");
-    const cfg = { commands: { text: true } } as unknown as OpenClawConfig;
+    const cfg = { commands: { text: true } } as unknown as OpenPawConfig;
 
     const resolved = resolveModelSelectionFromDirective({
       directives,

@@ -1,4 +1,4 @@
-import OpenClawKit
+import OpenPawKit
 import Foundation
 import Observation
 import OSLog
@@ -10,28 +10,28 @@ import AppKit
 import UIKit
 #endif
 
-private let chatUILogger = Logger(subsystem: "ai.openclaw", category: "OpenClawChatUI")
+private let chatUILogger = Logger(subsystem: "ai.openpaw", category: "OpenPawChatUI")
 
 @MainActor
 @Observable
-public final class OpenClawChatViewModel {
-    public private(set) var messages: [OpenClawChatMessage] = []
+public final class OpenPawChatViewModel {
+    public private(set) var messages: [OpenPawChatMessage] = []
     public var input: String = ""
     public var thinkingLevel: String = "off"
     public private(set) var isLoading = false
     public private(set) var isSending = false
     public private(set) var isAborting = false
     public var errorText: String?
-    public var attachments: [OpenClawPendingAttachment] = []
+    public var attachments: [OpenPawPendingAttachment] = []
     public private(set) var healthOK: Bool = false
     public private(set) var pendingRunCount: Int = 0
 
     public private(set) var sessionKey: String
     public private(set) var sessionId: String?
     public private(set) var streamingAssistantText: String?
-    public private(set) var pendingToolCalls: [OpenClawChatPendingToolCall] = []
-    public private(set) var sessions: [OpenClawChatSessionEntry] = []
-    private let transport: any OpenClawChatTransport
+    public private(set) var pendingToolCalls: [OpenPawChatPendingToolCall] = []
+    public private(set) var sessions: [OpenPawChatSessionEntry] = []
+    private let transport: any OpenPawChatTransport
 
     @ObservationIgnored
     private nonisolated(unsafe) var eventTask: Task<Void, Never>?
@@ -43,7 +43,7 @@ public final class OpenClawChatViewModel {
     private nonisolated(unsafe) var pendingRunTimeoutTasks: [String: Task<Void, Never>] = [:]
     private let pendingRunTimeoutMs: UInt64 = 120_000
 
-    private var pendingToolCallsById: [String: OpenClawChatPendingToolCall] = [:] {
+    private var pendingToolCallsById: [String: OpenPawChatPendingToolCall] = [:] {
         didSet {
             self.pendingToolCalls = self.pendingToolCallsById.values
                 .sorted { ($0.startedAt ?? 0) < ($1.startedAt ?? 0) }
@@ -52,7 +52,7 @@ public final class OpenClawChatViewModel {
 
     private var lastHealthPollAt: Date?
 
-    public init(sessionKey: String, transport: any OpenClawChatTransport) {
+    public init(sessionKey: String, transport: any OpenPawChatTransport) {
         self.sessionKey = sessionKey
         self.transport = transport
 
@@ -99,12 +99,12 @@ public final class OpenClawChatViewModel {
         Task { await self.performSwitchSession(to: sessionKey) }
     }
 
-    public var sessionChoices: [OpenClawChatSessionEntry] {
+    public var sessionChoices: [OpenPawChatSessionEntry] {
         let now = Date().timeIntervalSince1970 * 1000
         let cutoff = now - (24 * 60 * 60 * 1000)
         let sorted = self.sessions.sorted { ($0.updatedAt ?? 0) > ($1.updatedAt ?? 0) }
 
-        var result: [OpenClawChatSessionEntry] = []
+        var result: [OpenPawChatSessionEntry] = []
         var included = Set<String>()
 
         // Always show the main session first, even if it hasn't been updated recently.
@@ -142,7 +142,7 @@ public final class OpenClawChatViewModel {
         Task { await self.addImageAttachment(url: nil, data: data, fileName: fileName, mimeType: mimeType) }
     }
 
-    public func removeAttachment(_ id: OpenClawPendingAttachment.ID) {
+    public func removeAttachment(_ id: OpenPawPendingAttachment.ID) {
         self.attachments.removeAll { $0.id == id }
     }
 
@@ -186,23 +186,23 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private static func decodeMessages(_ raw: [AnyCodable]) -> [OpenClawChatMessage] {
+    private static func decodeMessages(_ raw: [AnyCodable]) -> [OpenPawChatMessage] {
         let decoded = raw.compactMap { item in
-            (try? ChatPayloadDecoding.decode(item, as: OpenClawChatMessage.self))
+            (try? ChatPayloadDecoding.decode(item, as: OpenPawChatMessage.self))
                 .map { Self.stripInboundMetadata(from: $0) }
         }
         return Self.dedupeMessages(decoded)
     }
 
-    private static func stripInboundMetadata(from message: OpenClawChatMessage) -> OpenClawChatMessage {
+    private static func stripInboundMetadata(from message: OpenPawChatMessage) -> OpenPawChatMessage {
         guard message.role.lowercased() == "user" else {
             return message
         }
 
-        let sanitizedContent = message.content.map { content -> OpenClawChatMessageContent in
+        let sanitizedContent = message.content.map { content -> OpenPawChatMessageContent in
             guard let text = content.text else { return content }
             let cleaned = ChatMarkdownPreprocessor.preprocess(markdown: text).cleaned
-            return OpenClawChatMessageContent(
+            return OpenPawChatMessageContent(
                 type: content.type,
                 text: cleaned,
                 thinking: content.thinking,
@@ -215,7 +215,7 @@ public final class OpenClawChatViewModel {
                 arguments: content.arguments)
         }
 
-        return OpenClawChatMessage(
+        return OpenPawChatMessage(
             id: message.id,
             role: message.role,
             content: sanitizedContent,
@@ -226,7 +226,7 @@ public final class OpenClawChatViewModel {
             stopReason: message.stopReason)
     }
 
-    private static func messageIdentityKey(for message: OpenClawChatMessage) -> String? {
+    private static func messageIdentityKey(for message: OpenPawChatMessage) -> String? {
         let role = message.role.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !role.isEmpty else { return nil }
 
@@ -253,8 +253,8 @@ public final class OpenClawChatViewModel {
     }
 
     private static func reconcileMessageIDs(
-        previous: [OpenClawChatMessage],
-        incoming: [OpenClawChatMessage]) -> [OpenClawChatMessage]
+        previous: [OpenPawChatMessage],
+        incoming: [OpenPawChatMessage]) -> [OpenPawChatMessage]
     {
         guard !previous.isEmpty, !incoming.isEmpty else { return incoming }
 
@@ -278,7 +278,7 @@ public final class OpenClawChatViewModel {
                 idsByKey[key] = ids
             }
             guard reusedId != message.id else { return message }
-            return OpenClawChatMessage(
+            return OpenPawChatMessage(
                 id: reusedId,
                 role: message.role,
                 content: message.content,
@@ -290,8 +290,8 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private static func dedupeMessages(_ messages: [OpenClawChatMessage]) -> [OpenClawChatMessage] {
-        var result: [OpenClawChatMessage] = []
+    private static func dedupeMessages(_ messages: [OpenPawChatMessage]) -> [OpenPawChatMessage] {
+        var result: [OpenPawChatMessage] = []
         result.reserveCapacity(messages.count)
         var seen = Set<String>()
 
@@ -308,7 +308,7 @@ public final class OpenClawChatViewModel {
         return result
     }
 
-    private static func dedupeKey(for message: OpenClawChatMessage) -> String? {
+    private static func dedupeKey(for message: OpenPawChatMessage) -> String? {
         guard let timestamp = message.timestamp else { return nil }
         let text = message.content.compactMap(\.text).joined(separator: "\n")
             .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -336,8 +336,8 @@ public final class OpenClawChatViewModel {
         self.streamingAssistantText = nil
 
         // Optimistically append user message to UI.
-        var userContent: [OpenClawChatMessageContent] = [
-            OpenClawChatMessageContent(
+        var userContent: [OpenPawChatMessageContent] = [
+            OpenPawChatMessageContent(
                 type: "text",
                 text: messageText,
                 thinking: nil,
@@ -349,8 +349,8 @@ public final class OpenClawChatViewModel {
                 name: nil,
                 arguments: nil),
         ]
-        let encodedAttachments = self.attachments.map { att -> OpenClawChatAttachmentPayload in
-            OpenClawChatAttachmentPayload(
+        let encodedAttachments = self.attachments.map { att -> OpenPawChatAttachmentPayload in
+            OpenPawChatAttachmentPayload(
                 type: att.type,
                 mimeType: att.mimeType,
                 fileName: att.fileName,
@@ -358,7 +358,7 @@ public final class OpenClawChatViewModel {
         }
         for att in encodedAttachments {
             userContent.append(
-                OpenClawChatMessageContent(
+                OpenPawChatMessageContent(
                     type: att.type,
                     text: nil,
                     thinking: nil,
@@ -371,7 +371,7 @@ public final class OpenClawChatViewModel {
                     arguments: nil))
         }
         self.messages.append(
-            OpenClawChatMessage(
+            OpenPawChatMessage(
                 id: UUID(),
                 role: "user",
                 content: userContent,
@@ -435,8 +435,8 @@ public final class OpenClawChatViewModel {
         await self.bootstrap()
     }
 
-    private func placeholderSession(key: String) -> OpenClawChatSessionEntry {
-        OpenClawChatSessionEntry(
+    private func placeholderSession(key: String) -> OpenPawChatSessionEntry {
+        OpenPawChatSessionEntry(
             key: key,
             kind: nil,
             displayName: nil,
@@ -457,7 +457,7 @@ public final class OpenClawChatViewModel {
             contextTokens: nil)
     }
 
-    private func handleTransportEvent(_ evt: OpenClawChatTransportEvent) {
+    private func handleTransportEvent(_ evt: OpenPawChatTransportEvent) {
         switch evt {
         case let .health(ok):
             self.healthOK = ok
@@ -477,7 +477,7 @@ public final class OpenClawChatViewModel {
         }
     }
 
-    private func handleChatEvent(_ chat: OpenClawChatEventPayload) {
+    private func handleChatEvent(_ chat: OpenPawChatEventPayload) {
         let isOurRun = chat.runId.flatMap { self.pendingRuns.contains($0) } ?? false
 
         // Gateway may publish canonical session keys (for example "agent:main:main")
@@ -536,7 +536,7 @@ public final class OpenClawChatViewModel {
         return false
     }
 
-    private func handleAgentEvent(_ evt: OpenClawAgentEventPayload) {
+    private func handleAgentEvent(_ evt: OpenPawAgentEventPayload) {
         if let sessionId, evt.runId != sessionId {
             return
         }
@@ -552,7 +552,7 @@ public final class OpenClawChatViewModel {
             guard let toolCallId = evt.data["toolCallId"]?.value as? String else { return }
             if phase == "start" {
                 let args = evt.data["args"]
-                self.pendingToolCallsById[toolCallId] = OpenClawChatPendingToolCall(
+                self.pendingToolCallsById[toolCallId] = OpenPawChatPendingToolCall(
                     toolCallId: toolCallId,
                     name: name,
                     args: args,
@@ -665,7 +665,7 @@ public final class OpenClawChatViewModel {
 
         let preview = Self.previewImage(data: data)
         self.attachments.append(
-            OpenClawPendingAttachment(
+            OpenPawPendingAttachment(
                 url: url,
                 data: data,
                 fileName: fileName,
@@ -673,7 +673,7 @@ public final class OpenClawChatViewModel {
                 preview: preview))
     }
 
-    private static func previewImage(data: Data) -> OpenClawPlatformImage? {
+    private static func previewImage(data: Data) -> OpenPawPlatformImage? {
         #if canImport(AppKit)
         NSImage(data: data)
         #elseif canImport(UIKit)

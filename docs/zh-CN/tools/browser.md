@@ -1,10 +1,10 @@
 ---
 read_when:
   - 添加智能体控制的浏览器自动化
-  - 调试 openclaw 干扰你自己 Chrome 的问题
+  - 调试 openpaw 干扰你自己 Chrome 的问题
   - 在 macOS 应用中实现浏览器设置和生命周期管理
 summary: 集成浏览器控制服务 + 操作命令
-title: 浏览器（OpenClaw 托管）
+title: 浏览器（OpenPaw 托管）
 x-i18n:
   generated_at: "2026-02-03T09:26:06Z"
   model: claude-opus-4-5
@@ -14,48 +14,48 @@ x-i18n:
   workflow: 15
 ---
 
-# 浏览器（openclaw 托管）
+# 浏览器（openpaw 托管）
 
-OpenClaw 可以运行一个由智能体控制的**专用 Chrome/Brave/Edge/Chromium 配置文件**。
+OpenPaw 可以运行一个由智能体控制的**专用 Chrome/Brave/Edge/Chromium 配置文件**。
 它与你的个人浏览器隔离，通过 Gateway 网关内部的小型本地控制服务进行管理（仅限 loopback）。
 
 新手视角：
 
 - 把它想象成一个**独立的、仅供智能体使用的浏览器**。
-- `openclaw` 配置文件**不会**触及你的个人浏览器配置文件。
+- `openpaw` 配置文件**不会**触及你的个人浏览器配置文件。
 - 智能体可以在安全的通道中**打开标签页、读取页面、点击和输入**。
-- 默认的 `chrome` 配置文件通过扩展中继使用**系统默认的 Chromium 浏览器**；切换到 `openclaw` 可使用隔离的托管浏览器。
+- 默认的 `chrome` 配置文件通过扩展中继使用**系统默认的 Chromium 浏览器**；切换到 `openpaw` 可使用隔离的托管浏览器。
 
 ## 功能概览
 
-- 一个名为 **openclaw** 的独立浏览器配置文件（默认橙色主题）。
+- 一个名为 **openpaw** 的独立浏览器配置文件（默认橙色主题）。
 - 确定性标签页控制（列出/打开/聚焦/关闭）。
 - 智能体操作（点击/输入/拖动/选择）、快照、截图、PDF。
-- 可选的多配置文件支持（`openclaw`、`work`、`remote` 等）。
+- 可选的多配置文件支持（`openpaw`、`work`、`remote` 等）。
 
 此浏览器**不是**你的日常浏览器。它是一个安全、隔离的界面，用于智能体自动化和验证。
 
 ## 快速开始
 
 ```bash
-openclaw browser --browser-profile openclaw status
-openclaw browser --browser-profile openclaw start
-openclaw browser --browser-profile openclaw open https://example.com
-openclaw browser --browser-profile openclaw snapshot
+openpaw browser --browser-profile openpaw status
+openpaw browser --browser-profile openpaw start
+openpaw browser --browser-profile openpaw open https://example.com
+openpaw browser --browser-profile openpaw snapshot
 ```
 
 如果出现"Browser disabled"，请在配置中启用它（见下文）并重启 Gateway 网关。
 
-## 配置文件：`openclaw` 与 `chrome`
+## 配置文件：`openpaw` 与 `chrome`
 
-- `openclaw`：托管的隔离浏览器（无需扩展）。
-- `chrome`：到你**系统浏览器**的扩展中继（需要将 OpenClaw 扩展附加到标签页）。
+- `openpaw`：托管的隔离浏览器（无需扩展）。
+- `chrome`：到你**系统浏览器**的扩展中继（需要将 OpenPaw 扩展附加到标签页）。
 
-如果你希望默认使用托管模式，请设置 `browser.defaultProfile: "openclaw"`。
+如果你希望默认使用托管模式，请设置 `browser.defaultProfile: "openpaw"`。
 
 ## 配置
 
-浏览器设置位于 `~/.openclaw/openclaw.json`。
+浏览器设置位于 `~/.openpaw/openpaw.json`。
 
 ```json5
 {
@@ -71,7 +71,7 @@ openclaw browser --browser-profile openclaw snapshot
     attachOnly: false,
     executablePath: "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
     profiles: {
-      openclaw: { cdpPort: 18800, color: "#FF4500" },
+      openpaw: { cdpPort: 18800, color: "#FF4500" },
       work: { cdpPort: 18801, color: "#0066CC" },
       remote: { cdpUrl: "http://10.0.0.42:9222", color: "#00AA00" },
     },
@@ -82,24 +82,24 @@ openclaw browser --browser-profile openclaw snapshot
 注意事项：
 
 - 浏览器控制服务绑定到 loopback 上的端口，该端口从 `gateway.port` 派生（默认：`18791`，即 gateway + 2）。中继使用下一个端口（`18792`）。
-- 如果你覆盖了 Gateway 网关端口（`gateway.port` 或 `OPENCLAW_GATEWAY_PORT`），派生的浏览器端口会相应调整以保持在同一"系列"中。
+- 如果你覆盖了 Gateway 网关端口（`gateway.port` 或 `OPENPAW_GATEWAY_PORT`），派生的浏览器端口会相应调整以保持在同一"系列"中。
 - 未设置时，`cdpUrl` 默认为中继端口。
 - `remoteCdpTimeoutMs` 适用于远程（非 loopback）CDP 可达性检查。
 - `remoteCdpHandshakeTimeoutMs` 适用于远程 CDP WebSocket 可达性检查。
 - `attachOnly: true` 表示"永不启动本地浏览器；仅在浏览器已运行时附加"。
 - `color` + 每个配置文件的 `color` 为浏览器 UI 着色，以便你能看到哪个配置文件处于活动状态。
-- 默认配置文件是 `chrome`（扩展中继）。使用 `defaultProfile: "openclaw"` 来使用托管浏览器。
+- 默认配置文件是 `chrome`（扩展中继）。使用 `defaultProfile: "openpaw"` 来使用托管浏览器。
 - 自动检测顺序：如果系统默认浏览器是基于 Chromium 的则使用它；否则 Chrome → Brave → Edge → Chromium → Chrome Canary。
-- 本地 `openclaw` 配置文件会自动分配 `cdpPort`/`cdpUrl` — 仅为远程 CDP 设置这些。
+- 本地 `openpaw` 配置文件会自动分配 `cdpPort`/`cdpUrl` — 仅为远程 CDP 设置这些。
 
 ## 使用 Brave（或其他基于 Chromium 的浏览器）
 
-如果你的**系统默认**浏览器是基于 Chromium 的（Chrome/Brave/Edge 等），OpenClaw 会自动使用它。设置 `browser.executablePath` 可覆盖自动检测：
+如果你的**系统默认**浏览器是基于 Chromium 的（Chrome/Brave/Edge 等），OpenPaw 会自动使用它。设置 `browser.executablePath` 可覆盖自动检测：
 
 CLI 示例：
 
 ```bash
-openclaw config set browser.executablePath "/usr/bin/google-chrome"
+openpaw config set browser.executablePath "/usr/bin/google-chrome"
 ```
 
 ```json5
@@ -129,18 +129,18 @@ openclaw config set browser.executablePath "/usr/bin/google-chrome"
 
 - **本地控制（默认）：** Gateway 网关启动 loopback 控制服务，可以启动本地浏览器。
 - **远程控制（节点主机）：** 在有浏览器的机器上运行节点主机；Gateway 网关将浏览器操作代理到该节点。
-- **远程 CDP：** 设置 `browser.profiles.<name>.cdpUrl`（或 `browser.cdpUrl`）以附加到远程的基于 Chromium 的浏览器。在这种情况下，OpenClaw 不会启动本地浏览器。
+- **远程 CDP：** 设置 `browser.profiles.<name>.cdpUrl`（或 `browser.cdpUrl`）以附加到远程的基于 Chromium 的浏览器。在这种情况下，OpenPaw 不会启动本地浏览器。
 
 远程 CDP URL 可以包含认证信息：
 
 - 查询令牌（例如 `https://provider.example?token=<token>`）
 - HTTP Basic 认证（例如 `https://user:pass@provider.example`）
 
-OpenClaw 在调用 `/json/*` 端点和连接 CDP WebSocket 时会保留认证信息。建议使用环境变量或密钥管理器存储令牌，而不是将其提交到配置文件中。
+OpenPaw 在调用 `/json/*` 端点和连接 CDP WebSocket 时会保留认证信息。建议使用环境变量或密钥管理器存储令牌，而不是将其提交到配置文件中。
 
 ## 节点浏览器代理（零配置默认）
 
-如果你在有浏览器的机器上运行**节点主机**，OpenClaw 可以自动将浏览器工具调用路由到该节点，无需任何额外的浏览器配置。这是远程 Gateway 网关的默认路径。
+如果你在有浏览器的机器上运行**节点主机**，OpenPaw 可以自动将浏览器工具调用路由到该节点，无需任何额外的浏览器配置。这是远程 Gateway 网关的默认路径。
 
 注意事项：
 
@@ -152,7 +152,7 @@ OpenClaw 在调用 `/json/*` 端点和连接 CDP WebSocket 时会保留认证信
 
 ## Browserless（托管远程 CDP）
 
-[Browserless](https://browserless.io) 是一个托管的 Chromium 服务，通过 HTTPS 暴露 CDP 端点。你可以将 OpenClaw 浏览器配置文件指向 Browserless 区域端点，并使用你的 API 密钥进行认证。
+[Browserless](https://browserless.io) 是一个托管的 Chromium 服务，通过 HTTPS 暴露 CDP 端点。你可以将 OpenPaw 浏览器配置文件指向 Browserless 区域端点，并使用你的 API 密钥进行认证。
 
 示例：
 
@@ -193,15 +193,15 @@ OpenClaw 在调用 `/json/*` 端点和连接 CDP WebSocket 时会保留认证信
 
 ## 配置文件（多浏览器）
 
-OpenClaw 支持多个命名配置文件（路由配置）。配置文件可以是：
+OpenPaw 支持多个命名配置文件（路由配置）。配置文件可以是：
 
-- **openclaw 托管**：具有独立用户数据目录和 CDP 端口的专用基于 Chromium 的浏览器实例
+- **openpaw 托管**：具有独立用户数据目录和 CDP 端口的专用基于 Chromium 的浏览器实例
 - **远程**：显式 CDP URL（在其他地方运行的基于 Chromium 的浏览器）
 - **扩展中继**：通过本地中继 + Chrome 扩展访问你现有的 Chrome 标签页
 
 默认值：
 
-- 如果缺少 `openclaw` 配置文件，会自动创建。
+- 如果缺少 `openpaw` 配置文件，会自动创建。
 - `chrome` 配置文件是内置的，用于 Chrome 扩展中继（默认指向 `http://127.0.0.1:18792`）。
 - 本地 CDP 端口默认从 **18800–18899** 分配。
 - 删除配置文件会将其本地数据目录移至回收站。
@@ -210,7 +210,7 @@ OpenClaw 支持多个命名配置文件（路由配置）。配置文件可以�
 
 ## Chrome 扩展中继（使用你现有的 Chrome）
 
-OpenClaw 还可以通过本地 CDP 中继 + Chrome 扩展驱动**你现有的 Chrome 标签页**（无需单独的"openclaw"Chrome 实例）。
+OpenPaw 还可以通过本地 CDP 中继 + Chrome 扩展驱动**你现有的 Chrome 标签页**（无需单独的"openpaw"Chrome 实例）。
 
 完整指南：[Chrome 扩展](/tools/chrome-extension)
 
@@ -218,7 +218,7 @@ OpenClaw 还可以通过本地 CDP 中继 + Chrome 扩展驱动**你现有的 Ch
 
 - Gateway 网关在本地运行（同一台机器）或节点主机在浏览器所在机器上运行。
 - 本地**中继服务器**在 loopback 的 `cdpUrl` 上监听（默认：`http://127.0.0.1:18792`）。
-- 你点击标签页上的 **OpenClaw Browser Relay** 扩展图标来附加（它不会自动附加）。
+- 你点击标签页上的 **OpenPaw Browser Relay** 扩展图标来附加（它不会自动附加）。
 - 智能体通过选择正确的配置文件，使用普通的 `browser` 工具控制该标签页。
 
 如果 Gateway 网关在其他地方运行，请在浏览器所在机器上运行节点主机，以便 Gateway 网关可以代理浏览器操作。
@@ -236,22 +236,22 @@ Chrome 扩展中继接管需要主机浏览器控制，因此要么：
 1. 加载扩展（开发/未打包）：
 
 ```bash
-openclaw browser extension install
+openpaw browser extension install
 ```
 
 - Chrome → `chrome://extensions` → 启用"开发者模式"
-- "加载已解压的扩展程序" → 选择 `openclaw browser extension path` 打印的目录
+- "加载已解压的扩展程序" → 选择 `openpaw browser extension path` 打印的目录
 - 固定扩展，然后在你想要控制的标签页上点击它（徽章显示 `ON`）。
 
 2. 使用它：
 
-- CLI：`openclaw browser --browser-profile chrome tabs`
+- CLI：`openpaw browser --browser-profile chrome tabs`
 - 智能体工具：`browser` 配合 `profile="chrome"`
 
 可选：如果你想要不同的名称或中继端口，创建你自己的配置文件：
 
 ```bash
-openclaw browser create-profile \
+openpaw browser create-profile \
   --name my-chrome \
   --driver extension \
   --cdp-url http://127.0.0.1:18792 \
@@ -271,7 +271,7 @@ openclaw browser create-profile \
 
 ## 浏览器选择
 
-本地启动时，OpenClaw 选择第一个可用的：
+本地启动时，OpenPaw 选择第一个可用的：
 
 1. Chrome
 2. Brave
@@ -308,20 +308,20 @@ openclaw browser create-profile \
 
 ### Playwright 要求
 
-某些功能（navigate/act/AI 快照/角色快照、元素截图、PDF）需要 Playwright。如果未安装 Playwright，这些端点会返回明确的 501 错误。ARIA 快照和基本截图对于 openclaw 托管的 Chrome 仍然有效。对于 Chrome 扩展中继驱动程序，ARIA 快照和截图需要 Playwright。
+某些功能（navigate/act/AI 快照/角色快照、元素截图、PDF）需要 Playwright。如果未安装 Playwright，这些端点会返回明确的 501 错误。ARIA 快照和基本截图对于 openpaw 托管的 Chrome 仍然有效。对于 Chrome 扩展中继驱动程序，ARIA 快照和截图需要 Playwright。
 
-如果你看到 `Playwright is not available in this gateway build`，请安装完整的 Playwright 包（不是 `playwright-core`）并重启 Gateway 网关，或者重新安装带浏览器支持的 OpenClaw。
+如果你看到 `Playwright is not available in this gateway build`，请安装完整的 Playwright 包（不是 `playwright-core`）并重启 Gateway 网关，或者重新安装带浏览器支持的 OpenPaw。
 
 #### Docker Playwright 安装
 
 如果你的 Gateway 网关在 Docker 中运行，避免使用 `npx playwright`（npm 覆盖冲突）。改用捆绑的 CLI：
 
 ```bash
-docker compose run --rm openclaw-cli \
+docker compose run --rm openpaw-cli \
   node /app/node_modules/playwright-core/cli.js install chromium
 ```
 
-要持久化浏览器下载，设置 `PLAYWRIGHT_BROWSERS_PATH`（例如 `/home/node/.cache/ms-playwright`）并确保 `/home/node` 通过 `OPENCLAW_HOME_VOLUME` 或绑定挂载持久化。参见 [Docker](/install/docker)。
+要持久化浏览器下载，设置 `PLAYWRIGHT_BROWSERS_PATH`（例如 `/home/node/.cache/ms-playwright`）并确保 `/home/node` 通过 `OPENPAW_HOME_VOLUME` 或绑定挂载持久化。参见 [Docker](/install/docker)。
 
 ## 工作原理（内部）
 
@@ -341,79 +341,79 @@ docker compose run --rm openclaw-cli \
 
 基础操作：
 
-- `openclaw browser status`
-- `openclaw browser start`
-- `openclaw browser stop`
-- `openclaw browser tabs`
-- `openclaw browser tab`
-- `openclaw browser tab new`
-- `openclaw browser tab select 2`
-- `openclaw browser tab close 2`
-- `openclaw browser open https://example.com`
-- `openclaw browser focus abcd1234`
-- `openclaw browser close abcd1234`
+- `openpaw browser status`
+- `openpaw browser start`
+- `openpaw browser stop`
+- `openpaw browser tabs`
+- `openpaw browser tab`
+- `openpaw browser tab new`
+- `openpaw browser tab select 2`
+- `openpaw browser tab close 2`
+- `openpaw browser open https://example.com`
+- `openpaw browser focus abcd1234`
+- `openpaw browser close abcd1234`
 
 检查：
 
-- `openclaw browser screenshot`
-- `openclaw browser screenshot --full-page`
-- `openclaw browser screenshot --ref 12`
-- `openclaw browser screenshot --ref e12`
-- `openclaw browser snapshot`
-- `openclaw browser snapshot --format aria --limit 200`
-- `openclaw browser snapshot --interactive --compact --depth 6`
-- `openclaw browser snapshot --efficient`
-- `openclaw browser snapshot --labels`
-- `openclaw browser snapshot --selector "#main" --interactive`
-- `openclaw browser snapshot --frame "iframe#main" --interactive`
-- `openclaw browser console --level error`
-- `openclaw browser errors --clear`
-- `openclaw browser requests --filter api --clear`
-- `openclaw browser pdf`
-- `openclaw browser responsebody "**/api" --max-chars 5000`
+- `openpaw browser screenshot`
+- `openpaw browser screenshot --full-page`
+- `openpaw browser screenshot --ref 12`
+- `openpaw browser screenshot --ref e12`
+- `openpaw browser snapshot`
+- `openpaw browser snapshot --format aria --limit 200`
+- `openpaw browser snapshot --interactive --compact --depth 6`
+- `openpaw browser snapshot --efficient`
+- `openpaw browser snapshot --labels`
+- `openpaw browser snapshot --selector "#main" --interactive`
+- `openpaw browser snapshot --frame "iframe#main" --interactive`
+- `openpaw browser console --level error`
+- `openpaw browser errors --clear`
+- `openpaw browser requests --filter api --clear`
+- `openpaw browser pdf`
+- `openpaw browser responsebody "**/api" --max-chars 5000`
 
 操作：
 
-- `openclaw browser navigate https://example.com`
-- `openclaw browser resize 1280 720`
-- `openclaw browser click 12 --double`
-- `openclaw browser click e12 --double`
-- `openclaw browser type 23 "hello" --submit`
-- `openclaw browser press Enter`
-- `openclaw browser hover 44`
-- `openclaw browser scrollintoview e12`
-- `openclaw browser drag 10 11`
-- `openclaw browser select 9 OptionA OptionB`
-- `openclaw browser download e12 /tmp/report.pdf`
-- `openclaw browser waitfordownload /tmp/report.pdf`
-- `openclaw browser upload /tmp/file.pdf`
-- `openclaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'`
-- `openclaw browser dialog --accept`
-- `openclaw browser wait --text "Done"`
-- `openclaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"`
-- `openclaw browser evaluate --fn '(el) => el.textContent' --ref 7`
-- `openclaw browser highlight e12`
-- `openclaw browser trace start`
-- `openclaw browser trace stop`
+- `openpaw browser navigate https://example.com`
+- `openpaw browser resize 1280 720`
+- `openpaw browser click 12 --double`
+- `openpaw browser click e12 --double`
+- `openpaw browser type 23 "hello" --submit`
+- `openpaw browser press Enter`
+- `openpaw browser hover 44`
+- `openpaw browser scrollintoview e12`
+- `openpaw browser drag 10 11`
+- `openpaw browser select 9 OptionA OptionB`
+- `openpaw browser download e12 /tmp/report.pdf`
+- `openpaw browser waitfordownload /tmp/report.pdf`
+- `openpaw browser upload /tmp/file.pdf`
+- `openpaw browser fill --fields '[{"ref":"1","type":"text","value":"Ada"}]'`
+- `openpaw browser dialog --accept`
+- `openpaw browser wait --text "Done"`
+- `openpaw browser wait "#main" --url "**/dash" --load networkidle --fn "window.ready===true"`
+- `openpaw browser evaluate --fn '(el) => el.textContent' --ref 7`
+- `openpaw browser highlight e12`
+- `openpaw browser trace start`
+- `openpaw browser trace stop`
 
 状态：
 
-- `openclaw browser cookies`
-- `openclaw browser cookies set session abc123 --url "https://example.com"`
-- `openclaw browser cookies clear`
-- `openclaw browser storage local get`
-- `openclaw browser storage local set theme dark`
-- `openclaw browser storage session clear`
-- `openclaw browser set offline on`
-- `openclaw browser set headers --json '{"X-Debug":"1"}'`
-- `openclaw browser set credentials user pass`
-- `openclaw browser set credentials --clear`
-- `openclaw browser set geo 37.7749 -122.4194 --origin "https://example.com"`
-- `openclaw browser set geo --clear`
-- `openclaw browser set media dark`
-- `openclaw browser set timezone America/New_York`
-- `openclaw browser set locale en-US`
-- `openclaw browser set device "iPhone 14"`
+- `openpaw browser cookies`
+- `openpaw browser cookies set session abc123 --url "https://example.com"`
+- `openpaw browser cookies clear`
+- `openpaw browser storage local get`
+- `openpaw browser storage local set theme dark`
+- `openpaw browser storage session clear`
+- `openpaw browser set offline on`
+- `openpaw browser set headers --json '{"X-Debug":"1"}'`
+- `openpaw browser set credentials user pass`
+- `openpaw browser set credentials --clear`
+- `openpaw browser set geo 37.7749 -122.4194 --origin "https://example.com"`
+- `openpaw browser set geo --clear`
+- `openpaw browser set media dark`
+- `openpaw browser set timezone America/New_York`
+- `openpaw browser set locale en-US`
+- `openpaw browser set device "iPhone 14"`
 
 注意事项：
 
@@ -423,7 +423,7 @@ docker compose run --rm openclaw-cli \
   - `--format ai`（安装 Playwright 时的默认值）：返回带有数字 ref 的 AI 快照（`aria-ref="<n>"`）。
   - `--format aria`：返回无障碍树（无 ref；仅供检查）。
   - `--efficient`（或 `--mode efficient`）：紧凑角色快照预设（interactive + compact + depth + 较低的 maxChars）。
-  - 配置默认值（仅限工具/CLI）：设置 `browser.snapshotDefaults.mode: "efficient"` 以在调用者未传递模式时使用高效快照（参见 [Gateway 网关配置](/gateway/configuration#browser-openclaw-managed-browser)）。
+  - 配置默认值（仅限工具/CLI）：设置 `browser.snapshotDefaults.mode: "efficient"` 以在调用者未传递模式时使用高效快照（参见 [Gateway 网关配置](/gateway/configuration#browser-openpaw-managed-browser)）。
   - 角色快照选项（`--interactive`、`--compact`、`--depth`、`--selector`）强制使用带有 `ref=e12` 等 ref 的基于角色的快照。
   - `--frame "<iframe selector>"` 将角色快照范围限定到 iframe（与 `e12` 等角色 ref 配合使用）。
   - `--interactive` 输出一个扁平的、易于选择的交互元素列表（最适合驱动操作）。
@@ -433,16 +433,16 @@ docker compose run --rm openclaw-cli \
 
 ## 快照和 ref
 
-OpenClaw 支持两种"快照"风格：
+OpenPaw 支持两种"快照"风格：
 
-- **AI 快照（数字 ref）**：`openclaw browser snapshot`（默认；`--format ai`）
+- **AI 快照（数字 ref）**：`openpaw browser snapshot`（默认；`--format ai`）
   - 输出：包含数字 ref 的文本快照。
-  - 操作：`openclaw browser click 12`、`openclaw browser type 23 "hello"`。
+  - 操作：`openpaw browser click 12`、`openpaw browser type 23 "hello"`。
   - 内部通过 Playwright 的 `aria-ref` 解析 ref。
 
-- **角色快照（角色 ref 如 `e12`）**：`openclaw browser snapshot --interactive`（或 `--compact`、`--depth`、`--selector`、`--frame`）
+- **角色快照（角色 ref 如 `e12`）**：`openpaw browser snapshot --interactive`（或 `--compact`、`--depth`、`--selector`、`--frame`）
   - 输出：带有 `[ref=e12]`（和可选的 `[nth=1]`）的基于角色的列表/树。
-  - 操作：`openclaw browser click e12`、`openclaw browser highlight e12`。
+  - 操作：`openpaw browser click e12`、`openpaw browser highlight e12`。
   - 内部通过 `getByRole(...)`（加上重复项的 `nth()`）解析 ref。
   - 添加 `--labels` 可包含带有叠加 `e12` 标签的视口截图。
 
@@ -456,18 +456,18 @@ ref 行为：
 你可以等待的不仅仅是时间/文本：
 
 - 等待 URL（Playwright 支持通配符）：
-  - `openclaw browser wait --url "**/dash"`
+  - `openpaw browser wait --url "**/dash"`
 - 等待加载状态：
-  - `openclaw browser wait --load networkidle`
+  - `openpaw browser wait --load networkidle`
 - 等待 JS 断言：
-  - `openclaw browser wait --fn "window.ready===true"`
+  - `openpaw browser wait --fn "window.ready===true"`
 - 等待选择器变得可见：
-  - `openclaw browser wait "#main"`
+  - `openpaw browser wait "#main"`
 
 这些可以组合使用：
 
 ```bash
-openclaw browser wait "#main" \
+openpaw browser wait "#main" \
   --url "**/dash" \
   --load networkidle \
   --fn "window.ready===true" \
@@ -478,16 +478,16 @@ openclaw browser wait "#main" \
 
 当操作失败时（例如"not visible"、"strict mode violation"、"covered"）：
 
-1. `openclaw browser snapshot --interactive`
+1. `openpaw browser snapshot --interactive`
 2. 使用 `click <ref>` / `type <ref>`（在交互模式下优先使用角色 ref）
-3. 如果仍然失败：`openclaw browser highlight <ref>` 查看 Playwright 定位的目标
+3. 如果仍然失败：`openpaw browser highlight <ref>` 查看 Playwright 定位的目标
 4. 如果页面行为异常：
-   - `openclaw browser errors --clear`
-   - `openclaw browser requests --filter api --clear`
+   - `openpaw browser errors --clear`
+   - `openpaw browser requests --filter api --clear`
 5. 深度调试：录制 trace：
-   - `openclaw browser trace start`
+   - `openpaw browser trace start`
    - 重现问题
-   - `openclaw browser trace stop`（打印 `TRACE:<path>`）
+   - `openpaw browser trace stop`（打印 `TRACE:<path>`）
 
 ## JSON 输出
 
@@ -496,10 +496,10 @@ openclaw browser wait "#main" \
 示例：
 
 ```bash
-openclaw browser status --json
-openclaw browser snapshot --interactive --json
-openclaw browser requests --filter api --json
-openclaw browser cookies --json
+openpaw browser status --json
+openpaw browser snapshot --interactive --json
+openpaw browser requests --filter api --json
+openpaw browser cookies --json
 ```
 
 JSON 格式的角色快照包含 `refs` 加上一个小的 `stats` 块（lines/chars/refs/interactive），以便工具可以推断负载大小和密度。
@@ -522,8 +522,8 @@ JSON 格式的角色快照包含 `refs` 加上一个小的 `stats` 块（lines/c
 
 ## 安全与隐私
 
-- openclaw 浏览器配置文件可能包含已登录的会话；请将其视为敏感信息。
-- `browser act kind=evaluate` / `openclaw browser evaluate` 和 `wait --fn` 在页面上下文中执行任意 JavaScript。提示注入可能会操纵它。如果不需要，请使用 `browser.evaluateEnabled=false` 禁用它。
+- openpaw 浏览器配置文件可能包含已登录的会话；请将其视为敏感信息。
+- `browser act kind=evaluate` / `openpaw browser evaluate` 和 `wait --fn` 在页面上下文中执行任意 JavaScript。提示注入可能会操纵它。如果不需要，请使用 `browser.evaluateEnabled=false` 禁用它。
 - 有关登录和反机器人注意事项（X/Twitter 等），请参阅 [浏览器登录 + X/Twitter 发帖](/tools/browser-login)。
 - 保持 Gateway 网关/节点主机私有（仅限 loopback 或 tailnet）。
 - 远程 CDP 端点功能强大；请通过隧道保护它们。
@@ -544,7 +544,7 @@ JSON 格式的角色快照包含 `refs` 加上一个小的 `stats` 块（lines/c
 - `browser act` 使用快照 `ref` ID 来点击/输入/拖动/选择。
 - `browser screenshot` 捕获像素（整页或元素）。
 - `browser` 接受：
-  - `profile` 来选择命名的浏览器配置文件（openclaw、chrome 或远程 CDP）。
+  - `profile` 来选择命名的浏览器配置文件（openpaw、chrome 或远程 CDP）。
   - `target`（`sandbox` | `host` | `node`）来选择浏览器所在位置。
   - 在沙箱会话中，`target: "host"` 需要 `agents.defaults.sandbox.browser.allowHostControl=true`。
   - 如果省略 `target`：沙箱会话默认为 `sandbox`，非沙箱会话默认为 `host`。

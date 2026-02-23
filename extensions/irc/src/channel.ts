@@ -9,7 +9,7 @@ import {
   setAccountEnabledInConfigSection,
   deleteAccountFromConfigSection,
   type ChannelPlugin,
-} from "openclaw/plugin-sdk";
+} from "openpaw/plugin-sdk";
 import {
   listIrcAccountIds,
   resolveDefaultIrcAccountId,

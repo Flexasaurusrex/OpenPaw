@@ -19,13 +19,13 @@ describe("resolveAllowAlwaysPatterns", () => {
   }
 
   it("returns direct executable paths for non-shell segments", () => {
-    const exe = path.join("/tmp", "openclaw-tool");
+    const exe = path.join("/tmp", "openpaw-tool");
     const patterns = resolveAllowAlwaysPatterns({
       segments: [
         {
           raw: exe,
           argv: [exe],
-          resolution: { rawExecutable: exe, resolvedPath: exe, executableName: "openclaw-tool" },
+          resolution: { rawExecutable: exe, resolvedPath: exe, executableName: "openpaw-tool" },
         },
       ],
     });

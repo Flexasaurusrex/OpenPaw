@@ -1,4 +1,4 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.Manifest
 import android.content.Context
@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.encodeToString
-import ai.openclaw.android.PermissionRequester
+import ai.openpaw.android.PermissionRequester
 
 /**
  * Sends SMS messages via the Android SMS API.

@@ -1,7 +1,7 @@
 import Foundation
 
 enum CanvasScheme {
-    static let scheme = "openclaw-canvas"
+    static let scheme = "openpaw-canvas"
     static let allSchemes = [scheme]
 
     static func makeURL(session: String, path: String? = nil) -> URL? {

@@ -1,7 +1,7 @@
-import OpenClawProtocol
+import OpenPawProtocol
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite
 @MainActor
@@ -16,7 +16,7 @@ struct AgentEventStoreTests {
             seq: 1,
             stream: "test",
             ts: 0,
-            data: [:] as [String: OpenClawProtocol.AnyCodable],
+            data: [:] as [String: OpenPawProtocol.AnyCodable],
             summary: nil))
         #expect(store.events.count == 1)
 
@@ -33,7 +33,7 @@ struct AgentEventStoreTests {
                 seq: i,
                 stream: "test",
                 ts: Double(i),
-                data: [:] as [String: OpenClawProtocol.AnyCodable],
+                data: [:] as [String: OpenPawProtocol.AnyCodable],
                 summary: nil))
         }
 

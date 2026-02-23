@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite struct RuntimeLocatorTests {
     private func makeTempExecutable(contents: String) throws -> URL {

@@ -32,7 +32,7 @@ describe("buildInboundMetaSystemPrompt", () => {
     } as TemplateContext);
 
     const payload = parseInboundMetaPayload(prompt);
-    expect(payload["schema"]).toBe("openclaw.inbound_meta.v1");
+    expect(payload["schema"]).toBe("openpaw.inbound_meta.v1");
     expect(payload["chat_id"]).toBe("telegram:5494292670");
     expect(payload["channel"]).toBe("telegram");
   });
@@ -77,7 +77,7 @@ describe("buildInboundUserContextPrefix", () => {
   it("omits conversation label block for direct chats", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "direct",
-      ConversationLabel: "openclaw-tui",
+      ConversationLabel: "openpaw-tui",
     } as TemplateContext);
 
     expect(text).toBe("");
@@ -96,14 +96,14 @@ describe("buildInboundUserContextPrefix", () => {
   it("does not treat group chats as direct based on sender id", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "group",
-      SenderId: "openclaw-control-ui",
+      SenderId: "openpaw-control-ui",
       MessageSid: "123",
       ConversationLabel: "some-label",
     } as TemplateContext);
 
     const conversationInfo = parseConversationInfoPayload(text);
     expect(conversationInfo["message_id"]).toBe("123");
-    expect(conversationInfo["sender_id"]).toBe("openclaw-control-ui");
+    expect(conversationInfo["sender_id"]).toBe("openpaw-control-ui");
     expect(conversationInfo["conversation_label"]).toBe("some-label");
   });
 

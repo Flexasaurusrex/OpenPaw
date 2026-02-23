@@ -16,7 +16,7 @@ function updateRelayUrl(port) {
 function relayHeaders(token) {
   const t = String(token || '').trim()
   if (!t) return {}
-  return { 'x-openclaw-relay-token': t }
+  return { 'x-openpaw-relay-token': t }
 }
 
 function setStatus(kind, message) {
@@ -50,7 +50,7 @@ async function checkRelayReachable(port, token) {
   } catch {
     setStatus(
       'error',
-      `Relay not reachable/authenticated at http://127.0.0.1:${port}/. Start OpenClaw browser relay and verify token.`,
+      `Relay not reachable/authenticated at http://127.0.0.1:${port}/. Start OpenPaw browser relay and verify token.`,
     )
   } finally {
     clearTimeout(t)

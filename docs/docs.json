@@ -1,14 +1,14 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "OpenClaw",
+  "name": "OpenPaw",
   "description": "Self-hosted gateway that connects WhatsApp, Telegram, Discord, iMessage, and more to AI coding agents. Run a single Gateway process on your own machine and message your AI assistant from anywhere.",
   "theme": "mint",
   "icons": {
     "library": "lucide"
   },
   "logo": {
-    "light": "/assets/pixel-lobster.svg",
-    "dark": "/assets/pixel-lobster.svg"
+    "light": "/assets/pixel-cat.svg",
+    "dark": "/assets/pixel-cat.svg"
   },
   "fonts": {
     "body": {
@@ -18,7 +18,7 @@
       "family": "DM Sans"
     }
   },
-  "favicon": "/assets/pixel-lobster.svg",
+  "favicon": "/assets/pixel-cat.svg",
   "colors": {
     "primary": "#FF5A36",
     "dark": "#FF5A36",
@@ -36,12 +36,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/openclaw/openclaw",
+        "href": "https://github.com/openpaw/openpaw",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/openclaw/openclaw/releases",
+        "href": "https://github.com/openpaw/openpaw/releases",
         "icon": "package"
       }
     ]
@@ -264,16 +264,16 @@
       "destination": "/nodes/camera"
     },
     {
-      "source": "/clawd",
-      "destination": "/start/openclaw"
+      "source": "/paw",
+      "destination": "/start/openpaw"
     },
     {
-      "source": "/start/clawd",
-      "destination": "/start/openclaw"
+      "source": "/start/paw",
+      "destination": "/start/openpaw"
     },
     {
-      "source": "/start/clawd/",
-      "destination": "/start/openclaw"
+      "source": "/start/paw/",
+      "destination": "/start/openpaw"
     },
     {
       "source": "/start/pairing",
@@ -284,11 +284,11 @@
       "destination": "/tools/clawhub"
     },
     {
-      "source": "/clawdhub",
+      "source": "/pawhub",
       "destination": "/tools/clawhub"
     },
     {
-      "source": "/tools/clawdhub",
+      "source": "/tools/pawhub",
       "destination": "/tools/clawhub"
     },
     {
@@ -835,7 +835,7 @@
               },
               {
                 "group": "Guides",
-                "pages": ["start/openclaw"]
+                "pages": ["start/openpaw"]
               }
             ]
           },
@@ -981,7 +981,7 @@
               {
                 "group": "Built-in tools",
                 "pages": [
-                  "tools/lobster",
+                  "tools/cat",
                   "tools/llm-task",
                   "tools/exec",
                   "tools/web",
@@ -1360,7 +1360,7 @@
               },
               {
                 "group": "指南",
-                "pages": ["zh-CN/start/openclaw"]
+                "pages": ["zh-CN/start/openpaw"]
               }
             ]
           },
@@ -1502,7 +1502,7 @@
               {
                 "group": "内置工具",
                 "pages": [
-                  "zh-CN/tools/lobster",
+                  "zh-CN/tools/cat",
                   "zh-CN/tools/llm-task",
                   "zh-CN/tools/exec",
                   "zh-CN/tools/web",

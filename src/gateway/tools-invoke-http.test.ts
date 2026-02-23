@@ -51,7 +51,7 @@ vi.mock("../plugins/tools.js", () => ({
 
 // Perf: the real tool factory instantiates many tools per request; for these HTTP
 // routing/policy tests we only need a small set of tool names.
-vi.mock("../agents/openclaw-tools.js", () => {
+vi.mock("../agents/openpaw-tools.js", () => {
   const toolInputError = (message: string) => {
     const err = new Error(message);
     err.name = "ToolInputError";
@@ -119,7 +119,7 @@ vi.mock("../agents/openclaw-tools.js", () => {
   ];
 
   return {
-    createOpenClawTools: () => tools,
+    createOpenPawTools: () => tools,
   };
 });
 
@@ -172,8 +172,8 @@ afterAll(async () => {
 });
 
 beforeEach(() => {
-  delete process.env.OPENCLAW_GATEWAY_TOKEN;
-  delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+  delete process.env.OPENPAW_GATEWAY_TOKEN;
+  delete process.env.OPENPAW_GATEWAY_PASSWORD;
   pluginHttpHandlers = [];
   cfg = {};
 });

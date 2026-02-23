@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import OpenPawProtocol
 import Foundation
 import Testing
 

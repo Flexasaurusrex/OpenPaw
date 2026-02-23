@@ -69,8 +69,8 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
       throw new Error("temp home not initialized");
     }
     const stateDir = await fs.mkdtemp(path.join(tempHome, prefix));
-    process.env.OPENCLAW_STATE_DIR = stateDir;
-    delete process.env.OPENCLAW_CONFIG_PATH;
+    process.env.OPENPAW_STATE_DIR = stateDir;
+    delete process.env.OPENPAW_CONFIG_PATH;
     return stateDir;
   };
   const withStateDir = async (
@@ -87,25 +87,25 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
   beforeAll(async () => {
     envSnapshot = captureEnv([
       "HOME",
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      "OPENCLAW_SKIP_CHANNELS",
-      "OPENCLAW_SKIP_GMAIL_WATCHER",
-      "OPENCLAW_SKIP_CRON",
-      "OPENCLAW_SKIP_CANVAS_HOST",
-      "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
+      "OPENPAW_STATE_DIR",
+      "OPENPAW_CONFIG_PATH",
+      "OPENPAW_SKIP_CHANNELS",
+      "OPENPAW_SKIP_GMAIL_WATCHER",
+      "OPENPAW_SKIP_CRON",
+      "OPENPAW_SKIP_CANVAS_HOST",
+      "OPENPAW_SKIP_BROWSER_CONTROL_SERVER",
+      "OPENPAW_GATEWAY_TOKEN",
+      "OPENPAW_GATEWAY_PASSWORD",
     ]);
-    process.env.OPENCLAW_SKIP_CHANNELS = "1";
-    process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-    process.env.OPENCLAW_SKIP_CRON = "1";
-    process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-    process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    process.env.OPENPAW_SKIP_CHANNELS = "1";
+    process.env.OPENPAW_SKIP_GMAIL_WATCHER = "1";
+    process.env.OPENPAW_SKIP_CRON = "1";
+    process.env.OPENPAW_SKIP_CANVAS_HOST = "1";
+    process.env.OPENPAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+    delete process.env.OPENPAW_GATEWAY_TOKEN;
+    delete process.env.OPENPAW_GATEWAY_PASSWORD;
 
-    tempHome = await makeTempWorkspace("openclaw-onboard-");
+    tempHome = await makeTempWorkspace("openpaw-onboard-");
     process.env.HOME = tempHome;
   });
 
@@ -119,7 +119,7 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
   it("writes gateway token auth into config", async () => {
     await withStateDir("state-noninteractive-", async (stateDir) => {
       const token = "tok_test_123";
-      const workspace = path.join(stateDir, "openclaw");
+      const workspace = path.join(stateDir, "openpaw");
 
       await runNonInteractiveOnboarding(
         {
@@ -188,11 +188,11 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
       return;
     }
     await withStateDir("state-lan-", async (stateDir) => {
-      process.env.OPENCLAW_STATE_DIR = stateDir;
-      process.env.OPENCLAW_CONFIG_PATH = path.join(stateDir, "openclaw.json");
+      process.env.OPENPAW_STATE_DIR = stateDir;
+      process.env.OPENPAW_CONFIG_PATH = path.join(stateDir, "openpaw.json");
 
       const port = getPseudoPort(40_000);
-      const workspace = path.join(stateDir, "openclaw");
+      const workspace = path.join(stateDir, "openpaw");
 
       await runNonInteractiveOnboarding(
         {

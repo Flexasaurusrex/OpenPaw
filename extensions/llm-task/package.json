@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/llm-task",
+  "name": "@openpaw/llm-task",
   "version": "2026.2.23",
   "private": true,
-  "description": "OpenClaw JSON-only LLM task plugin",
+  "description": "OpenPaw JSON-only LLM task plugin",
   "type": "module",
-  "openclaw": {
+  "openpaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite struct HealthStoreStateTests {
     @Test @MainActor func linkedChannelProbeFailureDegradesState() async throws {

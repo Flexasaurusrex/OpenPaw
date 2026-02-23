@@ -9,15 +9,15 @@ import Security
 final class PeekabooBridgeHostCoordinator {
     static let shared = PeekabooBridgeHostCoordinator()
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "PeekabooBridge")
+    private let logger = Logger(subsystem: "ai.openpaw", category: "PeekabooBridge")
 
     private var host: PeekabooBridgeHost?
-    private var services: OpenClawPeekabooBridgeServices?
-    private static var openclawSocketPath: String {
+    private var services: OpenPawPeekabooBridgeServices?
+    private static var openpawSocketPath: String {
         let fileManager = FileManager.default
         let base = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support")
-        let directory = base.appendingPathComponent("OpenClaw", isDirectory: true)
+        let directory = base.appendingPathComponent("OpenPaw", isDirectory: true)
         return directory.appendingPathComponent(PeekabooBridgeConstants.socketName, isDirectory: false).path
     }
 
@@ -46,7 +46,7 @@ final class PeekabooBridgeHostCoordinator {
         }
         let allowlistedBundles: Set<String> = []
 
-        let services = OpenClawPeekabooBridgeServices()
+        let services = OpenPawPeekabooBridgeServices()
         let server = PeekabooBridgeServer(
             services: services,
             hostKind: .gui,
@@ -54,7 +54,7 @@ final class PeekabooBridgeHostCoordinator {
             allowlistedBundles: allowlistedBundles)
 
         let host = PeekabooBridgeHost(
-            socketPath: Self.openclawSocketPath,
+            socketPath: Self.openpawSocketPath,
             server: server,
             allowedTeamIDs: allowlistedTeamIDs,
             requestTimeoutSec: 10)
@@ -64,7 +64,7 @@ final class PeekabooBridgeHostCoordinator {
 
         await host.start()
         self.logger
-            .info("PeekabooBridge host started at \(Self.openclawSocketPath, privacy: .public)")
+            .info("PeekabooBridge host started at \(Self.openpawSocketPath, privacy: .public)")
     }
 
     private static func currentTeamID() -> String? {
@@ -97,7 +97,7 @@ final class PeekabooBridgeHostCoordinator {
 }
 
 @MainActor
-private final class OpenClawPeekabooBridgeServices: PeekabooBridgeServiceProviding {
+private final class OpenPawPeekabooBridgeServices: PeekabooBridgeServiceProviding {
     let permissions: PermissionsService
     let screenCapture: any ScreenCaptureServiceProtocol
     let automation: any UIAutomationServiceProtocol
@@ -109,7 +109,7 @@ private final class OpenClawPeekabooBridgeServices: PeekabooBridgeServiceProvidi
     let snapshots: any SnapshotManagerProtocol
 
     init() {
-        let logging = LoggingService(subsystem: "ai.openclaw.peekaboo")
+        let logging = LoggingService(subsystem: "ai.openpaw.peekaboo")
         let feedbackClient: any AutomationFeedbackClient = NoopAutomationFeedbackClient()
 
         let snapshots = InMemorySnapshotManager(options: .init(

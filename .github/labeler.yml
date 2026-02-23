@@ -216,10 +216,10 @@
   - changed-files:
       - any-glob-to-any-file:
           - "extensions/llm-task/**"
-"extensions: lobster":
+"extensions: cat":
   - changed-files:
       - any-glob-to-any-file:
-          - "extensions/lobster/**"
+          - "extensions/cat/**"
 "extensions: memory-core":
   - changed-files:
       - any-glob-to-any-file:

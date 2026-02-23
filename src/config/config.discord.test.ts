@@ -23,7 +23,7 @@ describe("config discord", () => {
               enabled: true,
               allowFrom: ["steipete"],
               groupEnabled: true,
-              groupChannels: ["openclaw-dm"],
+              groupChannels: ["openpaw-dm"],
             },
             actions: {
               emojiUploads: true,
@@ -32,7 +32,7 @@ describe("config discord", () => {
             },
             guilds: {
               "123": {
-                slug: "friends-of-openclaw",
+                slug: "friends-of-openpaw",
                 requireMention: false,
                 users: ["steipete"],
                 channels: {
@@ -48,11 +48,11 @@ describe("config discord", () => {
 
         expect(cfg.channels?.discord?.enabled).toBe(true);
         expect(cfg.channels?.discord?.dm?.groupEnabled).toBe(true);
-        expect(cfg.channels?.discord?.dm?.groupChannels).toEqual(["openclaw-dm"]);
+        expect(cfg.channels?.discord?.dm?.groupChannels).toEqual(["openpaw-dm"]);
         expect(cfg.channels?.discord?.actions?.emojiUploads).toBe(true);
         expect(cfg.channels?.discord?.actions?.stickerUploads).toBe(false);
         expect(cfg.channels?.discord?.actions?.channels).toBe(true);
-        expect(cfg.channels?.discord?.guilds?.["123"]?.slug).toBe("friends-of-openclaw");
+        expect(cfg.channels?.discord?.guilds?.["123"]?.slug).toBe("friends-of-openpaw");
         expect(cfg.channels?.discord?.guilds?.["123"]?.channels?.general?.allow).toBe(true);
       },
     );

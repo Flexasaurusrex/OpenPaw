@@ -1,12 +1,12 @@
 import Foundation
-import OpenClawKit
+import OpenPawKit
 import OSLog
 
 @MainActor
 final class MacNodeModeCoordinator {
     static let shared = MacNodeModeCoordinator()
 
-    private let logger = Logger(subsystem: "ai.openclaw", category: "mac-node")
+    private let logger = Logger(subsystem: "ai.openpaw", category: "mac-node")
     private var task: Task<Void, Never>?
     private let runtime = MacNodeRuntime()
     private let session = GatewayNodeSession()
@@ -60,7 +60,7 @@ final class MacNodeModeCoordinator {
                     caps: caps,
                     commands: commands,
                     permissions: permissions,
-                    clientId: "openclaw-macos",
+                    clientId: "openpaw-macos",
                     clientMode: "node",
                     clientDisplayName: InstanceIdentity.displayName)
                 let sessionBox = self.buildSessionBox(url: config.url)
@@ -91,7 +91,7 @@ final class MacNodeModeCoordinator {
                             return BridgeInvokeResponse(
                                 id: req.id,
                                 ok: false,
-                                error: OpenClawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
+                                error: OpenPawNodeError(code: .unavailable, message: "UNAVAILABLE: node not ready"))
                         }
                         return await self.runtime.handleInvoke(req)
                     })
@@ -107,13 +107,13 @@ final class MacNodeModeCoordinator {
     }
 
     private func currentCaps() -> [String] {
-        var caps: [String] = [OpenClawCapability.canvas.rawValue, OpenClawCapability.screen.rawValue]
+        var caps: [String] = [OpenPawCapability.canvas.rawValue, OpenPawCapability.screen.rawValue]
         if UserDefaults.standard.object(forKey: cameraEnabledKey) as? Bool ?? false {
-            caps.append(OpenClawCapability.camera.rawValue)
+            caps.append(OpenPawCapability.camera.rawValue)
         }
         let rawLocationMode = UserDefaults.standard.string(forKey: locationModeKey) ?? "off"
-        if OpenClawLocationMode(rawValue: rawLocationMode) != .off {
-            caps.append(OpenClawCapability.location.rawValue)
+        if OpenPawLocationMode(rawValue: rawLocationMode) != .off {
+            caps.append(OpenPawCapability.location.rawValue)
         }
         return caps
     }
@@ -125,30 +125,30 @@ final class MacNodeModeCoordinator {
 
     private func currentCommands(caps: [String]) -> [String] {
         var commands: [String] = [
-            OpenClawCanvasCommand.present.rawValue,
-            OpenClawCanvasCommand.hide.rawValue,
-            OpenClawCanvasCommand.navigate.rawValue,
-            OpenClawCanvasCommand.evalJS.rawValue,
-            OpenClawCanvasCommand.snapshot.rawValue,
-            OpenClawCanvasA2UICommand.push.rawValue,
-            OpenClawCanvasA2UICommand.pushJSONL.rawValue,
-            OpenClawCanvasA2UICommand.reset.rawValue,
+            OpenPawCanvasCommand.present.rawValue,
+            OpenPawCanvasCommand.hide.rawValue,
+            OpenPawCanvasCommand.navigate.rawValue,
+            OpenPawCanvasCommand.evalJS.rawValue,
+            OpenPawCanvasCommand.snapshot.rawValue,
+            OpenPawCanvasA2UICommand.push.rawValue,
+            OpenPawCanvasA2UICommand.pushJSONL.rawValue,
+            OpenPawCanvasA2UICommand.reset.rawValue,
             MacNodeScreenCommand.record.rawValue,
-            OpenClawSystemCommand.notify.rawValue,
-            OpenClawSystemCommand.which.rawValue,
-            OpenClawSystemCommand.run.rawValue,
-            OpenClawSystemCommand.execApprovalsGet.rawValue,
-            OpenClawSystemCommand.execApprovalsSet.rawValue,
+            OpenPawSystemCommand.notify.rawValue,
+            OpenPawSystemCommand.which.rawValue,
+            OpenPawSystemCommand.run.rawValue,
+            OpenPawSystemCommand.execApprovalsGet.rawValue,
+            OpenPawSystemCommand.execApprovalsSet.rawValue,
         ]
 
         let capsSet = Set(caps)
-        if capsSet.contains(OpenClawCapability.camera.rawValue) {
-            commands.append(OpenClawCameraCommand.list.rawValue)
-            commands.append(OpenClawCameraCommand.snap.rawValue)
-            commands.append(OpenClawCameraCommand.clip.rawValue)
+        if capsSet.contains(OpenPawCapability.camera.rawValue) {
+            commands.append(OpenPawCameraCommand.list.rawValue)
+            commands.append(OpenPawCameraCommand.snap.rawValue)
+            commands.append(OpenPawCameraCommand.clip.rawValue)
         }
-        if capsSet.contains(OpenClawCapability.location.rawValue) {
-            commands.append(OpenClawLocationCommand.get.rawValue)
+        if capsSet.contains(OpenPawCapability.location.rawValue) {
+            commands.append(OpenPawLocationCommand.get.rawValue)
         }
 
         return commands

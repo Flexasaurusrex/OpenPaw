@@ -234,7 +234,7 @@ describe("buildEmbeddedRunPayloads", () => {
             type: "toolCall",
             id: "toolu_01",
             name: "browser",
-            arguments: { action: "search", query: "openclaw docs" },
+            arguments: { action: "search", query: "openpaw docs" },
           },
         ],
       }),

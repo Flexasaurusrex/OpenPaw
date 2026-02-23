@@ -1,44 +1,44 @@
 import Foundation
 
-public enum OpenClawChatTransportEvent: Sendable {
+public enum OpenPawChatTransportEvent: Sendable {
     case health(ok: Bool)
     case tick
-    case chat(OpenClawChatEventPayload)
-    case agent(OpenClawAgentEventPayload)
+    case chat(OpenPawChatEventPayload)
+    case agent(OpenPawAgentEventPayload)
     case seqGap
 }
 
-public protocol OpenClawChatTransport: Sendable {
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload
+public protocol OpenPawChatTransport: Sendable {
+    func requestHistory(sessionKey: String) async throws -> OpenPawChatHistoryPayload
     func sendMessage(
         sessionKey: String,
         message: String,
         thinking: String,
         idempotencyKey: String,
-        attachments: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments: [OpenPawChatAttachmentPayload]) async throws -> OpenPawChatSendResponse
 
     func abortRun(sessionKey: String, runId: String) async throws
-    func listSessions(limit: Int?) async throws -> OpenClawChatSessionsListResponse
+    func listSessions(limit: Int?) async throws -> OpenPawChatSessionsListResponse
 
     func requestHealth(timeoutMs: Int) async throws -> Bool
-    func events() -> AsyncStream<OpenClawChatTransportEvent>
+    func events() -> AsyncStream<OpenPawChatTransportEvent>
 
     func setActiveSessionKey(_ sessionKey: String) async throws
 }
 
-extension OpenClawChatTransport {
+extension OpenPawChatTransport {
     public func setActiveSessionKey(_: String) async throws {}
 
     public func abortRun(sessionKey _: String, runId _: String) async throws {
         throw NSError(
-            domain: "OpenClawChatTransport",
+            domain: "OpenPawChatTransport",
             code: 0,
             userInfo: [NSLocalizedDescriptionKey: "chat.abort not supported by this transport"])
     }
 
-    public func listSessions(limit _: Int?) async throws -> OpenClawChatSessionsListResponse {
+    public func listSessions(limit _: Int?) async throws -> OpenPawChatSessionsListResponse {
         throw NSError(
-            domain: "OpenClawChatTransport",
+            domain: "OpenPawChatTransport",
             code: 0,
             userInfo: [NSLocalizedDescriptionKey: "sessions.list not supported by this transport"])
     }

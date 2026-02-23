@@ -65,7 +65,7 @@ function resolveBinEntry(binField: string | Record<string, string> | undefined):
     return null;
   }
 
-  const preferred = binField.lobster;
+  const preferred = binField.cat;
   if (typeof preferred === "string" && preferred.trim()) {
     return preferred.trim();
   }
@@ -78,13 +78,13 @@ function resolveBinEntry(binField: string | Record<string, string> | undefined):
   return null;
 }
 
-function resolveLobsterScriptFromPackageJson(wrapperPath: string): string | null {
+function resolveCatScriptFromPackageJson(wrapperPath: string): string | null {
   const wrapperDir = path.dirname(wrapperPath);
   const packageDirs = [
-    // Local install: <repo>/node_modules/.bin/lobster.cmd -> ../lobster
-    path.resolve(wrapperDir, "..", "lobster"),
-    // Global npm install: <npm-prefix>/lobster.cmd -> ./node_modules/lobster
-    path.resolve(wrapperDir, "node_modules", "lobster"),
+    // Local install: <repo>/node_modules/.bin/cat.cmd -> ../cat
+    path.resolve(wrapperDir, "..", "cat"),
+    // Global npm install: <npm-prefix>/cat.cmd -> ./node_modules/cat
+    path.resolve(wrapperDir, "node_modules", "cat"),
   ];
 
   for (const packageDir of packageDirs) {
@@ -113,7 +113,7 @@ function resolveLobsterScriptFromPackageJson(wrapperPath: string): string | null
   return null;
 }
 
-function resolveLobsterScriptFromCmdShim(wrapperPath: string): string | null {
+function resolveCatScriptFromCmdShim(wrapperPath: string): string | null {
   if (!isFilePath(wrapperPath)) {
     return null;
   }
@@ -165,7 +165,7 @@ function resolveLobsterScriptFromCmdShim(wrapperPath: string): string | null {
   return null;
 }
 
-export function resolveWindowsLobsterSpawn(
+export function resolveWindowsCatSpawn(
   execPath: string,
   argv: string[],
   env: NodeJS.ProcessEnv,
@@ -177,11 +177,11 @@ export function resolveWindowsLobsterSpawn(
   }
 
   const scriptPath =
-    resolveLobsterScriptFromCmdShim(resolvedExecPath) ??
-    resolveLobsterScriptFromPackageJson(resolvedExecPath);
+    resolveCatScriptFromCmdShim(resolvedExecPath) ??
+    resolveCatScriptFromPackageJson(resolvedExecPath);
   if (!scriptPath) {
     throw new Error(
-      `${path.basename(resolvedExecPath)} wrapper resolved, but no Node entrypoint could be resolved without shell execution. Ensure Lobster is installed and runnable on PATH (prefer lobster.exe).`,
+      `${path.basename(resolvedExecPath)} wrapper resolved, but no Node entrypoint could be resolved without shell execution. Ensure Cat is installed and runnable on PATH (prefer cat.exe).`,
     );
   }
 

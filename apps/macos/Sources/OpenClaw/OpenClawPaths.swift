@@ -1,6 +1,6 @@
 import Foundation
 
-enum OpenClawEnv {
+enum OpenPawEnv {
     static func path(_ key: String) -> String? {
         // Normalize env overrides once so UI + file IO stay consistent.
         guard let raw = getenv(key) else { return nil }
@@ -13,30 +13,30 @@ enum OpenClawEnv {
     }
 }
 
-enum OpenClawPaths {
-    private static let configPathEnv = ["OPENCLAW_CONFIG_PATH"]
-    private static let stateDirEnv = ["OPENCLAW_STATE_DIR"]
+enum OpenPawPaths {
+    private static let configPathEnv = ["OPENPAW_CONFIG_PATH"]
+    private static let stateDirEnv = ["OPENPAW_STATE_DIR"]
 
     static var stateDirURL: URL {
         for key in self.stateDirEnv {
-            if let override = OpenClawEnv.path(key) {
+            if let override = OpenPawEnv.path(key) {
                 return URL(fileURLWithPath: override, isDirectory: true)
             }
         }
         let home = FileManager().homeDirectoryForCurrentUser
-        return home.appendingPathComponent(".openclaw", isDirectory: true)
+        return home.appendingPathComponent(".openpaw", isDirectory: true)
     }
 
     private static func resolveConfigCandidate(in dir: URL) -> URL? {
         let candidates = [
-            dir.appendingPathComponent("openclaw.json"),
+            dir.appendingPathComponent("openpaw.json"),
         ]
         return candidates.first(where: { FileManager().fileExists(atPath: $0.path) })
     }
 
     static var configURL: URL {
         for key in self.configPathEnv {
-            if let override = OpenClawEnv.path(key) {
+            if let override = OpenPawEnv.path(key) {
                 return URL(fileURLWithPath: override)
             }
         }
@@ -44,7 +44,7 @@ enum OpenClawPaths {
         if let existing = self.resolveConfigCandidate(in: stateDir) {
             return existing
         }
-        return stateDir.appendingPathComponent("openclaw.json")
+        return stateDir.appendingPathComponent("openpaw.json")
     }
 
     static var workspaceURL: URL {

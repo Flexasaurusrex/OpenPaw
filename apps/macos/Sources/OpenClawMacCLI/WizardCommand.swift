@@ -1,7 +1,7 @@
 import Darwin
 import Foundation
-import OpenClawKit
-import OpenClawProtocol
+import OpenPawKit
+import OpenPawProtocol
 
 struct WizardCliOptions {
     var url: String?
@@ -71,10 +71,10 @@ func runWizardCommand(_ args: [String]) async {
     let opts = WizardCliOptions.parse(args)
     if opts.help {
         print("""
-        openclaw-mac wizard
+        openpaw-mac wizard
 
         Usage:
-          openclaw-mac wizard [--url <ws://host:port>] [--token <token>] [--password <password>]
+          openpaw-mac wizard [--url <ws://host:port>] [--token <token>] [--password <password>]
                               [--mode <local|remote>] [--workspace <path>] [--json]
 
         Options:
@@ -247,14 +247,14 @@ actor GatewayWizardClient {
         }
         let osVersion = ProcessInfo.processInfo.operatingSystemVersion
         let platform = "macos \(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
-        let clientId = "openclaw-macos"
+        let clientId = "openpaw-macos"
         let clientMode = "ui"
         let role = "operator"
         // Explicit scopes; gateway no longer defaults empty scopes to admin.
         let scopes = defaultOperatorConnectScopes
         let client: [String: ProtoAnyCodable] = [
             "id": ProtoAnyCodable(clientId),
-            "displayName": ProtoAnyCodable(Host.current().localizedName ?? "OpenClaw macOS Wizard CLI"),
+            "displayName": ProtoAnyCodable(Host.current().localizedName ?? "OpenPaw macOS Wizard CLI"),
             "version": ProtoAnyCodable("dev"),
             "platform": ProtoAnyCodable(platform),
             "deviceFamily": ProtoAnyCodable("Mac"),

@@ -1,10 +1,10 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { Type } from "@sinclair/typebox";
-import type { OpenClawPluginApi } from "../../../src/plugins/types.js";
-import { resolveWindowsLobsterSpawn } from "./windows-spawn.js";
+import type { OpenPawPluginApi } from "../../../src/plugins/types.js";
+import { resolveWindowsCatSpawn } from "./windows-spawn.js";
 
-type LobsterEnvelope =
+type CatEnvelope =
   | {
       ok: true;
       status: "ok" | "needs_approval" | "cancelled";
@@ -47,7 +47,7 @@ function resolveCwd(cwdRaw: unknown): string {
   return resolved;
 }
 
-async function runLobsterSubprocessOnce(params: {
+async function runCatSubprocessOnce(params: {
   execPath: string;
   argv: string[];
   cwd: string;
@@ -65,7 +65,7 @@ async function runLobsterSubprocessOnce(params: {
   }
   const spawnTarget =
     process.platform === "win32"
-      ? resolveWindowsLobsterSpawn(execPath, argv, env)
+      ? resolveWindowsCatSpawn(execPath, argv, env)
       : { command: execPath, argv };
 
   return await new Promise<{ stdout: string }>((resolve, reject) => {
@@ -111,7 +111,7 @@ async function runLobsterSubprocessOnce(params: {
       const str = String(chunk);
       stdoutBytes += Buffer.byteLength(str, "utf8");
       if (stdoutBytes > maxStdoutBytes) {
-        failAndTerminate("lobster output exceeded maxStdoutBytes");
+        failAndTerminate("cat output exceeded maxStdoutBytes");
         return;
       }
       stdout += str;
@@ -122,7 +122,7 @@ async function runLobsterSubprocessOnce(params: {
     });
 
     const timer = setTimeout(() => {
-      failAndTerminate("lobster subprocess timed out");
+      failAndTerminate("cat subprocess timed out");
     }, timeoutMs);
 
     child.once("error", (err) => {
@@ -133,7 +133,7 @@ async function runLobsterSubprocessOnce(params: {
       if (code !== 0) {
         settle({
           ok: false,
-          error: new Error(`lobster failed (${code ?? "?"}): ${stderr.trim() || stdout.trim()}`),
+          error: new Error(`cat failed (${code ?? "?"}): ${stderr.trim() || stdout.trim()}`),
         });
         return;
       }
@@ -142,7 +142,7 @@ async function runLobsterSubprocessOnce(params: {
   });
 }
 
-function parseEnvelope(stdout: string): LobsterEnvelope {
+function parseEnvelope(stdout: string): CatEnvelope {
   const trimmed = stdout.trim();
 
   const tryParse = (input: string) => {
@@ -165,22 +165,22 @@ function parseEnvelope(stdout: string): LobsterEnvelope {
   }
 
   if (parsed === undefined) {
-    throw new Error("lobster returned invalid JSON");
+    throw new Error("cat returned invalid JSON");
   }
 
   if (!parsed || typeof parsed !== "object") {
-    throw new Error("lobster returned invalid JSON envelope");
+    throw new Error("cat returned invalid JSON envelope");
   }
 
   const ok = (parsed as { ok?: unknown }).ok;
   if (ok === true || ok === false) {
-    return parsed as LobsterEnvelope;
+    return parsed as CatEnvelope;
   }
 
-  throw new Error("lobster returned invalid JSON envelope");
+  throw new Error("cat returned invalid JSON envelope");
 }
 
-function buildLobsterArgv(action: string, params: Record<string, unknown>): string[] {
+function buildCatArgv(action: string, params: Record<string, unknown>): string[] {
   if (action === "run") {
     const pipeline = typeof params.pipeline === "string" ? params.pipeline : "";
     if (!pipeline.trim()) {
@@ -207,12 +207,12 @@ function buildLobsterArgv(action: string, params: Record<string, unknown>): stri
   throw new Error(`Unknown action: ${action}`);
 }
 
-export function createLobsterTool(api: OpenClawPluginApi) {
+export function createCatTool(api: OpenPawPluginApi) {
   return {
-    name: "lobster",
-    label: "Lobster Workflow",
+    name: "cat",
+    label: "Cat Workflow",
     description:
-      "Run Lobster pipelines as a local-first workflow runtime (typed JSON envelope + resumable approvals).",
+      "Run Cat pipelines as a local-first workflow runtime (typed JSON envelope + resumable approvals).",
     parameters: Type.Object({
       // NOTE: Prefer string enums in tool schemas; some providers reject unions/anyOf.
       action: Type.Unsafe<"run" | "resume">({ type: "string", enum: ["run", "resume"] }),
@@ -235,19 +235,19 @@ export function createLobsterTool(api: OpenClawPluginApi) {
         throw new Error("action required");
       }
 
-      const execPath = "lobster";
+      const execPath = "cat";
       const cwd = resolveCwd(params.cwd);
       const timeoutMs = typeof params.timeoutMs === "number" ? params.timeoutMs : 20_000;
       const maxStdoutBytes =
         typeof params.maxStdoutBytes === "number" ? params.maxStdoutBytes : 512_000;
 
-      const argv = buildLobsterArgv(action, params);
+      const argv = buildCatArgv(action, params);
 
       if (api.runtime?.version && api.logger?.debug) {
-        api.logger.debug(`lobster plugin runtime=${api.runtime.version}`);
+        api.logger.debug(`cat plugin runtime=${api.runtime.version}`);
       }
 
-      const { stdout } = await runLobsterSubprocessOnce({
+      const { stdout } = await runCatSubprocessOnce({
         execPath,
         argv,
         cwd,

@@ -12,10 +12,10 @@ import {
 } from "./paths.js";
 
 describe("oauth paths", () => {
-  it("prefers OPENCLAW_OAUTH_DIR over OPENCLAW_STATE_DIR", () => {
+  it("prefers OPENPAW_OAUTH_DIR over OPENPAW_STATE_DIR", () => {
     const env = {
-      OPENCLAW_OAUTH_DIR: "/custom/oauth",
-      OPENCLAW_STATE_DIR: "/custom/state",
+      OPENPAW_OAUTH_DIR: "/custom/oauth",
+      OPENPAW_STATE_DIR: "/custom/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveOAuthDir(env, "/custom/state")).toBe(path.resolve("/custom/oauth"));
@@ -24,9 +24,9 @@ describe("oauth paths", () => {
     );
   });
 
-  it("derives oauth path from OPENCLAW_STATE_DIR when unset", () => {
+  it("derives oauth path from OPENPAW_STATE_DIR when unset", () => {
     const env = {
-      OPENCLAW_STATE_DIR: "/custom/state",
+      OPENPAW_STATE_DIR: "/custom/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveOAuthDir(env, "/custom/state")).toBe(path.join("/custom/state", "credentials"));
@@ -46,39 +46,39 @@ describe("state + config path candidates", () => {
     }
   }
 
-  function expectOpenClawHomeDefaults(env: NodeJS.ProcessEnv): void {
-    const configuredHome = env.OPENCLAW_HOME;
+  function expectOpenPawHomeDefaults(env: NodeJS.ProcessEnv): void {
+    const configuredHome = env.OPENPAW_HOME;
     if (!configuredHome) {
-      throw new Error("OPENCLAW_HOME must be set for this assertion helper");
+      throw new Error("OPENPAW_HOME must be set for this assertion helper");
     }
     const resolvedHome = path.resolve(configuredHome);
-    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".openclaw"));
+    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".openpaw"));
 
     const candidates = resolveDefaultConfigCandidates(env);
-    expect(candidates[0]).toBe(path.join(resolvedHome, ".openclaw", "openclaw.json"));
+    expect(candidates[0]).toBe(path.join(resolvedHome, ".openpaw", "openpaw.json"));
   }
 
-  it("uses OPENCLAW_STATE_DIR when set", () => {
+  it("uses OPENPAW_STATE_DIR when set", () => {
     const env = {
-      OPENCLAW_STATE_DIR: "/new/state",
+      OPENPAW_STATE_DIR: "/new/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveStateDir(env, () => "/home/test")).toBe(path.resolve("/new/state"));
   });
 
-  it("uses OPENCLAW_HOME for default state/config locations", () => {
+  it("uses OPENPAW_HOME for default state/config locations", () => {
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENPAW_HOME: "/srv/openpaw-home",
     } as NodeJS.ProcessEnv;
-    expectOpenClawHomeDefaults(env);
+    expectOpenPawHomeDefaults(env);
   });
 
-  it("prefers OPENCLAW_HOME over HOME for default state/config locations", () => {
+  it("prefers OPENPAW_HOME over HOME for default state/config locations", () => {
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENPAW_HOME: "/srv/openpaw-home",
       HOME: "/home/other",
     } as NodeJS.ProcessEnv;
-    expectOpenClawHomeDefaults(env);
+    expectOpenPawHomeDefaults(env);
   });
 
   it("orders default config candidates in a stable order", () => {
@@ -86,38 +86,38 @@ describe("state + config path candidates", () => {
     const resolvedHome = path.resolve(home);
     const candidates = resolveDefaultConfigCandidates({} as NodeJS.ProcessEnv, () => home);
     const expected = [
-      path.join(resolvedHome, ".openclaw", "openclaw.json"),
-      path.join(resolvedHome, ".openclaw", "clawdbot.json"),
-      path.join(resolvedHome, ".openclaw", "moldbot.json"),
-      path.join(resolvedHome, ".openclaw", "moltbot.json"),
-      path.join(resolvedHome, ".clawdbot", "openclaw.json"),
-      path.join(resolvedHome, ".clawdbot", "clawdbot.json"),
-      path.join(resolvedHome, ".clawdbot", "moldbot.json"),
-      path.join(resolvedHome, ".clawdbot", "moltbot.json"),
-      path.join(resolvedHome, ".moldbot", "openclaw.json"),
-      path.join(resolvedHome, ".moldbot", "clawdbot.json"),
+      path.join(resolvedHome, ".openpaw", "openpaw.json"),
+      path.join(resolvedHome, ".openpaw", "pawbot.json"),
+      path.join(resolvedHome, ".openpaw", "moldbot.json"),
+      path.join(resolvedHome, ".openpaw", "pawbot.json"),
+      path.join(resolvedHome, ".pawbot", "openpaw.json"),
+      path.join(resolvedHome, ".pawbot", "pawbot.json"),
+      path.join(resolvedHome, ".pawbot", "moldbot.json"),
+      path.join(resolvedHome, ".pawbot", "pawbot.json"),
+      path.join(resolvedHome, ".moldbot", "openpaw.json"),
+      path.join(resolvedHome, ".moldbot", "pawbot.json"),
       path.join(resolvedHome, ".moldbot", "moldbot.json"),
-      path.join(resolvedHome, ".moldbot", "moltbot.json"),
-      path.join(resolvedHome, ".moltbot", "openclaw.json"),
-      path.join(resolvedHome, ".moltbot", "clawdbot.json"),
-      path.join(resolvedHome, ".moltbot", "moldbot.json"),
-      path.join(resolvedHome, ".moltbot", "moltbot.json"),
+      path.join(resolvedHome, ".moldbot", "pawbot.json"),
+      path.join(resolvedHome, ".pawbot", "openpaw.json"),
+      path.join(resolvedHome, ".pawbot", "pawbot.json"),
+      path.join(resolvedHome, ".pawbot", "moldbot.json"),
+      path.join(resolvedHome, ".pawbot", "pawbot.json"),
     ];
     expect(candidates).toEqual(expected);
   });
 
-  it("prefers ~/.openclaw when it exists and legacy dir is missing", async () => {
-    await withTempRoot("openclaw-state-", async (root) => {
-      const newDir = path.join(root, ".openclaw");
+  it("prefers ~/.openpaw when it exists and legacy dir is missing", async () => {
+    await withTempRoot("openpaw-state-", async (root) => {
+      const newDir = path.join(root, ".openpaw");
       await fs.mkdir(newDir, { recursive: true });
       const resolved = resolveStateDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(newDir);
     });
   });
 
-  it("falls back to existing legacy state dir when ~/.openclaw is missing", async () => {
-    await withTempRoot("openclaw-state-legacy-", async (root) => {
-      const legacyDir = path.join(root, ".clawdbot");
+  it("falls back to existing legacy state dir when ~/.openpaw is missing", async () => {
+    await withTempRoot("openpaw-state-legacy-", async (root) => {
+      const legacyDir = path.join(root, ".pawbot");
       await fs.mkdir(legacyDir, { recursive: true });
       const resolved = resolveStateDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(legacyDir);
@@ -125,10 +125,10 @@ describe("state + config path candidates", () => {
   });
 
   it("CONFIG_PATH prefers existing config when present", async () => {
-    await withTempRoot("openclaw-config-", async (root) => {
-      const legacyDir = path.join(root, ".openclaw");
+    await withTempRoot("openpaw-config-", async (root) => {
+      const legacyDir = path.join(root, ".openpaw");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyPath = path.join(legacyDir, "openclaw.json");
+      const legacyPath = path.join(legacyDir, "openpaw.json");
       await fs.writeFile(legacyPath, "{}", "utf-8");
 
       const resolved = resolveConfigPathCandidate({} as NodeJS.ProcessEnv, () => root);
@@ -137,16 +137,16 @@ describe("state + config path candidates", () => {
   });
 
   it("respects state dir overrides when config is missing", async () => {
-    await withTempRoot("openclaw-config-override-", async (root) => {
-      const legacyDir = path.join(root, ".openclaw");
+    await withTempRoot("openpaw-config-override-", async (root) => {
+      const legacyDir = path.join(root, ".openpaw");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyConfig = path.join(legacyDir, "openclaw.json");
+      const legacyConfig = path.join(legacyDir, "openpaw.json");
       await fs.writeFile(legacyConfig, "{}", "utf-8");
 
       const overrideDir = path.join(root, "override");
-      const env = { OPENCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
+      const env = { OPENPAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
       const resolved = resolveConfigPath(env, overrideDir, () => root);
-      expect(resolved).toBe(path.join(overrideDir, "openclaw.json"));
+      expect(resolved).toBe(path.join(overrideDir, "openpaw.json"));
     });
   });
 });

@@ -1,7 +1,7 @@
 import Foundation
 import Testing
-@testable import OpenClawKit
-import OpenClawProtocol
+@testable import OpenPawKit
+import OpenPawProtocol
 
 private struct TimeoutError: Error, CustomStringConvertible {
     let label: String
@@ -240,7 +240,7 @@ struct GatewayNodeSessionTests {
             caps: [],
             commands: [],
             permissions: [:],
-            clientId: "openclaw-ios-test",
+            clientId: "openpaw-ios-test",
             clientMode: "ui",
             clientDisplayName: "iOS Test",
             includeDeviceIdentity: false)

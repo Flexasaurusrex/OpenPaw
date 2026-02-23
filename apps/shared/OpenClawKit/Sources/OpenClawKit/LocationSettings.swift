@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OpenClawLocationMode: String, Codable, Sendable, CaseIterable {
+public enum OpenPawLocationMode: String, Codable, Sendable, CaseIterable {
     case off
     case whileUsing
     case always

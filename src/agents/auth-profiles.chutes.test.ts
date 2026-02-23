@@ -22,12 +22,12 @@ describe("auth-profiles (chutes)", () => {
   });
 
   it("refreshes expired Chutes OAuth credentials", async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-chutes-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-chutes-"));
     const agentDir = path.join(tempDir, "agents", "main", "agent");
     await withEnvAsync(
       {
-        OPENCLAW_STATE_DIR: tempDir,
-        OPENCLAW_AGENT_DIR: agentDir,
+        OPENPAW_STATE_DIR: tempDir,
+        OPENPAW_AGENT_DIR: agentDir,
         PI_CODING_AGENT_DIR: agentDir,
         CHUTES_CLIENT_ID: undefined,
       },

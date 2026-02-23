@@ -6,7 +6,7 @@ import SwiftUI
 struct AnthropicAuthControls: View {
     let connectionMode: AppState.ConnectionMode
 
-    @State private var oauthStatus: OpenClawOAuthStore.AnthropicOAuthStatus = OpenClawOAuthStore.anthropicOAuthStatus()
+    @State private var oauthStatus: OpenPawOAuthStore.AnthropicOAuthStatus = OpenPawOAuthStore.anthropicOAuthStatus()
     @State private var pkce: AnthropicOAuth.PKCE?
     @State private var code: String = ""
     @State private var busy = false
@@ -42,10 +42,10 @@ struct AnthropicAuthControls: View {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Button("Reveal") {
-                    NSWorkspace.shared.activateFileViewerSelecting([OpenClawOAuthStore.oauthURL()])
+                    NSWorkspace.shared.activateFileViewerSelecting([OpenPawOAuthStore.oauthURL()])
                 }
                 .buttonStyle(.bordered)
-                .disabled(!FileManager().fileExists(atPath: OpenClawOAuthStore.oauthURL().path))
+                .disabled(!FileManager().fileExists(atPath: OpenPawOAuthStore.oauthURL().path))
 
                 Button("Refresh") {
                     self.refresh()
@@ -53,7 +53,7 @@ struct AnthropicAuthControls: View {
                 .buttonStyle(.bordered)
             }
 
-            Text(OpenClawOAuthStore.oauthURL().path)
+            Text(OpenPawOAuthStore.oauthURL().path)
                 .font(.caption.monospaced())
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -130,8 +130,8 @@ struct AnthropicAuthControls: View {
     }
 
     private func refresh() {
-        let imported = OpenClawOAuthStore.importLegacyAnthropicOAuthIfNeeded()
-        self.oauthStatus = OpenClawOAuthStore.anthropicOAuthStatus()
+        let imported = OpenPawOAuthStore.importLegacyAnthropicOAuthIfNeeded()
+        self.oauthStatus = OpenPawOAuthStore.anthropicOAuthStatus()
         if imported != nil {
             self.statusText = "Imported existing OAuth credentials."
         }
@@ -172,11 +172,11 @@ struct AnthropicAuthControls: View {
                 code: parsed.code,
                 state: parsed.state,
                 verifier: pkce.verifier)
-            try OpenClawOAuthStore.saveAnthropicOAuth(creds)
+            try OpenPawOAuthStore.saveAnthropicOAuth(creds)
             self.refresh()
             self.pkce = nil
             self.code = ""
-            self.statusText = "Connected. OpenClaw can now use Claude via OAuth."
+            self.statusText = "Connected. OpenPaw can now use Claude via OAuth."
         } catch {
             self.statusText = "OAuth failed: \(error.localizedDescription)"
         }
@@ -212,7 +212,7 @@ struct AnthropicAuthControls: View {
 extension AnthropicAuthControls {
     init(
         connectionMode: AppState.ConnectionMode,
-        oauthStatus: OpenClawOAuthStore.AnthropicOAuthStatus,
+        oauthStatus: OpenPawOAuthStore.AnthropicOAuthStatus,
         pkce: AnthropicOAuth.PKCE? = nil,
         code: String = "",
         busy: Bool = false,

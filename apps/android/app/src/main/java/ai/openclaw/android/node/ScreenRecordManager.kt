@@ -1,4 +1,4 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.content.Context
 import android.hardware.display.DisplayManager
@@ -6,7 +6,7 @@ import android.media.MediaRecorder
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.util.Base64
-import ai.openclaw.android.ScreenCaptureRequester
+import ai.openpaw.android.ScreenCaptureRequester
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -17,13 +17,13 @@ class ScreenRecordManager(private val context: Context) {
   data class Payload(val payloadJson: String)
 
   @Volatile private var screenCaptureRequester: ScreenCaptureRequester? = null
-  @Volatile private var permissionRequester: ai.openclaw.android.PermissionRequester? = null
+  @Volatile private var permissionRequester: ai.openpaw.android.PermissionRequester? = null
 
   fun attachScreenCaptureRequester(requester: ScreenCaptureRequester) {
     screenCaptureRequester = requester
   }
 
-  fun attachPermissionRequester(requester: ai.openclaw.android.PermissionRequester) {
+  fun attachPermissionRequester(requester: ai.openpaw.android.PermissionRequester) {
     permissionRequester = requester
   }
 
@@ -63,7 +63,7 @@ class ScreenRecordManager(private val context: Context) {
       val height = metrics.heightPixels
       val densityDpi = metrics.densityDpi
 
-      val file = File.createTempFile("openclaw-screen-", ".mp4")
+      val file = File.createTempFile("openpaw-screen-", ".mp4")
       if (includeAudio) ensureMicPermission()
 
       val recorder = createMediaRecorder()
@@ -90,7 +90,7 @@ class ScreenRecordManager(private val context: Context) {
         val surface = recorder.surface
         virtualDisplay =
           projection.createVirtualDisplay(
-            "openclaw-screen",
+            "openpaw-screen",
             width,
             height,
             densityDpi,

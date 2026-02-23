@@ -1,6 +1,6 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
-import ai.openclaw.android.gateway.GatewayEndpoint
+import ai.openpaw.android.gateway.GatewayEndpoint
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -10,7 +10,7 @@ class ConnectionManagerTest {
   fun resolveTlsParamsForEndpoint_prefersStoredPinOverAdvertisedFingerprint() {
     val endpoint =
       GatewayEndpoint(
-        stableId = "_openclaw-gw._tcp.|local.|Test",
+        stableId = "_openpaw-gw._tcp.|local.|Test",
         name = "Test",
         host = "10.0.0.2",
         port = 18789,
@@ -33,7 +33,7 @@ class ConnectionManagerTest {
   fun resolveTlsParamsForEndpoint_doesNotTrustAdvertisedFingerprintWhenNoStoredPin() {
     val endpoint =
       GatewayEndpoint(
-        stableId = "_openclaw-gw._tcp.|local.|Test",
+        stableId = "_openpaw-gw._tcp.|local.|Test",
         name = "Test",
         host = "10.0.0.2",
         port = 18789,

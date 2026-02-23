@@ -1,27 +1,27 @@
 import Foundation
 
-public enum OpenClawRemindersCommand: String, Codable, Sendable {
+public enum OpenPawRemindersCommand: String, Codable, Sendable {
     case list = "reminders.list"
     case add = "reminders.add"
 }
 
-public enum OpenClawReminderStatusFilter: String, Codable, Sendable {
+public enum OpenPawReminderStatusFilter: String, Codable, Sendable {
     case incomplete
     case completed
     case all
 }
 
-public struct OpenClawRemindersListParams: Codable, Sendable, Equatable {
-    public var status: OpenClawReminderStatusFilter?
+public struct OpenPawRemindersListParams: Codable, Sendable, Equatable {
+    public var status: OpenPawReminderStatusFilter?
     public var limit: Int?
 
-    public init(status: OpenClawReminderStatusFilter? = nil, limit: Int? = nil) {
+    public init(status: OpenPawReminderStatusFilter? = nil, limit: Int? = nil) {
         self.status = status
         self.limit = limit
     }
 }
 
-public struct OpenClawRemindersAddParams: Codable, Sendable, Equatable {
+public struct OpenPawRemindersAddParams: Codable, Sendable, Equatable {
     public var title: String
     public var dueISO: String?
     public var notes: String?
@@ -43,7 +43,7 @@ public struct OpenClawRemindersAddParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawReminderPayload: Codable, Sendable, Equatable {
+public struct OpenPawReminderPayload: Codable, Sendable, Equatable {
     public var identifier: String
     public var title: String
     public var dueISO: String?
@@ -65,18 +65,18 @@ public struct OpenClawReminderPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawRemindersListPayload: Codable, Sendable, Equatable {
-    public var reminders: [OpenClawReminderPayload]
+public struct OpenPawRemindersListPayload: Codable, Sendable, Equatable {
+    public var reminders: [OpenPawReminderPayload]
 
-    public init(reminders: [OpenClawReminderPayload]) {
+    public init(reminders: [OpenPawReminderPayload]) {
         self.reminders = reminders
     }
 }
 
-public struct OpenClawRemindersAddPayload: Codable, Sendable, Equatable {
-    public var reminder: OpenClawReminderPayload
+public struct OpenPawRemindersAddPayload: Codable, Sendable, Equatable {
+    public var reminder: OpenPawReminderPayload
 
-    public init(reminder: OpenClawReminderPayload) {
+    public init(reminder: OpenPawReminderPayload) {
         self.reminder = reminder
     }
 }

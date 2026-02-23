@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/irc",
+  "name": "@openpaw/irc",
   "version": "2026.2.23",
-  "description": "OpenClaw IRC channel plugin",
+  "description": "OpenPaw IRC channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "openpaw": "workspace:*"
   },
-  "openclaw": {
+  "openpaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import {
   buildBootstrapContextFiles,
   DEFAULT_BOOTSTRAP_MAX_CHARS,
@@ -152,7 +152,7 @@ describe("buildBootstrapContextFiles", () => {
 
 type BootstrapLimitResolverCase = {
   name: "bootstrapMaxChars" | "bootstrapTotalMaxChars";
-  resolve: (cfg?: OpenClawConfig) => number;
+  resolve: (cfg?: OpenPawConfig) => number;
   defaultValue: number;
 };
 
@@ -180,7 +180,7 @@ describe("bootstrap limit resolvers", () => {
     for (const resolver of BOOTSTRAP_LIMIT_RESOLVERS) {
       const cfg = {
         agents: { defaults: { [resolver.name]: 12345 } },
-      } as OpenClawConfig;
+      } as OpenPawConfig;
       expect(resolver.resolve(cfg)).toBe(12345);
     }
   });
@@ -189,7 +189,7 @@ describe("bootstrap limit resolvers", () => {
     for (const resolver of BOOTSTRAP_LIMIT_RESOLVERS) {
       const cfg = {
         agents: { defaults: { [resolver.name]: -1 } },
-      } as OpenClawConfig;
+      } as OpenPawConfig;
       expect(resolver.resolve(cfg)).toBe(resolver.defaultValue);
     }
   });

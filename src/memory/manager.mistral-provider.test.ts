@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import type {
   EmbeddingProvider,
   EmbeddingProviderResult,
@@ -37,7 +37,7 @@ function buildConfig(params: {
   indexPath: string;
   provider: "openai" | "mistral";
   fallback?: "none" | "mistral";
-}): OpenClawConfig {
+}): OpenPawConfig {
   return {
     agents: {
       defaults: {
@@ -53,7 +53,7 @@ function buildConfig(params: {
       },
       list: [{ id: "main", default: true }],
     },
-  } as OpenClawConfig;
+  } as OpenPawConfig;
 }
 
 describe("memory manager mistral provider wiring", () => {
@@ -63,7 +63,7 @@ describe("memory manager mistral provider wiring", () => {
 
   beforeEach(async () => {
     createEmbeddingProviderMock.mockReset();
-    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-memory-mistral-"));
+    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-memory-mistral-"));
     indexPath = path.join(workspaceDir, "index.sqlite");
     await fs.mkdir(path.join(workspaceDir, "memory"), { recursive: true });
     await fs.writeFile(path.join(workspaceDir, "MEMORY.md"), "test");

@@ -98,16 +98,16 @@ vi.mock("@opentelemetry/semantic-conventions", () => ({
   ATTR_SERVICE_NAME: "service.name",
 }));
 
-vi.mock("openclaw/plugin-sdk", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk")>("openclaw/plugin-sdk");
+vi.mock("openpaw/plugin-sdk", async () => {
+  const actual = await vi.importActual<typeof import("openpaw/plugin-sdk")>("openpaw/plugin-sdk");
   return {
     ...actual,
     registerLogTransport: registerLogTransportMock,
   };
 });
 
-import type { OpenClawPluginServiceContext } from "openclaw/plugin-sdk";
-import { emitDiagnosticEvent } from "openclaw/plugin-sdk";
+import type { OpenPawPluginServiceContext } from "openpaw/plugin-sdk";
+import { emitDiagnosticEvent } from "openpaw/plugin-sdk";
 import { createDiagnosticsOtelService } from "./service.js";
 
 function createLogger() {
@@ -119,7 +119,7 @@ function createLogger() {
   };
 }
 
-function createTraceOnlyContext(endpoint: string): OpenClawPluginServiceContext {
+function createTraceOnlyContext(endpoint: string): OpenPawPluginServiceContext {
   return {
     config: {
       diagnostics: {
@@ -135,7 +135,7 @@ function createTraceOnlyContext(endpoint: string): OpenClawPluginServiceContext 
       },
     },
     logger: createLogger(),
-    stateDir: "/tmp/openclaw-diagnostics-otel-test",
+    stateDir: "/tmp/openpaw-diagnostics-otel-test",
   };
 }
 describe("diagnostics-otel service", () => {
@@ -162,7 +162,7 @@ describe("diagnostics-otel service", () => {
     });
 
     const service = createDiagnosticsOtelService();
-    const ctx: OpenClawPluginServiceContext = {
+    const ctx: OpenPawPluginServiceContext = {
       config: {
         diagnostics: {
           enabled: true,
@@ -177,7 +177,7 @@ describe("diagnostics-otel service", () => {
         },
       },
       logger: createLogger(),
-      stateDir: "/tmp/openclaw-diagnostics-otel-test",
+      stateDir: "/tmp/openpaw-diagnostics-otel-test",
     };
     await service.start(ctx);
 
@@ -221,26 +221,26 @@ describe("diagnostics-otel service", () => {
       attempt: 2,
     });
 
-    expect(telemetryState.counters.get("openclaw.webhook.received")?.add).toHaveBeenCalled();
+    expect(telemetryState.counters.get("openpaw.webhook.received")?.add).toHaveBeenCalled();
     expect(
-      telemetryState.histograms.get("openclaw.webhook.duration_ms")?.record,
+      telemetryState.histograms.get("openpaw.webhook.duration_ms")?.record,
     ).toHaveBeenCalled();
-    expect(telemetryState.counters.get("openclaw.message.queued")?.add).toHaveBeenCalled();
-    expect(telemetryState.counters.get("openclaw.message.processed")?.add).toHaveBeenCalled();
+    expect(telemetryState.counters.get("openpaw.message.queued")?.add).toHaveBeenCalled();
+    expect(telemetryState.counters.get("openpaw.message.processed")?.add).toHaveBeenCalled();
     expect(
-      telemetryState.histograms.get("openclaw.message.duration_ms")?.record,
+      telemetryState.histograms.get("openpaw.message.duration_ms")?.record,
     ).toHaveBeenCalled();
-    expect(telemetryState.histograms.get("openclaw.queue.wait_ms")?.record).toHaveBeenCalled();
-    expect(telemetryState.counters.get("openclaw.session.stuck")?.add).toHaveBeenCalled();
+    expect(telemetryState.histograms.get("openpaw.queue.wait_ms")?.record).toHaveBeenCalled();
+    expect(telemetryState.counters.get("openpaw.session.stuck")?.add).toHaveBeenCalled();
     expect(
-      telemetryState.histograms.get("openclaw.session.stuck_age_ms")?.record,
+      telemetryState.histograms.get("openpaw.session.stuck_age_ms")?.record,
     ).toHaveBeenCalled();
-    expect(telemetryState.counters.get("openclaw.run.attempt")?.add).toHaveBeenCalled();
+    expect(telemetryState.counters.get("openpaw.run.attempt")?.add).toHaveBeenCalled();
 
     const spanNames = telemetryState.tracer.startSpan.mock.calls.map((call) => call[0]);
-    expect(spanNames).toContain("openclaw.webhook.processed");
-    expect(spanNames).toContain("openclaw.message.processed");
-    expect(spanNames).toContain("openclaw.session.stuck");
+    expect(spanNames).toContain("openpaw.webhook.processed");
+    expect(spanNames).toContain("openpaw.message.processed");
+    expect(spanNames).toContain("openpaw.session.stuck");
 
     expect(registerLogTransportMock).toHaveBeenCalledTimes(1);
     expect(registeredTransports).toHaveLength(1);
@@ -303,7 +303,7 @@ describe("diagnostics-otel service", () => {
     });
 
     const service = createDiagnosticsOtelService();
-    const ctx: OpenClawPluginServiceContext = {
+    const ctx: OpenPawPluginServiceContext = {
       config: {
         diagnostics: {
           enabled: true,
@@ -316,7 +316,7 @@ describe("diagnostics-otel service", () => {
         },
       },
       logger: createLogger(),
-      stateDir: "/tmp/openclaw-diagnostics-otel-test",
+      stateDir: "/tmp/openpaw-diagnostics-otel-test",
     };
     await service.start(ctx);
     expect(registeredTransports).toHaveLength(1);
@@ -342,7 +342,7 @@ describe("diagnostics-otel service", () => {
     });
 
     const service = createDiagnosticsOtelService();
-    const ctx: OpenClawPluginServiceContext = {
+    const ctx: OpenPawPluginServiceContext = {
       config: {
         diagnostics: {
           enabled: true,
@@ -355,7 +355,7 @@ describe("diagnostics-otel service", () => {
         },
       },
       logger: createLogger(),
-      stateDir: "/tmp/openclaw-diagnostics-otel-test",
+      stateDir: "/tmp/openpaw-diagnostics-otel-test",
     };
     await service.start(ctx);
     expect(registeredTransports).toHaveLength(1);
@@ -367,7 +367,7 @@ describe("diagnostics-otel service", () => {
 
     expect(logEmit).toHaveBeenCalled();
     const emitCall = logEmit.mock.calls[0]?.[0];
-    const tokenAttr = emitCall?.attributes?.["openclaw.token"];
+    const tokenAttr = emitCall?.attributes?.["openpaw.token"];
     expect(tokenAttr).not.toBe("ghp_abcdefghijklmnopqrstuvwxyz123456");
     if (typeof tokenAttr === "string") {
       expect(tokenAttr).toContain("…");
@@ -377,7 +377,7 @@ describe("diagnostics-otel service", () => {
 
   test("redacts sensitive reason in session.state metric attributes", async () => {
     const service = createDiagnosticsOtelService();
-    const ctx: OpenClawPluginServiceContext = {
+    const ctx: OpenPawPluginServiceContext = {
       config: {
         diagnostics: {
           enabled: true,
@@ -392,7 +392,7 @@ describe("diagnostics-otel service", () => {
         },
       },
       logger: createLogger(),
-      stateDir: "/tmp/openclaw-diagnostics-otel-test",
+      stateDir: "/tmp/openpaw-diagnostics-otel-test",
     };
     await service.start(ctx);
 
@@ -402,16 +402,16 @@ describe("diagnostics-otel service", () => {
       reason: "token=ghp_abcdefghijklmnopqrstuvwxyz123456",
     });
 
-    const sessionCounter = telemetryState.counters.get("openclaw.session.state");
+    const sessionCounter = telemetryState.counters.get("openpaw.session.state");
     expect(sessionCounter?.add).toHaveBeenCalledWith(
       1,
       expect.objectContaining({
-        "openclaw.reason": expect.stringContaining("…"),
+        "openpaw.reason": expect.stringContaining("…"),
       }),
     );
     const attrs = sessionCounter?.add.mock.calls[0]?.[1] as Record<string, unknown> | undefined;
-    expect(typeof attrs?.["openclaw.reason"]).toBe("string");
-    expect(String(attrs?.["openclaw.reason"])).not.toContain(
+    expect(typeof attrs?.["openpaw.reason"]).toBe("string");
+    expect(String(attrs?.["openpaw.reason"])).not.toContain(
       "ghp_abcdefghijklmnopqrstuvwxyz123456",
     );
     await service.stop?.(ctx);

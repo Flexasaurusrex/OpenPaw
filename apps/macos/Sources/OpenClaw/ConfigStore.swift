@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import OpenPawProtocol
 
 enum ConfigStore {
     struct Overrides: Sendable {
@@ -44,7 +44,7 @@ enum ConfigStore {
         if let gateway = await self.loadFromGateway() {
             return gateway
         }
-        return OpenClawConfigFile.loadDict()
+        return OpenPawConfigFile.loadDict()
     }
 
     @MainActor
@@ -63,7 +63,7 @@ enum ConfigStore {
                 do {
                     try await self.saveToGateway(root)
                 } catch {
-                    OpenClawConfigFile.saveDict(root)
+                    OpenPawConfigFile.saveDict(root)
                 }
             }
         }

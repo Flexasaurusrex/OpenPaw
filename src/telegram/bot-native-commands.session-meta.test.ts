@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { registerTelegramNativeCommands } from "./bot-native-commands.js";
 import { createNativeCommandTestParams } from "./bot-native-commands.test-helpers.js";
 
@@ -64,7 +64,7 @@ function buildStatusCommandContext() {
   };
 }
 
-function registerAndResolveStatusHandler(cfg: OpenClawConfig): TelegramCommandHandler {
+function registerAndResolveStatusHandler(cfg: OpenPawConfig): TelegramCommandHandler {
   const commandHandlers = new Map<string, TelegramCommandHandler>();
   registerTelegramNativeCommands({
     ...createNativeCommandTestParams({
@@ -90,12 +90,12 @@ function registerAndResolveStatusHandler(cfg: OpenClawConfig): TelegramCommandHa
 describe("registerTelegramNativeCommands — session metadata", () => {
   beforeEach(() => {
     sessionMocks.recordSessionMetaFromInbound.mockClear().mockResolvedValue(undefined);
-    sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/openclaw-sessions.json");
+    sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/openpaw-sessions.json");
     replyMocks.dispatchReplyWithBufferedBlockDispatcher.mockClear().mockResolvedValue(undefined);
   });
 
   it("calls recordSessionMetaFromInbound after a native slash command", async () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: OpenPawConfig = {};
     const handler = registerAndResolveStatusHandler(cfg);
     await handler(buildStatusCommandContext());
 
@@ -114,7 +114,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
     const deferred = createDeferred<void>();
     sessionMocks.recordSessionMetaFromInbound.mockReturnValue(deferred.promise);
 
-    const cfg: OpenClawConfig = {};
+    const cfg: OpenPawConfig = {};
     const handler = registerAndResolveStatusHandler(cfg);
     const runPromise = handler(buildStatusCommandContext());
 

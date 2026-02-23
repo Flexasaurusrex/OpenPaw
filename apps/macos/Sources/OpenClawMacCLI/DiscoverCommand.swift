@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawDiscovery
+import OpenPawDiscovery
 
 struct DiscoveryOptions {
     var timeoutMs: Int = 2000
@@ -58,10 +58,10 @@ func runDiscover(_ args: [String]) async {
     let opts = DiscoveryOptions.parse(args)
     if opts.help {
         print("""
-        openclaw-mac discover
+        openpaw-mac discover
 
         Usage:
-          openclaw-mac discover [--timeout <ms>] [--json] [--include-local]
+          openpaw-mac discover [--timeout <ms>] [--json] [--include-local]
 
         Options:
           --timeout <ms>     Discovery window in milliseconds (default: 2000)

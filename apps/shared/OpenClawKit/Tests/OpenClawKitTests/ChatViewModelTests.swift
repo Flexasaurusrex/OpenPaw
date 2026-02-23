@@ -1,7 +1,7 @@
-import OpenClawKit
+import OpenPawKit
 import Foundation
 import Testing
-@testable import OpenClawChatUI
+@testable import OpenPawChatUI
 
 private struct TimeoutError: Error, CustomStringConvertible {
     let label: String
@@ -31,40 +31,40 @@ private actor TestChatTransportState {
     var abortedRunIds: [String] = []
 }
 
-private final class TestChatTransport: @unchecked Sendable, OpenClawChatTransport {
+private final class TestChatTransport: @unchecked Sendable, OpenPawChatTransport {
     private let state = TestChatTransportState()
-    private let historyResponses: [OpenClawChatHistoryPayload]
-    private let sessionsResponses: [OpenClawChatSessionsListResponse]
+    private let historyResponses: [OpenPawChatHistoryPayload]
+    private let sessionsResponses: [OpenPawChatSessionsListResponse]
 
-    private let stream: AsyncStream<OpenClawChatTransportEvent>
-    private let continuation: AsyncStream<OpenClawChatTransportEvent>.Continuation
+    private let stream: AsyncStream<OpenPawChatTransportEvent>
+    private let continuation: AsyncStream<OpenPawChatTransportEvent>.Continuation
 
     init(
-        historyResponses: [OpenClawChatHistoryPayload],
-        sessionsResponses: [OpenClawChatSessionsListResponse] = [])
+        historyResponses: [OpenPawChatHistoryPayload],
+        sessionsResponses: [OpenPawChatSessionsListResponse] = [])
     {
         self.historyResponses = historyResponses
         self.sessionsResponses = sessionsResponses
-        var cont: AsyncStream<OpenClawChatTransportEvent>.Continuation!
+        var cont: AsyncStream<OpenPawChatTransportEvent>.Continuation!
         self.stream = AsyncStream { c in
             cont = c
         }
         self.continuation = cont
     }
 
-    func events() -> AsyncStream<OpenClawChatTransportEvent> {
+    func events() -> AsyncStream<OpenPawChatTransportEvent> {
         self.stream
     }
 
     func setActiveSessionKey(_: String) async throws {}
 
-    func requestHistory(sessionKey: String) async throws -> OpenClawChatHistoryPayload {
+    func requestHistory(sessionKey: String) async throws -> OpenPawChatHistoryPayload {
         let idx = await self.state.historyCallCount
         await self.state.setHistoryCallCount(idx + 1)
         if idx < self.historyResponses.count {
             return self.historyResponses[idx]
         }
-        return self.historyResponses.last ?? OpenClawChatHistoryPayload(
+        return self.historyResponses.last ?? OpenPawChatHistoryPayload(
             sessionKey: sessionKey,
             sessionId: nil,
             messages: [],
@@ -76,23 +76,23 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         message _: String,
         thinking _: String,
         idempotencyKey: String,
-        attachments _: [OpenClawChatAttachmentPayload]) async throws -> OpenClawChatSendResponse
+        attachments _: [OpenPawChatAttachmentPayload]) async throws -> OpenPawChatSendResponse
     {
         await self.state.sentRunIdsAppend(idempotencyKey)
-        return OpenClawChatSendResponse(runId: idempotencyKey, status: "ok")
+        return OpenPawChatSendResponse(runId: idempotencyKey, status: "ok")
     }
 
     func abortRun(sessionKey _: String, runId: String) async throws {
         await self.state.abortedRunIdsAppend(runId)
     }
 
-    func listSessions(limit _: Int?) async throws -> OpenClawChatSessionsListResponse {
+    func listSessions(limit _: Int?) async throws -> OpenPawChatSessionsListResponse {
         let idx = await self.state.sessionsCallCount
         await self.state.setSessionsCallCount(idx + 1)
         if idx < self.sessionsResponses.count {
             return self.sessionsResponses[idx]
         }
-        return self.sessionsResponses.last ?? OpenClawChatSessionsListResponse(
+        return self.sessionsResponses.last ?? OpenPawChatSessionsListResponse(
             ts: nil,
             path: nil,
             count: 0,
@@ -104,7 +104,7 @@ private final class TestChatTransport: @unchecked Sendable, OpenClawChatTranspor
         true
     }
 
-    func emit(_ evt: OpenClawChatTransportEvent) {
+    func emit(_ evt: OpenPawChatTransportEvent) {
         self.continuation.yield(evt)
     }
 
@@ -139,12 +139,12 @@ extension TestChatTransportState {
 @Suite struct ChatViewModelTests {
     @Test func streamsAssistantAndClearsOnFinal() async throws {
         let sessionId = "sess-main"
-        let history1 = OpenClawChatHistoryPayload(
+        let history1 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: sessionId,
             messages: [],
             thinkingLevel: "off")
-        let history2 = OpenClawChatHistoryPayload(
+        let history2 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: sessionId,
             messages: [
@@ -157,7 +157,7 @@ extension TestChatTransportState {
             thinkingLevel: "off")
 
         let transport = TestChatTransport(historyResponses: [history1, history2])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK && vm.sessionId == sessionId } }
@@ -170,7 +170,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .agent(
-                OpenClawAgentEventPayload(
+                OpenPawAgentEventPayload(
                     runId: sessionId,
                     seq: 1,
                     stream: "assistant",
@@ -183,7 +183,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .agent(
-                OpenClawAgentEventPayload(
+                OpenPawAgentEventPayload(
                     runId: sessionId,
                     seq: 2,
                     stream: "tool",
@@ -200,7 +200,7 @@ extension TestChatTransportState {
         let runId = try #require(await transport.lastSentRunId())
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "final",
@@ -216,12 +216,12 @@ extension TestChatTransportState {
     }
 
     @Test func acceptsCanonicalSessionKeyEventsForOwnPendingRun() async throws {
-        let history1 = OpenClawChatHistoryPayload(
+        let history1 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "off")
-        let history2 = OpenClawChatHistoryPayload(
+        let history2 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -234,7 +234,7 @@ extension TestChatTransportState {
             thinkingLevel: "off")
 
         let transport = TestChatTransport(historyResponses: [history1, history2])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK } }
@@ -248,7 +248,7 @@ extension TestChatTransportState {
         let runId = try #require(await transport.lastSentRunId())
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: runId,
                     sessionKey: "agent:main:main",
                     state: "final",
@@ -263,7 +263,7 @@ extension TestChatTransportState {
 
     @Test func acceptsCanonicalSessionKeyEventsForExternalRuns() async throws {
         let now = Date().timeIntervalSince1970 * 1000
-        let history1 = OpenClawChatHistoryPayload(
+        let history1 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -274,7 +274,7 @@ extension TestChatTransportState {
                 ]),
             ],
             thinkingLevel: "off")
-        let history2 = OpenClawChatHistoryPayload(
+        let history2 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -292,14 +292,14 @@ extension TestChatTransportState {
             thinkingLevel: "off")
 
         let transport = TestChatTransport(historyResponses: [history1, history2])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.messages.count == 1 } }
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: "external-run",
                     sessionKey: "agent:main:main",
                     state: "final",
@@ -313,7 +313,7 @@ extension TestChatTransportState {
 
     @Test func preservesMessageIDsAcrossHistoryRefreshes() async throws {
         let now = Date().timeIntervalSince1970 * 1000
-        let history1 = OpenClawChatHistoryPayload(
+        let history1 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -324,7 +324,7 @@ extension TestChatTransportState {
                 ]),
             ],
             thinkingLevel: "off")
-        let history2 = OpenClawChatHistoryPayload(
+        let history2 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -342,7 +342,7 @@ extension TestChatTransportState {
             thinkingLevel: "off")
 
         let transport = TestChatTransport(historyResponses: [history1, history2])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.messages.count == 1 } }
@@ -350,7 +350,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: "other-run",
                     sessionKey: "main",
                     state: "final",
@@ -364,20 +364,20 @@ extension TestChatTransportState {
 
     @Test func clearsStreamingOnExternalFinalEvent() async throws {
         let sessionId = "sess-main"
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: sessionId,
             messages: [],
             thinkingLevel: "off")
         let transport = TestChatTransport(historyResponses: [history, history])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK && vm.sessionId == sessionId } }
 
         transport.emit(
             .agent(
-                OpenClawAgentEventPayload(
+                OpenPawAgentEventPayload(
                     runId: sessionId,
                     seq: 1,
                     stream: "assistant",
@@ -386,7 +386,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .agent(
-                OpenClawAgentEventPayload(
+                OpenPawAgentEventPayload(
                     runId: sessionId,
                     seq: 2,
                     stream: "tool",
@@ -405,7 +405,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: "other-run",
                     sessionKey: "main",
                     state: "final",
@@ -418,12 +418,12 @@ extension TestChatTransportState {
 
     @Test func seqGapClearsPendingRunsAndAutoRefreshesHistory() async throws {
         let now = Date().timeIntervalSince1970 * 1000
-        let history1 = OpenClawChatHistoryPayload(
+        let history1 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "off")
-        let history2 = OpenClawChatHistoryPayload(
+        let history2 = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -436,7 +436,7 @@ extension TestChatTransportState {
             thinkingLevel: "off")
 
         let transport = TestChatTransport(historyResponses: [history1, history2])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK } }
@@ -463,18 +463,18 @@ extension TestChatTransportState {
         let recent = now - (2 * 60 * 60 * 1000)
         let recentOlder = now - (5 * 60 * 60 * 1000)
         let stale = now - (26 * 60 * 60 * 1000)
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [],
             thinkingLevel: "off")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = OpenPawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 4,
             defaults: nil,
             sessions: [
-                OpenClawChatSessionEntry(
+                OpenPawChatSessionEntry(
                     key: "recent-1",
                     kind: nil,
                     displayName: nil,
@@ -493,7 +493,7 @@ extension TestChatTransportState {
                     totalTokens: nil,
                     model: nil,
                     contextTokens: nil),
-                OpenClawChatSessionEntry(
+                OpenPawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -512,7 +512,7 @@ extension TestChatTransportState {
                     totalTokens: nil,
                     model: nil,
                     contextTokens: nil),
-                OpenClawChatSessionEntry(
+                OpenPawChatSessionEntry(
                     key: "recent-2",
                     kind: nil,
                     displayName: nil,
@@ -531,7 +531,7 @@ extension TestChatTransportState {
                     totalTokens: nil,
                     model: nil,
                     contextTokens: nil),
-                OpenClawChatSessionEntry(
+                OpenPawChatSessionEntry(
                     key: "old-1",
                     kind: nil,
                     displayName: nil,
@@ -555,7 +555,7 @@ extension TestChatTransportState {
         let transport = TestChatTransport(
             historyResponses: [history],
             sessionsResponses: [sessions])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
         await MainActor.run { vm.load() }
         try await waitUntil("sessions loaded") { await MainActor.run { !vm.sessions.isEmpty } }
 
@@ -566,18 +566,18 @@ extension TestChatTransportState {
     @Test func sessionChoicesIncludeCurrentWhenMissing() async throws {
         let now = Date().timeIntervalSince1970 * 1000
         let recent = now - (30 * 60 * 1000)
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "custom",
             sessionId: "sess-custom",
             messages: [],
             thinkingLevel: "off")
-        let sessions = OpenClawChatSessionsListResponse(
+        let sessions = OpenPawChatSessionsListResponse(
             ts: now,
             path: nil,
             count: 1,
             defaults: nil,
             sessions: [
-                OpenClawChatSessionEntry(
+                OpenPawChatSessionEntry(
                     key: "main",
                     kind: nil,
                     displayName: nil,
@@ -601,7 +601,7 @@ extension TestChatTransportState {
         let transport = TestChatTransport(
             historyResponses: [history],
             sessionsResponses: [sessions])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "custom", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "custom", transport: transport) }
         await MainActor.run { vm.load() }
         try await waitUntil("sessions loaded") { await MainActor.run { !vm.sessions.isEmpty } }
 
@@ -611,20 +611,20 @@ extension TestChatTransportState {
 
     @Test func clearsStreamingOnExternalErrorEvent() async throws {
         let sessionId = "sess-main"
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: sessionId,
             messages: [],
             thinkingLevel: "off")
         let transport = TestChatTransport(historyResponses: [history, history])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK && vm.sessionId == sessionId } }
 
         transport.emit(
             .agent(
-                OpenClawAgentEventPayload(
+                OpenPawAgentEventPayload(
                     runId: sessionId,
                     seq: 1,
                     stream: "assistant",
@@ -637,7 +637,7 @@ extension TestChatTransportState {
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: "other-run",
                     sessionKey: "main",
                     state: "error",
@@ -648,7 +648,7 @@ extension TestChatTransportState {
     }
 
     @Test func stripsInboundMetadataFromHistoryMessages() async throws {
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: "sess-main",
             messages: [
@@ -657,7 +657,7 @@ extension TestChatTransportState {
                     "content": [["type": "text", "text": """
 Conversation info (untrusted metadata):
 ```json
-{ \"sender\": \"openclaw-ios\" }
+{ \"sender\": \"openpaw-ios\" }
 ```
 
 Hello?
@@ -667,7 +667,7 @@ Hello?
             ],
             thinkingLevel: "off")
         let transport = TestChatTransport(historyResponses: [history])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("history loaded") { await MainActor.run { !vm.messages.isEmpty } }
@@ -678,13 +678,13 @@ Hello?
 
     @Test func abortRequestsDoNotClearPendingUntilAbortedEvent() async throws {
         let sessionId = "sess-main"
-        let history = OpenClawChatHistoryPayload(
+        let history = OpenPawChatHistoryPayload(
             sessionKey: "main",
             sessionId: sessionId,
             messages: [],
             thinkingLevel: "off")
         let transport = TestChatTransport(historyResponses: [history, history])
-        let vm = await MainActor.run { OpenClawChatViewModel(sessionKey: "main", transport: transport) }
+        let vm = await MainActor.run { OpenPawChatViewModel(sessionKey: "main", transport: transport) }
 
         await MainActor.run { vm.load() }
         try await waitUntil("bootstrap") { await MainActor.run { vm.healthOK && vm.sessionId == sessionId } }
@@ -708,7 +708,7 @@ Hello?
 
         transport.emit(
             .chat(
-                OpenClawChatEventPayload(
+                OpenPawChatEventPayload(
                     runId: runId,
                     sessionKey: "main",
                     state: "aborted",

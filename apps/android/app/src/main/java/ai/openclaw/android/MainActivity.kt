@@ -1,4 +1,4 @@
-package ai.openclaw.android
+package ai.openpaw.android
 
 import android.Manifest
 import android.content.pm.ApplicationInfo
@@ -18,8 +18,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import ai.openclaw.android.ui.RootScreen
-import ai.openclaw.android.ui.OpenClawTheme
+import ai.openpaw.android.ui.RootScreen
+import ai.openpaw.android.ui.OpenPawTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
     }
 
     setContent {
-      OpenClawTheme {
+      OpenPawTheme {
         Surface(modifier = Modifier) {
           RootScreen(viewModel = viewModel)
         }

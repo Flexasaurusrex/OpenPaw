@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawDiscovery
+import OpenPawDiscovery
 import Testing
-@testable import OpenClaw
+@testable import OpenPaw
 
 @Suite
 struct GatewayDiscoveryHelpersTests {
@@ -21,7 +21,7 @@ struct GatewayDiscoveryHelpersTests {
             tailnetDns: tailnetDns,
             sshPort: sshPort,
             gatewayPort: gatewayPort,
-            cliPath: "/tmp/openclaw",
+            cliPath: "/tmp/openpaw",
             stableID: UUID().uuidString,
             debugID: UUID().uuidString,
             isLocal: false)

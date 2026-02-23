@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "./config.js";
+import type { OpenPawConfig } from "./config.js";
 import { resolveChannelGroupPolicy, resolveToolsBySender } from "./group-policy.js";
 
 describe("resolveChannelGroupPolicy", () => {
@@ -10,7 +10,7 @@ describe("resolveChannelGroupPolicy", () => {
           groupPolicy: "allowlist",
         },
       },
-    } as OpenClawConfig;
+    } as OpenPawConfig;
 
     const policy = resolveChannelGroupPolicy({
       cfg,
@@ -32,7 +32,7 @@ describe("resolveChannelGroupPolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OpenPawConfig;
 
     const policy = resolveChannelGroupPolicy({
       cfg,
@@ -54,7 +54,7 @@ describe("resolveChannelGroupPolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OpenPawConfig;
 
     const policy = resolveChannelGroupPolicy({
       cfg,
@@ -77,7 +77,7 @@ describe("resolveChannelGroupPolicy", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as OpenPawConfig;
 
     const policy = resolveChannelGroupPolicy({
       cfg,
@@ -222,7 +222,7 @@ describe("resolveToolsBySender", () => {
     expect(warningSpy).toHaveBeenCalledTimes(1);
     expect(String(warningSpy.mock.calls[0]?.[0])).toContain(`toolsBySender key "${legacyKey}"`);
     expect(warningSpy.mock.calls[0]?.[1]).toMatchObject({
-      code: "OPENCLAW_TOOLS_BY_SENDER_UNTYPED_KEY",
+      code: "OPENPAW_TOOLS_BY_SENDER_UNTYPED_KEY",
     });
   });
 });

@@ -16,7 +16,7 @@ describe("config io write", () => {
     env?: NodeJS.ProcessEnv;
     logger?: { warn: (msg: string) => void; error: (msg: string) => void };
   }) {
-    const configPath = path.join(params.home, ".openclaw", "openclaw.json");
+    const configPath = path.join(params.home, ".openpaw", "openpaw.json");
     await fs.mkdir(path.dirname(configPath), { recursive: true });
     await fs.writeFile(configPath, JSON.stringify(params.initialConfig, null, 2), "utf-8");
 
@@ -63,7 +63,7 @@ describe("config io write", () => {
         error: vi.fn(),
       },
     });
-    const auditPath = path.join(params.home, ".openclaw", "logs", "config-audit.jsonl");
+    const auditPath = path.join(params.home, ".openpaw", "logs", "config-audit.jsonl");
     const next = structuredClone(snapshot.config);
     const gateway =
       next.gateway && typeof next.gateway === "object"
@@ -80,7 +80,7 @@ describe("config io write", () => {
   }
 
   it("persists caller changes onto resolved config without leaking runtime defaults", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: { gateway: { port: 18789 } },
@@ -97,7 +97,7 @@ describe("config io write", () => {
   });
 
   it("honors explicit unset paths when schema defaults would otherwise reappear", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -125,8 +125,8 @@ describe("config io write", () => {
   });
 
   it("does not mutate caller config when unsetPaths is applied on first write", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+    await withTempHome("openpaw-config-io-", async (home) => {
+      const configPath = path.join(home, ".openpaw", "openpaw.json");
       const io = createConfigIO({
         env: {} as NodeJS.ProcessEnv,
         homedir: () => home,
@@ -153,7 +153,7 @@ describe("config io write", () => {
   });
 
   it("does not mutate caller config when unsetPaths is applied on existing files", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -174,7 +174,7 @@ describe("config io write", () => {
   });
 
   it("keeps caller arrays immutable when unsetting array entries", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -195,7 +195,7 @@ describe("config io write", () => {
   });
 
   it("treats missing unset paths as no-op without mutating caller config", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -219,7 +219,7 @@ describe("config io write", () => {
   });
 
   it("ignores blocked prototype-key unset path segments", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -249,7 +249,7 @@ describe("config io write", () => {
   });
 
   it("preserves env var references when writing", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         env: { OPENAI_API_KEY: "sk-secret" } as NodeJS.ProcessEnv,
@@ -284,7 +284,7 @@ describe("config io write", () => {
   });
 
   it("does not reintroduce Slack/Discord legacy dm.policy defaults when writing", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
@@ -330,8 +330,8 @@ describe("config io write", () => {
   });
 
   it("keeps env refs in arrays when appending entries", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+    await withTempHome("openpaw-config-io-", async (home) => {
+      const configPath = path.join(home, ".openpaw", "openpaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -403,7 +403,7 @@ describe("config io write", () => {
   });
 
   it("logs an overwrite audit entry when replacing an existing config file", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const warn = vi.fn();
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
@@ -433,7 +433,7 @@ describe("config io write", () => {
   });
 
   it("does not log an overwrite audit entry when creating config for the first time", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const warn = vi.fn();
       const io = createConfigIO({
         env: {} as NodeJS.ProcessEnv,
@@ -456,7 +456,7 @@ describe("config io write", () => {
   });
 
   it("appends config write audit JSONL entries with forensic metadata", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { configPath, lines, last } = await writeGatewayPatchAndReadLastAuditEntry({
         home,
         initialConfig: { gateway: { port: 18789 } },
@@ -476,15 +476,15 @@ describe("config io write", () => {
   });
 
   it("records gateway watch session markers in config audit entries", async () => {
-    await withTempHome("openclaw-config-io-", async (home) => {
+    await withTempHome("openpaw-config-io-", async (home) => {
       const { last } = await writeGatewayPatchAndReadLastAuditEntry({
         home,
         initialConfig: { gateway: { mode: "local" } },
         gatewayPatch: { bind: "loopback" },
         env: {
-          OPENCLAW_WATCH_MODE: "1",
-          OPENCLAW_WATCH_SESSION: "watch-session-1",
-          OPENCLAW_WATCH_COMMAND: "gateway --force",
+          OPENPAW_WATCH_MODE: "1",
+          OPENPAW_WATCH_SESSION: "watch-session-1",
+          OPENPAW_WATCH_COMMAND: "gateway --force",
         } as NodeJS.ProcessEnv,
       });
       expect(last.watchMode).toBe(true);

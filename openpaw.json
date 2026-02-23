@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openpaw.ai/schema.json",
+  "comment": "OpenPaw Configuration - Smart Model Routing (Haiku → Sonnet)",
+
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-haiku-4-5-20251001",
+        "fallbacks": [
+          "anthropic/claude-sonnet-4-5-20250929"
+        ]
+      },
+      "models": {
+        "anthropic/claude-haiku-4-5-20251001": {
+          "alias": "haiku",
+          "params": {
+            "cacheRetention": "short"
+          }
+        },
+        "anthropic/claude-sonnet-4-5-20250929": {
+          "alias": "sonnet",
+          "params": {
+            "cacheRetention": "short"
+          }
+        }
+      },
+      "thinking": {
+        "low": {
+          "model": "anthropic/claude-haiku-4-5-20251001"
+        },
+        "medium": {
+          "model": "anthropic/claude-haiku-4-5-20251001"
+        },
+        "high": {
+          "model": "anthropic/claude-sonnet-4-5-20250929"
+        }
+      }
+    }
+  },
+
+  "gateway": {
+    "mode": "local",
+    "port": 18789,
+    "bindHost": "127.0.0.1",
+    "auth": {
+      "mode": "token"
+    }
+  },
+
+  "comment_reasoning": "Model Selection Strategy:",
+  "comment_haiku": "- Haiku (primary): Fast, cost-effective for routine tasks",
+  "comment_sonnet": "- Sonnet (fallback + high thinking): Complex reasoning, deep analysis",
+  "comment_usage": "Use --thinking low/medium/high to control which model processes your request"
+}

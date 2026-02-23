@@ -1,9 +1,9 @@
 import Foundation
-import OpenClawKit
+import OpenPawKit
 import OSLog
 import WebKit
 
-private let canvasLogger = Logger(subsystem: "ai.openclaw", category: "Canvas")
+private let canvasLogger = Logger(subsystem: "ai.openpaw", category: "Canvas")
 
 final class CanvasSchemeHandler: NSObject, WKURLSchemeHandler {
     private let root: URL
@@ -222,7 +222,7 @@ final class CanvasSchemeHandler: NSObject, WKURLSchemeHandler {
         let name = fileURL.deletingPathExtension().lastPathComponent
         guard !name.isEmpty, !ext.isEmpty else { return nil }
 
-        let bundle = OpenClawKitResources.bundle
+        let bundle = OpenPawKitResources.bundle
         let resourceURL =
             bundle.url(forResource: name, withExtension: ext, subdirectory: subdirectory)
             ?? bundle.url(forResource: name, withExtension: ext)

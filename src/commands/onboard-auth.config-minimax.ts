@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import { toAgentModelListLike } from "../config/model-input.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
 import {
@@ -19,7 +19,7 @@ import {
   MINIMAX_LM_STUDIO_COST,
 } from "./onboard-auth.models.js";
 
-export function applyMinimaxProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMinimaxProviderConfig(cfg: OpenPawConfig): OpenPawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models["anthropic/claude-opus-4-6"] = {
     ...models["anthropic/claude-opus-4-6"],
@@ -53,9 +53,9 @@ export function applyMinimaxProviderConfig(cfg: OpenClawConfig): OpenClawConfig 
 }
 
 export function applyMinimaxHostedProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   params?: { baseUrl?: string },
-): OpenClawConfig {
+): OpenPawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[MINIMAX_HOSTED_MODEL_REF] = {
     ...models[MINIMAX_HOSTED_MODEL_REF],
@@ -84,15 +84,15 @@ export function applyMinimaxHostedProviderConfig(
   return applyOnboardAuthAgentModelsAndProviders(cfg, { agentModels: models, providers });
 }
 
-export function applyMinimaxConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMinimaxConfig(cfg: OpenPawConfig): OpenPawConfig {
   const next = applyMinimaxProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, "lmstudio/minimax-m2.1-gs32");
 }
 
 export function applyMinimaxHostedConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   params?: { baseUrl?: string },
-): OpenClawConfig {
+): OpenPawConfig {
   const next = applyMinimaxHostedProviderConfig(cfg, params);
   return {
     ...next,
@@ -111,9 +111,9 @@ export function applyMinimaxHostedConfig(
 
 // MiniMax Anthropic-compatible API (platform.minimax.io/anthropic)
 export function applyMinimaxApiProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   modelId: string = "MiniMax-M2.5",
-): OpenClawConfig {
+): OpenPawConfig {
   return applyMinimaxApiProviderConfigWithBaseUrl(cfg, {
     providerId: "minimax",
     modelId,
@@ -122,9 +122,9 @@ export function applyMinimaxApiProviderConfig(
 }
 
 export function applyMinimaxApiConfig(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   modelId: string = "MiniMax-M2.5",
-): OpenClawConfig {
+): OpenPawConfig {
   return applyMinimaxApiConfigWithBaseUrl(cfg, {
     providerId: "minimax",
     modelId,
@@ -134,9 +134,9 @@ export function applyMinimaxApiConfig(
 
 // MiniMax China API (api.minimaxi.com)
 export function applyMinimaxApiProviderConfigCn(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   modelId: string = "MiniMax-M2.5",
-): OpenClawConfig {
+): OpenPawConfig {
   return applyMinimaxApiProviderConfigWithBaseUrl(cfg, {
     providerId: "minimax-cn",
     modelId,
@@ -145,9 +145,9 @@ export function applyMinimaxApiProviderConfigCn(
 }
 
 export function applyMinimaxApiConfigCn(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   modelId: string = "MiniMax-M2.5",
-): OpenClawConfig {
+): OpenPawConfig {
   return applyMinimaxApiConfigWithBaseUrl(cfg, {
     providerId: "minimax-cn",
     modelId,
@@ -162,9 +162,9 @@ type MinimaxApiProviderConfigParams = {
 };
 
 function applyMinimaxApiProviderConfigWithBaseUrl(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   params: MinimaxApiProviderConfigParams,
-): OpenClawConfig {
+): OpenPawConfig {
   const providers = { ...cfg.models?.providers } as Record<string, ModelProviderConfig>;
   const existingProvider = providers[params.providerId];
   const existingModels = existingProvider?.models ?? [];
@@ -206,9 +206,9 @@ function applyMinimaxApiProviderConfigWithBaseUrl(
 }
 
 function applyMinimaxApiConfigWithBaseUrl(
-  cfg: OpenClawConfig,
+  cfg: OpenPawConfig,
   params: MinimaxApiProviderConfigParams,
-): OpenClawConfig {
+): OpenPawConfig {
   const next = applyMinimaxApiProviderConfigWithBaseUrl(cfg, params);
   return applyAgentDefaultModelPrimary(next, `${params.providerId}/${params.modelId}`);
 }

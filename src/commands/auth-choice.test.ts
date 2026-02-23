@@ -17,7 +17,7 @@ import {
   createExitThrowingRuntime,
   createWizardPrompter,
   readAuthProfilesForAgent,
-  requireOpenClawAgentDir,
+  requireOpenPawAgentDir,
   setupAuthTestEnv,
 } from "./test-wizard-helpers.js";
 
@@ -56,8 +56,8 @@ type StoredAuthProfile = {
 
 describe("applyAuthChoice", () => {
   const lifecycle = createAuthTestLifecycle([
-    "OPENCLAW_STATE_DIR",
-    "OPENCLAW_AGENT_DIR",
+    "OPENPAW_STATE_DIR",
+    "OPENPAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
     "ANTHROPIC_API_KEY",
     "OPENROUTER_API_KEY",
@@ -80,7 +80,7 @@ describe("applyAuthChoice", () => {
     "CHUTES_CLIENT_ID",
   ]);
   async function setupTempState() {
-    const env = await setupAuthTestEnv("openclaw-auth-");
+    const env = await setupAuthTestEnv("openpaw-auth-");
     lifecycle.setStateDir(env.stateDir);
   }
   function createPrompter(overrides: Partial<WizardPrompter>): WizardPrompter {
@@ -112,7 +112,7 @@ describe("applyAuthChoice", () => {
   async function readAuthProfiles() {
     return await readAuthProfilesForAgent<{
       profiles?: Record<string, StoredAuthProfile>;
-    }>(requireOpenClawAgentDir());
+    }>(requireOpenPawAgentDir());
   }
   async function readAuthProfile(profileId: string) {
     return (await readAuthProfiles()).profiles?.[profileId];
@@ -910,7 +910,7 @@ describe("applyAuthChoice", () => {
     await setupTempState();
     process.env.LITELLM_API_KEY = "sk-litellm-test";
 
-    const authProfilePath = authProfilePathForAgent(requireOpenClawAgentDir());
+    const authProfilePath = authProfilePathForAgent(requireOpenPawAgentDir());
     await fs.writeFile(
       authProfilePath,
       JSON.stringify(

@@ -25,7 +25,7 @@ async function createCaseDir(prefix: string): Promise<string> {
 }
 
 beforeAll(async () => {
-  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-skills-sync-suite-"));
+  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openpaw-skills-sync-suite-"));
 });
 
 afterAll(async () => {
@@ -145,7 +145,7 @@ describe("buildWorkspaceSkillsPrompt", () => {
       name: "nano-banana-pro",
       description: "Generates images",
       metadata:
-        '{"openclaw":{"requires":{"env":["GEMINI_API_KEY"]},"primaryEnv":"GEMINI_API_KEY"}}',
+        '{"openpaw":{"requires":{"env":["GEMINI_API_KEY"]},"primaryEnv":"GEMINI_API_KEY"}}',
       body: "# Nano Banana\n",
     });
 

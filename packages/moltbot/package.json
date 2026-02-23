@@ -1,16 +1,16 @@
 {
-  "name": "moltbot",
+  "name": "pawbot",
   "version": "2026.2.12",
-  "description": "Compatibility shim that forwards to openclaw",
+  "description": "Compatibility shim that forwards to openpaw",
   "bin": {
-    "moltbot": "./bin/moltbot.js"
+    "pawbot": "./bin/pawbot.js"
   },
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./cli-entry": "./bin/moltbot.js"
+    "./cli-entry": "./bin/pawbot.js"
   },
   "dependencies": {
-    "openclaw": "workspace:*"
+    "openpaw": "workspace:*"
   }
 }

@@ -1,4 +1,4 @@
-package ai.openclaw.android.voice
+package ai.openpaw.android.voice
 
 import android.media.MediaDataSource
 import kotlin.math.min

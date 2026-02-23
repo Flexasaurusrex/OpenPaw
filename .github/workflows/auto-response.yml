@@ -37,7 +37,7 @@ jobs:
                 label: "r: support",
                 close: true,
                 message:
-                  "Please use [our support server](https://discord.gg/clawd) and ask in #help or #users-helping-users to resolve this, or follow the stuck FAQ at https://docs.openclaw.ai/help/faq#im-stuck-whats-the-fastest-way-to-get-unstuck.",
+                  "Please use [our support server](https://discord.gg/paw) and ask in #help or #users-helping-users to resolve this, or follow the stuck FAQ at https://docs.openpaw.ai/help/faq#im-stuck-whats-the-fastest-way-to-get-unstuck.",
               },
               {
                 label: "r: testflight",
@@ -48,7 +48,7 @@ jobs:
                 label: "r: third-party-extension",
                 close: true,
                 message:
-                  "Please make this as a third-party plugin that you maintain yourself in your own repo. Docs: https://docs.openclaw.ai/plugin. Feel free to open a PR after to add it to our community plugins page: https://docs.openclaw.ai/plugins/community",
+                  "Please make this as a third-party plugin that you maintain yourself in your own repo. Docs: https://docs.openpaw.ai/plugin. Feel free to open a PR after to add it to our community plugins page: https://docs.openpaw.ai/plugins/community",
               },
               {
                 label: "r: moltbook",
@@ -56,7 +56,7 @@ jobs:
                 lock: true,
                 lockReason: "off-topic",
                 message:
-                  "OpenClaw is not affiliated with Moltbook, and issues related to Moltbook should not be submitted here.",
+                  "OpenPaw is not affiliated with Moltbook, and issues related to Moltbook should not be submitted here.",
               },
             ];
 

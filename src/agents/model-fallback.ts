@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { OpenPawConfig } from "../config/config.js";
 import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
@@ -126,7 +126,7 @@ function throwFallbackFailureSummary(params: {
 }
 
 function resolveImageFallbackCandidates(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: OpenPawConfig | undefined;
   defaultProvider: string;
   modelOverride?: string;
 }): ModelCandidate[] {
@@ -171,7 +171,7 @@ function resolveImageFallbackCandidates(params: {
 }
 
 function resolveFallbackCandidates(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: OpenPawConfig | undefined;
   provider: string;
   model: string;
   /** Optional explicit fallbacks list; when provided (even empty), replaces agents.defaults.model.fallbacks. */
@@ -278,7 +278,7 @@ export const _probeThrottleInternals = {
 } as const;
 
 export async function runWithModelFallback<T>(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: OpenPawConfig | undefined;
   provider: string;
   model: string;
   agentDir?: string;
@@ -410,7 +410,7 @@ export async function runWithModelFallback<T>(params: {
 }
 
 export async function runWithImageModelFallback<T>(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: OpenPawConfig | undefined;
   modelOverride?: string;
   run: (provider: string, model: string) => Promise<T>;
   onError?: ModelFallbackErrorHandler;

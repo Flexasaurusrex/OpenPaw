@@ -123,10 +123,10 @@ function createDefaultThreadConfig(): LoadedConfig {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-5",
-        workspace: "/tmp/openclaw",
+        workspace: "/tmp/openpaw",
       },
     },
-    session: { store: "/tmp/openclaw-sessions.json" },
+    session: { store: "/tmp/openpaw-sessions.json" },
     messages: { responsePrefix: "PFX" },
     channels: {
       discord: {
@@ -147,10 +147,10 @@ function createMentionRequiredGuildConfig(
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-5",
-        workspace: "/tmp/openclaw",
+        workspace: "/tmp/openpaw",
       },
     },
-    session: { store: "/tmp/openclaw-sessions.json" },
+    session: { store: "/tmp/openpaw-sessions.json" },
     channels: {
       discord: {
         dm: { enabled: true, policy: "open" },
@@ -274,7 +274,7 @@ describe("discord tool result dispatch", () => {
       const cfg = createMentionRequiredGuildConfig({
         messages: {
           responsePrefix: "PFX",
-          groupChat: { mentionPatterns: ["\\bopenclaw\\b"] },
+          groupChat: { mentionPatterns: ["\\bopenpaw\\b"] },
         },
       });
 
@@ -282,7 +282,7 @@ describe("discord tool result dispatch", () => {
       const client = createGuildTextClient();
 
       await handler(
-        createGuildMessageEvent({ messageId: "m2", content: "openclaw: hello" }),
+        createGuildMessageEvent({ messageId: "m2", content: "openpaw: hello" }),
         client,
       );
 
@@ -301,10 +301,10 @@ describe("discord tool result dispatch", () => {
           defaults: {
             model: "anthropic/claude-opus-4-5",
             humanDelay: { mode: "off" },
-            workspace: "/tmp/openclaw",
+            workspace: "/tmp/openpaw",
           },
         },
-        session: { store: "/tmp/openclaw-sessions.json" },
+        session: { store: "/tmp/openpaw-sessions.json" },
         channels: {
           discord: { dm: { enabled: true, policy: "open" } },
         },
@@ -368,7 +368,7 @@ describe("discord tool result dispatch", () => {
             mentionedEveryone: false,
             mentionedUsers: [],
             mentionedRoles: [],
-            author: { id: "bot-id", bot: true, username: "OpenClaw" },
+            author: { id: "bot-id", bot: true, username: "OpenPaw" },
           },
         },
         eventPatch: {
@@ -449,8 +449,8 @@ describe("discord tool result dispatch", () => {
     }>();
 
     const cfg = {
-      agent: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/openclaw" },
-      session: { store: "/tmp/openclaw-sessions.json" },
+      agent: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/openpaw" },
+      session: { store: "/tmp/openpaw-sessions.json" },
       channels: {
         discord: {
           dm: { enabled: true, policy: "open" },

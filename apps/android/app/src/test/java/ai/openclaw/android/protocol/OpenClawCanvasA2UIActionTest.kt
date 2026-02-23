@@ -1,28 +1,28 @@
-package ai.openclaw.android.protocol
+package ai.openpaw.android.protocol
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class OpenClawCanvasA2UIActionTest {
+class OpenPawCanvasA2UIActionTest {
   @Test
   fun extractActionNameAcceptsNameOrAction() {
     val nameObj = Json.parseToJsonElement("{\"name\":\"Hello\"}").jsonObject
-    assertEquals("Hello", OpenClawCanvasA2UIAction.extractActionName(nameObj))
+    assertEquals("Hello", OpenPawCanvasA2UIAction.extractActionName(nameObj))
 
     val actionObj = Json.parseToJsonElement("{\"action\":\"Wave\"}").jsonObject
-    assertEquals("Wave", OpenClawCanvasA2UIAction.extractActionName(actionObj))
+    assertEquals("Wave", OpenPawCanvasA2UIAction.extractActionName(actionObj))
 
     val fallbackObj =
       Json.parseToJsonElement("{\"name\":\"  \",\"action\":\"Fallback\"}").jsonObject
-    assertEquals("Fallback", OpenClawCanvasA2UIAction.extractActionName(fallbackObj))
+    assertEquals("Fallback", OpenPawCanvasA2UIAction.extractActionName(fallbackObj))
   }
 
   @Test
   fun formatAgentMessageMatchesSharedSpec() {
     val msg =
-      OpenClawCanvasA2UIAction.formatAgentMessage(
+      OpenPawCanvasA2UIAction.formatAgentMessage(
         actionName = "Get Weather",
         sessionKey = "main",
         surfaceId = "main",
@@ -40,9 +40,9 @@ class OpenClawCanvasA2UIActionTest {
 
   @Test
   fun jsDispatchA2uiStatusIsStable() {
-    val js = OpenClawCanvasA2UIAction.jsDispatchA2UIActionStatus(actionId = "a1", ok = true, error = null)
+    val js = OpenPawCanvasA2UIAction.jsDispatchA2UIActionStatus(actionId = "a1", ok = true, error = null)
     assertEquals(
-      "window.dispatchEvent(new CustomEvent('openclaw:a2ui-action-status', { detail: { id: \"a1\", ok: true, error: \"\" } }));",
+      "window.dispatchEvent(new CustomEvent('openpaw:a2ui-action-status', { detail: { id: \"a1\", ok: true, error: \"\" } }));",
       js,
     )
   }

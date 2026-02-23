@@ -1,21 +1,21 @@
-package ai.openclaw.android.node
+package ai.openpaw.android.node
 
 import android.os.Build
-import ai.openclaw.android.BuildConfig
-import ai.openclaw.android.SecurePrefs
-import ai.openclaw.android.gateway.GatewayClientInfo
-import ai.openclaw.android.gateway.GatewayConnectOptions
-import ai.openclaw.android.gateway.GatewayEndpoint
-import ai.openclaw.android.gateway.GatewayTlsParams
-import ai.openclaw.android.protocol.OpenClawCanvasA2UICommand
-import ai.openclaw.android.protocol.OpenClawCanvasCommand
-import ai.openclaw.android.protocol.OpenClawCameraCommand
-import ai.openclaw.android.protocol.OpenClawLocationCommand
-import ai.openclaw.android.protocol.OpenClawScreenCommand
-import ai.openclaw.android.protocol.OpenClawSmsCommand
-import ai.openclaw.android.protocol.OpenClawCapability
-import ai.openclaw.android.LocationMode
-import ai.openclaw.android.VoiceWakeMode
+import ai.openpaw.android.BuildConfig
+import ai.openpaw.android.SecurePrefs
+import ai.openpaw.android.gateway.GatewayClientInfo
+import ai.openpaw.android.gateway.GatewayConnectOptions
+import ai.openpaw.android.gateway.GatewayEndpoint
+import ai.openpaw.android.gateway.GatewayTlsParams
+import ai.openpaw.android.protocol.OpenPawCanvasA2UICommand
+import ai.openpaw.android.protocol.OpenPawCanvasCommand
+import ai.openpaw.android.protocol.OpenPawCameraCommand
+import ai.openpaw.android.protocol.OpenPawLocationCommand
+import ai.openpaw.android.protocol.OpenPawScreenCommand
+import ai.openpaw.android.protocol.OpenPawSmsCommand
+import ai.openpaw.android.protocol.OpenPawCapability
+import ai.openpaw.android.LocationMode
+import ai.openpaw.android.VoiceWakeMode
 
 class ConnectionManager(
   private val prefs: SecurePrefs,
@@ -81,24 +81,24 @@ class ConnectionManager(
 
   fun buildInvokeCommands(): List<String> =
     buildList {
-      add(OpenClawCanvasCommand.Present.rawValue)
-      add(OpenClawCanvasCommand.Hide.rawValue)
-      add(OpenClawCanvasCommand.Navigate.rawValue)
-      add(OpenClawCanvasCommand.Eval.rawValue)
-      add(OpenClawCanvasCommand.Snapshot.rawValue)
-      add(OpenClawCanvasA2UICommand.Push.rawValue)
-      add(OpenClawCanvasA2UICommand.PushJSONL.rawValue)
-      add(OpenClawCanvasA2UICommand.Reset.rawValue)
-      add(OpenClawScreenCommand.Record.rawValue)
+      add(OpenPawCanvasCommand.Present.rawValue)
+      add(OpenPawCanvasCommand.Hide.rawValue)
+      add(OpenPawCanvasCommand.Navigate.rawValue)
+      add(OpenPawCanvasCommand.Eval.rawValue)
+      add(OpenPawCanvasCommand.Snapshot.rawValue)
+      add(OpenPawCanvasA2UICommand.Push.rawValue)
+      add(OpenPawCanvasA2UICommand.PushJSONL.rawValue)
+      add(OpenPawCanvasA2UICommand.Reset.rawValue)
+      add(OpenPawScreenCommand.Record.rawValue)
       if (cameraEnabled()) {
-        add(OpenClawCameraCommand.Snap.rawValue)
-        add(OpenClawCameraCommand.Clip.rawValue)
+        add(OpenPawCameraCommand.Snap.rawValue)
+        add(OpenPawCameraCommand.Clip.rawValue)
       }
       if (locationMode() != LocationMode.Off) {
-        add(OpenClawLocationCommand.Get.rawValue)
+        add(OpenPawLocationCommand.Get.rawValue)
       }
       if (smsAvailable()) {
-        add(OpenClawSmsCommand.Send.rawValue)
+        add(OpenPawSmsCommand.Send.rawValue)
       }
       if (BuildConfig.DEBUG) {
         add("debug.logs")
@@ -109,15 +109,15 @@ class ConnectionManager(
 
   fun buildCapabilities(): List<String> =
     buildList {
-      add(OpenClawCapability.Canvas.rawValue)
-      add(OpenClawCapability.Screen.rawValue)
-      if (cameraEnabled()) add(OpenClawCapability.Camera.rawValue)
-      if (smsAvailable()) add(OpenClawCapability.Sms.rawValue)
+      add(OpenPawCapability.Canvas.rawValue)
+      add(OpenPawCapability.Screen.rawValue)
+      if (cameraEnabled()) add(OpenPawCapability.Camera.rawValue)
+      if (smsAvailable()) add(OpenPawCapability.Sms.rawValue)
       if (voiceWakeMode() != VoiceWakeMode.Off && hasRecordAudioPermission()) {
-        add(OpenClawCapability.VoiceWake.rawValue)
+        add(OpenPawCapability.VoiceWake.rawValue)
       }
       if (locationMode() != LocationMode.Off) {
-        add(OpenClawCapability.Location.rawValue)
+        add(OpenPawCapability.Location.rawValue)
       }
     }
 
@@ -141,7 +141,7 @@ class ConnectionManager(
     val version = resolvedVersionName()
     val release = Build.VERSION.RELEASE?.trim().orEmpty()
     val releaseLabel = if (release.isEmpty()) "unknown" else release
-    return "OpenClawAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
+    return "OpenPawAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
   }
 
   fun buildClientInfo(clientId: String, clientMode: String): GatewayClientInfo {
@@ -164,7 +164,7 @@ class ConnectionManager(
       caps = buildCapabilities(),
       commands = buildInvokeCommands(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "openclaw-android", clientMode = "node"),
+      client = buildClientInfo(clientId = "openpaw-android", clientMode = "node"),
       userAgent = buildUserAgent(),
     )
   }
@@ -176,7 +176,7 @@ class ConnectionManager(
       caps = emptyList(),
       commands = emptyList(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "openclaw-control-ui", clientMode = "ui"),
+      client = buildClientInfo(clientId = "openpaw-control-ui", clientMode = "ui"),
       userAgent = buildUserAgent(),
     )
   }

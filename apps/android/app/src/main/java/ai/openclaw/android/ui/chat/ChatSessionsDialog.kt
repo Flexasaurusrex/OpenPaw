@@ -1,4 +1,4 @@
-package ai.openclaw.android.ui.chat
+package ai.openpaw.android.ui.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ai.openclaw.android.chat.ChatSessionEntry
+import ai.openpaw.android.chat.ChatSessionEntry
 
 @Composable
 fun ChatSessionsDialog(
