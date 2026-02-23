@@ -67,7 +67,7 @@ export async function runOnboardingWizard(
   prompter: WizardPrompter,
 ) {
   const onboardHelpers = await import("../commands/onboard-helpers.js");
-  onboardHelpers.printWizardHeader(runtime);
+  await onboardHelpers.printWizardHeader(runtime);
   await prompter.intro("OpenPaw onboarding");
   await requireRiskAcknowledgement({ opts, prompter });
 

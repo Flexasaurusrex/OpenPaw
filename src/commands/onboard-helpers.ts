@@ -98,14 +98,34 @@ export function validateGatewayPasswordInput(value: unknown): string | undefined
   return undefined;
 }
 
-export function printWizardHeader(runtime: RuntimeEnv) {
+export async function printWizardHeader(runtime: RuntimeEnv) {
+  const { VERSION } = await import("../version.js");
+  const { resolveCommitHash } = await import("../infra/git-commit.js");
+  const { pickTagline } = await import("../cli/tagline.js");
+
+  const commit = resolveCommitHash() || "unknown";
+  const shortCommit = commit.slice(0, 7);
+  const tagline = pickTagline();
+
+  const versionLine = `🐾 OpenPaw ${VERSION} (${shortCommit}) — ${tagline}`;
   const header = [
-    "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-    "██░▄▄▄░██░▄▄░██░▄▄▄██░▀██░██░▄▄▀██░████░▄▄▀██░███░██",
-    "██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██",
-    "██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██",
-    "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-    "                  🐾 OPENPAW 🐾                    ",
+    "",
+    versionLine,
+    "",
+    "       /\\_/\\                                              /\\_/\\       ",
+    "      ( o.o )                                            ( ^.^ )      ",
+    "       > ^ <                                              > ^ <       ",
+    "      ▐▓▓▌▐▓▓▌                                          ▐▓▓▌▐▓▓▌     ",
+    "       ▓▓  ▓▓                                            ▓▓  ▓▓      ",
+    "",
+    "     ██████╗ ██████╗ ███████╗███╗   ██╗██████╗  █████╗ ██╗    ██╗",
+    "    ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔══██╗██║    ██║",
+    "    ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██████╔╝███████║██║ █╗ ██║",
+    "    ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██╔═══╝ ██╔══██║██║███╗██║",
+    "    ╚██████╔╝██║     ███████╗██║ ╚████║██║     ██║  ██║╚███╔███╔╝",
+    "     ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═╝     ╚═╝  ╚═╝ ╚══╝╚══╝ ",
+    "",
+    "                         🐾 OPENPAW 🐾                            ",
     " ",
   ].join("\n");
   runtime.log(header);

@@ -212,7 +212,7 @@ export async function runConfigureWizard(
   runtime: RuntimeEnv = defaultRuntime,
 ) {
   try {
-    printWizardHeader(runtime);
+    await printWizardHeader(runtime);
     intro(opts.command === "update" ? "OpenPaw update wizard" : "OpenPaw configure");
     const prompter = createClackPrompter();
 

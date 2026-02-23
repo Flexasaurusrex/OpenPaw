@@ -69,7 +69,7 @@ export async function doctorCommand(
   options: DoctorOptions = {},
 ) {
   const prompter = createDoctorPrompter({ runtime, options });
-  printWizardHeader(runtime);
+  await printWizardHeader(runtime);
   intro("OpenPaw doctor");
 
   const root = await resolveOpenPawPackageRoot({
