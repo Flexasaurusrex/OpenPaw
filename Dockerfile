@@ -54,4 +54,5 @@ ENV NODE_ENV=production
 USER node
 
 # Start gateway with Railway-compatible settings
-CMD ["node", "dist/entry.js", "gateway", "run", "--bind", "0.0.0.0", "--port", "18789"]
+# Use shell form to allow PORT environment variable substitution
+CMD node dist/entry.js gateway run --bind 0.0.0.0 --port ${PORT:-18789}
