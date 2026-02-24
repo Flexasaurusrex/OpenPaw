@@ -3,7 +3,7 @@ services:
     name: openpaw-live
     runtime: node
     buildCommand: echo "Using pre-built dist"
-    startCommand: cp -r extensions src/ 2>/dev/null || true && npx openpaw config set gateway.mode local && npx openpaw doctor --fix && node --max-old-space-size=1024 dist/entry.js gateway run --bind lan --port $PORT --allow-unconfigured
+    startCommand: echo "=== DEBUG PORT=$PORT ===" && ls -la src/extensions 2>/dev/null || echo "src/extensions not found" && cp -r extensions src/ 2>/dev/null || true && ls -la src/extensions && npx openpaw config set gateway.mode local && npx openpaw doctor --fix && echo "=== STARTING GATEWAY ON PORT $PORT ===" && node --max-old-space-size=1024 dist/entry.js gateway run --bind 0.0.0.0 --port $PORT --allow-unconfigured
     envVars:
       - key: NODE_ENV
         value: production
