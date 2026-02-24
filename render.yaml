@@ -1,21 +1,9 @@
 services:
   - type: web
-    name: openpaw
-    runtime: docker
-    plan: starter
-    healthCheckPath: /health
+    name: openpaw-live
+    runtime: node
+    buildCommand: echo "Using pre-built dist - no build needed"
+    startCommand: node dist/entry.js gateway run --bind 0.0.0.0 --port $PORT
     envVars:
-      - key: PORT
-        value: "8080"
-      - key: SETUP_PASSWORD
-        sync: false
-      - key: OPENPAW_STATE_DIR
-        value: /data/.openpaw
-      - key: OPENPAW_WORKSPACE_DIR
-        value: /data/workspace
-      - key: OPENPAW_GATEWAY_TOKEN
-        generateValue: true
-    disk:
-      name: openpaw-data
-      mountPath: /data
-      sizeGB: 1
+      - key: NODE_ENV
+        value: production
