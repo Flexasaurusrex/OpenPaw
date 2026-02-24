@@ -1,0 +1,32 @@
+import type { OpenPawConfig } from "../config/config.js";
+import type { SlackAccountConfig } from "../config/types.js";
+export type SlackTokenSource = "env" | "config" | "none";
+export type ResolvedSlackAccount = {
+    accountId: string;
+    enabled: boolean;
+    name?: string;
+    botToken?: string;
+    appToken?: string;
+    botTokenSource: SlackTokenSource;
+    appTokenSource: SlackTokenSource;
+    config: SlackAccountConfig;
+    groupPolicy?: SlackAccountConfig["groupPolicy"];
+    textChunkLimit?: SlackAccountConfig["textChunkLimit"];
+    mediaMaxMb?: SlackAccountConfig["mediaMaxMb"];
+    reactionNotifications?: SlackAccountConfig["reactionNotifications"];
+    reactionAllowlist?: SlackAccountConfig["reactionAllowlist"];
+    replyToMode?: SlackAccountConfig["replyToMode"];
+    replyToModeByChatType?: SlackAccountConfig["replyToModeByChatType"];
+    actions?: SlackAccountConfig["actions"];
+    slashCommand?: SlackAccountConfig["slashCommand"];
+    dm?: SlackAccountConfig["dm"];
+    channels?: SlackAccountConfig["channels"];
+};
+export declare const listSlackAccountIds: (cfg: OpenPawConfig) => string[];
+export declare const resolveDefaultSlackAccountId: (cfg: OpenPawConfig) => string;
+export declare function resolveSlackAccount(params: {
+    cfg: OpenPawConfig;
+    accountId?: string | null;
+}): ResolvedSlackAccount;
+export declare function listEnabledSlackAccounts(cfg: OpenPawConfig): ResolvedSlackAccount[];
+export declare function resolveSlackReplyToMode(account: ResolvedSlackAccount, chatType?: string | null): "off" | "first" | "all";

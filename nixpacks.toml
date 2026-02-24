@@ -1,11 +1,8 @@
 [phases.setup]
-nixPkgs = ["nodejs_22", "pnpm"]
+nixPkgs = ["nodejs_22"]
 
 [phases.install]
-cmds = ["pnpm install --frozen-lockfile"]
-
-[phases.build]
-cmds = ["pnpm build"]
+cmds = ["npm install -g pnpm"]
 
 [start]
-cmd = "pnpm openpaw gateway run --bind 0.0.0.0 --port ${PORT:-18789}"
+cmd = "node dist/entry.js gateway run --bind 0.0.0.0 --port ${PORT:-18789}"
