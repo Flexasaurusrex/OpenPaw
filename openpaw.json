@@ -47,6 +47,11 @@
     }
   },
 
+  "telegram": {
+    "enabled": true,
+    "botToken": "${TELEGRAM_BOT_TOKEN}"
+  },
+
   "comment_reasoning": "Model Selection Strategy:",
   "comment_haiku": "- Haiku (primary): Fast, cost-effective for routine tasks",
   "comment_sonnet": "- Sonnet (fallback + high thinking): Complex reasoning, deep analysis",

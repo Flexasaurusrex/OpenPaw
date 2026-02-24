@@ -1,0 +1,37 @@
+{
+  "name": "@pawhub/cryptowatch",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "On-chain monitoring, price alerts, and portfolio tracking via Telegram",
+  "main": "dist/index.js",
+  "bin": {
+    "cryptowatch": "bin/cryptowatch.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["crypto", "blockchain", "ethereum", "wallet", "telegram", "price-alerts"],
+  "author": "PawHub",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "node-telegram-bot-api": "^0.66.0",
+    "conf": "^13.0.1",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.1",
+    "axios": "^1.6.7",
+    "ethers": "^6.11.1",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/node-telegram-bot-api": "^0.64.3",
+    "@types/node-cron": "^3.0.11",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
