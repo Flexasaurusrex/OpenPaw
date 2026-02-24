@@ -1,6 +1,6 @@
 FROM node:22-bookworm@sha256:cd7bcd2e7a1e6f72052feb023c7f6b722205d3fcab7bbcbd2d1bfdab10b1e935
 
-# Install Bun (required for build scripts)
+# Install Bun (required for some runtime features)
 RUN curl -fsSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
 
@@ -20,10 +20,9 @@ RUN if [ -n "$OPENPAW_DOCKER_APT_PACKAGES" ]; then \
 COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY --chown=node:node ui/package.json ./ui/package.json
 COPY --chown=node:node patches ./patches
-COPY --chown=node:node scripts ./scripts
 
 USER node
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod
 
 # Optionally install Chromium and Xvfb for browser automation.
 # Build with: docker build --build-arg OPENPAW_INSTALL_BROWSER=1 ...
@@ -43,11 +42,9 @@ RUN if [ -n "$OPENPAW_INSTALL_BROWSER" ]; then \
     fi
 
 USER node
-COPY --chown=node:node . .
-RUN pnpm build
-# Force pnpm for UI build (Bun may fail on ARM/Synology architectures)
-ENV OPENPAW_PREFER_PNPM=1
-RUN pnpm ui:build
+# Copy pre-built dist and other runtime files
+COPY --chown=node:node dist ./dist
+COPY --chown=node:node src/canvas-host ./src/canvas-host
 
 ENV NODE_ENV=production
 
@@ -56,10 +53,5 @@ ENV NODE_ENV=production
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
-# Start gateway server with default config.
-# Binds to loopback (127.0.0.1) by default for security.
-#
-# For container platforms requiring external health checks:
-#   1. Set OPENPAW_GATEWAY_TOKEN or OPENPAW_GATEWAY_PASSWORD env var
-#   2. Override CMD: ["node","openpaw.mjs","gateway","--allow-unconfigured","--bind","lan"]
-CMD ["node", "openpaw.mjs", "gateway", "--allow-unconfigured"]
+# Start gateway with Railway-compatible settings
+CMD ["node", "dist/entry.js", "gateway", "run", "--bind", "0.0.0.0", "--port", "18789"]
