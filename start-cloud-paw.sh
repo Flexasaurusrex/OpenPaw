@@ -31,7 +31,7 @@ cp -r extensions src/ 2>/dev/null || true
 # Configure gateway
 echo "=== Configuring OpenPaw ==="
 npx openpaw config set gateway.mode local
-npx openpaw config set agent.workspace "$WORKSPACE_PATH"
+npx openpaw config set agents.defaults.workspace "$WORKSPACE_PATH"
 npx openpaw doctor --fix
 
 # Start gateway
