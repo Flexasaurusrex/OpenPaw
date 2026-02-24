@@ -467,10 +467,10 @@ export async function finalizeOnboardingWizard(
 
   await prompter.outro(
     controlUiOpened
-      ? "Onboarding complete. Dashboard opened; keep that tab to control OpenPaw."
+      ? "🐾 All set! Your terminal just got a whole lot smarter. Dashboard opened — keep that tab handy!"
       : seededInBackground
-        ? "Onboarding complete. Web UI seeded in the background; open it anytime with the dashboard link above."
-        : "Onboarding complete. Use the dashboard link above to control OpenPaw.",
+        ? "🐾 Configuration complete! Web UI is ready in the background. Open it anytime with the link above."
+        : "🐾 You're all configured! Use the dashboard link above to control OpenPaw. Time to ship something great!",
   );
 
   return { launchedTui };

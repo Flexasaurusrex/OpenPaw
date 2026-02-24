@@ -121,6 +121,13 @@ export async function runOnboardingWizard(
       initialValue: "quickstart",
     }));
 
+  // Add personality based on choice
+  if (flow === "quickstart" && !explicitFlow) {
+    await prompter.note("Smart move! Let's get you up and running fast 🐾", "QuickStart");
+  } else if (flow === "advanced" && !explicitFlow) {
+    await prompter.note("Ah, a power user. I respect that. Let's dive deep 🔧", "Advanced");
+  }
+
   if (opts.mode === "remote" && flow === "quickstart") {
     await prompter.note(
       "QuickStart only supports local gateways. Switching to Manual mode.",
@@ -375,6 +382,14 @@ export async function runOnboardingWizard(
       },
     });
     nextConfig = authResult.config;
+  }
+
+  // Celebrate successful auth
+  if (authChoice !== "skip") {
+    await prompter.note(
+      "Your secrets are safe with me. Unlike your .env file that one time... 🔐",
+      "Auth configured",
+    );
   }
 
   if (authChoiceFromPrompt && authChoice !== "custom-api-key") {
