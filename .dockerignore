@@ -32,8 +32,9 @@ tmp
 **/tmp
 
 # build artifacts
-dist
-**/dist
+# dist is needed for Railway deployment (pre-built)
+# dist
+# **/dist
 apps/macos/.build
 apps/ios/build
 **/*.trace
