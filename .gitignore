@@ -113,3 +113,5 @@ dist/protocol.schema.json
 
 # Synthing
 **/.stfolder/
+.env.railway
+.env.local
