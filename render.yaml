@@ -3,7 +3,7 @@ services:
     name: openpaw-live
     runtime: node
     buildCommand: npm install -g pnpm && pnpm install && pnpm build
-    startCommand: node dist/entry.js gateway run --bind 0.0.0.0 --port $PORT --allow-unconfigured
+    startCommand: echo "Starting gateway on port $PORT" && node dist/entry.js gateway run --bind 0.0.0.0 --port $PORT --allow-unconfigured
     envVars:
       - key: NODE_ENV
         value: production
