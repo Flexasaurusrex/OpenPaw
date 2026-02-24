@@ -2,8 +2,8 @@ services:
   - type: web
     name: openpaw-live
     runtime: node
-    buildCommand: npm install -g pnpm && pnpm install && pnpm build && rm -rf src/extensions && cp -r extensions src/extensions
-    startCommand: echo "Starting gateway on port $PORT" && node dist/entry.js gateway run --bind 0.0.0.0 --port $PORT --allow-unconfigured
+    buildCommand: echo "Using pre-built dist"
+    startCommand: cp -r extensions src/ 2>/dev/null || true && npx openpaw config set gateway.mode local && npx openpaw doctor --fix && node --max-old-space-size=1024 dist/entry.js gateway run --bind lan --port $PORT --allow-unconfigured
     envVars:
       - key: NODE_ENV
         value: production
