@@ -53,6 +53,17 @@ ENV NODE_ENV=production
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
+# Create startup script to handle PORT properly
+COPY --chown=node:node <<'EOF' /app/start.sh
+#!/bin/bash
+set -e
+echo "PORT env var: ${PORT}"
+GATEWAY_PORT=${PORT:-18789}
+echo "Starting gateway on port: $GATEWAY_PORT"
+exec node dist/entry.js gateway run --bind 0.0.0.0 --port "$GATEWAY_PORT"
+EOF
+
+RUN chmod +x /app/start.sh
+
 # Start gateway with Railway-compatible settings
-# Use shell form to allow PORT environment variable substitution
-CMD node dist/entry.js gateway run --bind 0.0.0.0 --port ${PORT:-18789}
+CMD ["/app/start.sh"]
