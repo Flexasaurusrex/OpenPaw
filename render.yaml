@@ -2,7 +2,7 @@ services:
   - type: web
     name: openpaw-live
     runtime: node
-    buildCommand: echo "Using pre-built dist - no build needed"
+    buildCommand: npm install -g pnpm && pnpm install --prod
     startCommand: node dist/entry.js gateway run --bind 0.0.0.0 --port $PORT
     envVars:
       - key: NODE_ENV
