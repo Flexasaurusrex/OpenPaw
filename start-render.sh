@@ -3,6 +3,13 @@ set -e
 
 echo "=== OpenPaw Render Startup ==="
 
+# Use persistent disk for OpenPaw data
+export OPENPAW_WORKSPACE="/data/.openpaw"
+mkdir -p "$OPENPAW_WORKSPACE"
+
+# Create symlink from default location to persistent disk
+ln -sf "$OPENPAW_WORKSPACE" /opt/render/.openpaw || true
+
 # Set config
 echo "Setting gateway config..."
 pnpm openpaw config set gateway.mode local
