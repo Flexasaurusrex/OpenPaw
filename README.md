@@ -128,7 +128,7 @@ OpenPaw is MIT licensed and welcomes contributions.
 - 💬 [Discord](https://discord.gg/openpaw)
 - 🐦 [X / Twitter](https://x.com/openpaw)
 - 📬 [Newsletter](https://newsletter.openpaw.ai)
-- ⭐ [Star us on GitHub](https://github.com/openpaw/openpaw)
+- ⭐ [Star us on GitHub](https://github.com/Flexasaurusrex/OpenPaw)
 
 ## License
 
