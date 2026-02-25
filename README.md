@@ -60,7 +60,7 @@ npm install && npm start
 # Instructions in /docs/setup.md
 ```
 
-Or skip the setup entirely → **OpenPaw Cloud** — Paw running in 10 minutes, no terminal required.
+Or deploy to the cloud → See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Render setup.
 
 ## Security First
 
@@ -99,13 +99,13 @@ Every skill on PawHub has been reviewed by a human before listing. No exceptions
 | ☀️ **PortfolioMorning** | Overnight market briefing delivered before you wake up                              |
 | 🔐 **VaultKeeper**      | Credential rotation reminders and API key hygiene                                   |
 
-[Browse all skills on PawHub →](https://pawhub.ai)
+**PawHub is launching soon!** [Sign up for early access →](https://pawhub.io)
 
 ### Publish Your Own Skill
 
 Build a skill, submit it for review, earn 70% of every sale. We take 30%.
 
-[Skill development guide →](https://docs.openpaw.ai/skills/publishing)
+**Interested in publishing?** [Register as a developer →](https://pawhub.io)
 
 ## The Philosophy
 
@@ -119,7 +119,7 @@ That's Paw. Built on the best open-source agentic infrastructure available. Hard
 
 OpenPaw is MIT licensed and welcomes contributions.
 
-- **Skills**: Submit to PawHub via [pawhub.ai/submit](https://pawhub.ai/submit)
+- **Skills**: Register at [pawhub.io](https://pawhub.io) for marketplace access when it launches
 - **Core**: Open a PR on GitHub
 - **Bugs**: Open an issue, Paw will be mildly annoyed but will investigate
 
@@ -127,9 +127,9 @@ OpenPaw is MIT licensed and welcomes contributions.
 
 - 🐦 [Follow on X / Twitter](https://x.com/flexasaurusrex)
 - ⭐ [Star us on GitHub](https://github.com/Flexasaurusrex/OpenPaw)
+- 🛍️ [Join PawHub waitlist](https://pawhub.io) (marketplace launching soon)
 - 💬 Discord (coming soon)
 - 📬 Newsletter (coming soon)
-- ⭐ [Star us on GitHub](https://github.com/Flexasaurusrex/OpenPaw)
 
 ## License
 
