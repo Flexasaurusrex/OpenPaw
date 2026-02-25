@@ -29,4 +29,4 @@ cp -r extensions src/ 2>/dev/null || true
 
 # Start gateway (skip config commands that might fail)
 echo "=== Starting Cloud Paw on port $PORT ==="
-exec node --max-old-space-size=1024 dist/entry.js gateway run --bind 0.0.0.0 --port $PORT --allow-unconfigured
+exec node --max-old-space-size=1024 dist/entry.js gateway run --bind lan --port $PORT --allow-unconfigured
