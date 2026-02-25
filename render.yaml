@@ -3,7 +3,7 @@ services:
     name: openpaw-live
     runtime: node
     buildCommand: npm install -g pnpm && pnpm install && pnpm build && pnpm openpaw config set gateway.mode local && pnpm openpaw config set channels.telegram.enabled true && pnpm openpaw plugins enable telegram
-    startCommand: pnpm openpaw config set gateway.mode local && pnpm openpaw config set channels.telegram.enabled true && pnpm openpaw plugins enable telegram && pnpm openpaw gateway run --bind lan --port $PORT
+    startCommand: bash start-render.sh
     envVars:
       - key: NODE_ENV
         value: production
