@@ -7,6 +7,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: ENABLE_EXPERIMENTAL_COREPACK
+        value: "1"
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: TELEGRAM_CHAT_ID
