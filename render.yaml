@@ -2,8 +2,14 @@ services:
   - type: web
     name: openpaw-live
     runtime: node
-    buildCommand: echo "Using pre-built dist"
-    startCommand: bash start-cloud-paw.sh
+    buildCommand: npm install -g pnpm && pnpm install && pnpm build
+    startCommand: |
+      export OPENPAW_WORKSPACE="/opt/render/.openpaw/workspace"
+      if [ ! -d "$OPENPAW_WORKSPACE/.git" ]; then
+        echo "Cloning workspace..."
+        git clone https://github.com/Flexasaurusrex/openpaw-workspace.git "$OPENPAW_WORKSPACE" || true
+      fi
+      pnpm openpaw gateway run --bind lan --port $PORT
     envVars:
       - key: NODE_ENV
         value: production
