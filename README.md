@@ -1,4 +1,5 @@
 # 🐾 OpenPaw
+
 ## The AI agent that actually does things. And knows it's a cat.
 
 OpenPaw is a security-hardened, personality-forward fork of OpenClaw — built for creators, founders, freelancers, and anyone who wants an autonomous AI agent that runs locally, integrates with the apps you already use, and has a genuine soul.
@@ -11,14 +12,14 @@ OpenPaw is a security-hardened, personality-forward fork of OpenClaw — built f
 
 OpenClaw proved the world wants autonomous AI agents. OpenPaw is what that agent should actually be.
 
-| | OpenClaw | OpenPaw |
-|---|---|---|
-| **Authentication** | Off by default | On by default |
-| **Credential storage** | Plaintext config | Encrypted env vars |
-| **Gateway exposure** | 0.0.0.0 (public) | localhost only |
-| **Skill marketplace** | Unvetted (341 malicious skills found) | Every skill reviewed before listing |
-| **Personality** | Generic assistant | Paw. A cat. Genuinely. |
-| **Built for** | Developers | Creators, founders, everyone |
+|                        | OpenClaw                              | OpenPaw                             |
+| ---------------------- | ------------------------------------- | ----------------------------------- |
+| **Authentication**     | Off by default                        | On by default                       |
+| **Credential storage** | Plaintext config                      | Encrypted env vars                  |
+| **Gateway exposure**   | 0.0.0.0 (public)                      | localhost only                      |
+| **Skill marketplace**  | Unvetted (341 malicious skills found) | Every skill reviewed before listing |
+| **Personality**        | Generic assistant                     | Paw. A cat. Genuinely.              |
+| **Built for**          | Developers                            | Creators, founders, everyone        |
 
 ## Meet Paw 🐾
 
@@ -43,7 +44,7 @@ Paw: "42,847 visitors so far. Up 23% from yesterday.
 
 ```bash
 # Clone OpenPaw
-git clone https://github.com/openpaw/openpaw.git
+git clone https://github.com/Flexasaurusrex/OpenPaw.git
 cd openpaw
 
 # Copy your environment config
@@ -80,23 +81,23 @@ Every skill on PawHub has been reviewed by a human before listing. No exceptions
 
 ### Launch Skills
 
-| Skill | What It Does |
-|---|---|
-| 🌙 **Overnight** | Natural language task queue. Runs while you sleep. Morning summary delivered. |
-| 📊 **PulseCheck** | Query your analytics in plain language via Telegram |
-| 📬 **InboxZero** | Autonomous email triage. Any provider, via IMAP |
-| 📁 **Archivist** | Universal content cataloging. URLs, files, descriptions — all tagged and searchable |
-| 📈 **CryptoWatch** | On-chain monitoring and price alerts to your phone |
-| 🔍 **TrendHunter** | Monitors the web for topics you care about, surfaces signals before they peak |
-| ✍️ **ThreadWriter** | Topic in → optimized X thread out |
-| 💡 **SEOEngine** | Keyword research, competitive analysis, full blog post output |
-| 🔔 **SysWhisper** | Server health monitoring with plain language Telegram alerts |
-| 🚀 **DeployWatch** | GitHub Actions and deployment monitoring |
-| 📋 **CRMPaw** | Lightweight CRM inside your messaging app |
-| 📝 **ProposalWriter** | Client brief in → polished proposal out |
-| 📈 **PolyTracker** | Prediction market monitoring and sentiment analysis |
-| ☀️ **PortfolioMorning** | Overnight market briefing delivered before you wake up |
-| 🔐 **VaultKeeper** | Credential rotation reminders and API key hygiene |
+| Skill                   | What It Does                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------- |
+| 🌙 **Overnight**        | Natural language task queue. Runs while you sleep. Morning summary delivered.       |
+| 📊 **PulseCheck**       | Query your analytics in plain language via Telegram                                 |
+| 📬 **InboxZero**        | Autonomous email triage. Any provider, via IMAP                                     |
+| 📁 **Archivist**        | Universal content cataloging. URLs, files, descriptions — all tagged and searchable |
+| 📈 **CryptoWatch**      | On-chain monitoring and price alerts to your phone                                  |
+| 🔍 **TrendHunter**      | Monitors the web for topics you care about, surfaces signals before they peak       |
+| ✍️ **ThreadWriter**     | Topic in → optimized X thread out                                                   |
+| 💡 **SEOEngine**        | Keyword research, competitive analysis, full blog post output                       |
+| 🔔 **SysWhisper**       | Server health monitoring with plain language Telegram alerts                        |
+| 🚀 **DeployWatch**      | GitHub Actions and deployment monitoring                                            |
+| 📋 **CRMPaw**           | Lightweight CRM inside your messaging app                                           |
+| 📝 **ProposalWriter**   | Client brief in → polished proposal out                                             |
+| 📈 **PolyTracker**      | Prediction market monitoring and sentiment analysis                                 |
+| ☀️ **PortfolioMorning** | Overnight market briefing delivered before you wake up                              |
+| 🔐 **VaultKeeper**      | Credential rotation reminders and API key hygiene                                   |
 
 [Browse all skills on PawHub →](https://pawhub.ai)
 
