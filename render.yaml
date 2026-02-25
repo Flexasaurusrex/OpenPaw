@@ -2,14 +2,8 @@ services:
   - type: web
     name: openpaw-live
     runtime: node
-    buildCommand: npm install -g pnpm && pnpm install && pnpm build
-    startCommand: |
-      export OPENPAW_WORKSPACE="/opt/render/.openpaw/workspace"
-      if [ ! -d "$OPENPAW_WORKSPACE/.git" ]; then
-        echo "Cloning workspace..."
-        git clone https://github.com/Flexasaurusrex/openpaw-workspace.git "$OPENPAW_WORKSPACE" || true
-      fi
-      pnpm openpaw gateway run --bind lan --port $PORT
+    buildCommand: npm install -g pnpm && pnpm install && pnpm build && pnpm openpaw config set gateway.mode local && pnpm openpaw config set channels.telegram.enabled true
+    startCommand: pnpm openpaw gateway run --bind lan --port $PORT
     envVars:
       - key: NODE_ENV
         value: production
