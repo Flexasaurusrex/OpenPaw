@@ -60,7 +60,7 @@ npm install && npm start
 # Instructions in /docs/setup.md
 ```
 
-Or deploy to the cloud → See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Render setup.
+Or skip setup entirely → **PawHub Cloud** (launching soon) — Deploy your Paw in 1 click. [Join waitlist →](https://pawhub.io)
 
 ## Security First
 
