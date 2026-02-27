@@ -10,6 +10,13 @@ mkdir -p "$OPENPAW_WORKSPACE"
 # Create symlink from default location to persistent disk
 ln -sf "$OPENPAW_WORKSPACE" /opt/render/.openpaw || true
 
+# Sync bundled PawHub skills from repo to runtime directory
+echo "Syncing bundled PawHub skills..."
+mkdir -p "$OPENPAW_WORKSPACE/skills/pawhub"
+REPO_SKILLS="/opt/render/project/src/skills/pawhub"
+[ -d "$REPO_SKILLS" ] && cp -r "$REPO_SKILLS"/* "$OPENPAW_WORKSPACE/skills/pawhub/" 2>/dev/null || true
+echo "PawHub skills synced to $OPENPAW_WORKSPACE/skills/pawhub/"
+
 # Set config
 echo "Setting gateway config..."
 pnpm openpaw config set gateway.mode local
