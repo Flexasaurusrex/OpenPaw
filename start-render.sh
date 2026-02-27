@@ -26,6 +26,12 @@ done
 
 echo "PawHub skills sync complete"
 
+# Setup Uber credentials for RandomRide skill
+if [ -f "./skills/pawhub/randomride/setup-credentials.sh" ]; then
+  echo "Setting up Uber API credentials..."
+  bash ./skills/pawhub/randomride/setup-credentials.sh
+fi
+
 # Set config
 echo "Setting gateway config..."
 pnpm openpaw config set gateway.mode local
