@@ -30,14 +30,13 @@ class RandomRideButton:
                 # LocalPaw: ~/.openpaw/secrets/.uber_credentials.json
                 cloudpaw_creds = "/opt/render/.openpaw/secrets/.uber_credentials.json"
                 home_creds = os.path.expanduser("~/.openpaw/secrets/.uber_credentials.json")
-                fallback_creds = os.path.expanduser("~/.uber_credentials.json")
 
                 if os.path.exists(cloudpaw_creds):
                     uber_creds_path = cloudpaw_creds
                 elif os.path.exists(home_creds):
                     uber_creds_path = home_creds
                 else:
-                    uber_creds_path = fallback_creds
+                    uber_creds_path = home_creds  # Use this path even if it doesn't exist yet
             
             self.uber = UberAPI(uber_creds_path)
             print("✓ Uber API initialized with real credentials")
