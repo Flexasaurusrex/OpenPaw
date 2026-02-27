@@ -13,9 +13,18 @@ ln -sf "$OPENPAW_WORKSPACE" /opt/render/.openpaw || true
 # Sync bundled PawHub skills from repo to runtime directory
 echo "Syncing bundled PawHub skills..."
 mkdir -p "$OPENPAW_WORKSPACE/skills/pawhub"
-REPO_SKILLS="/opt/render/project/src/skills/pawhub"
-[ -d "$REPO_SKILLS" ] && cp -r "$REPO_SKILLS"/* "$OPENPAW_WORKSPACE/skills/pawhub/" 2>/dev/null || true
-echo "PawHub skills synced to $OPENPAW_WORKSPACE/skills/pawhub/"
+
+# Try multiple possible repo locations
+for REPO_PATH in "./skills/pawhub" "/opt/render/project/src/skills/pawhub" "$(pwd)/skills/pawhub"; do
+  if [ -d "$REPO_PATH" ]; then
+    echo "Found skills at: $REPO_PATH"
+    cp -r "$REPO_PATH"/* "$OPENPAW_WORKSPACE/skills/pawhub/" 2>/dev/null || true
+    ls -la "$OPENPAW_WORKSPACE/skills/pawhub/" | head -5
+    break
+  fi
+done
+
+echo "PawHub skills sync complete"
 
 # Set config
 echo "Setting gateway config..."
