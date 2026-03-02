@@ -4,10 +4,6 @@
 
 OpenPaw is a security-hardened, personality-forward fork of OpenClaw — built for creators, founders, freelancers, and anyone who wants an autonomous AI agent that runs locally, integrates with the apps you already use, and has a genuine soul.
 
-![Show Image](https://placehold.co/800x400/1a1a1a/white?text=OpenPaw+Hero)
-![Show Image](https://placehold.co/800x300/2d2d2d/white?text=Paw+Interface)
-![Show Image](https://placehold.co/400x400/3a3a3a/white?text=Paw+Avatar)
-
 ## Why OpenPaw?
 
 OpenClaw proved the world wants autonomous AI agents. OpenPaw is what that agent should actually be.
@@ -40,25 +36,38 @@ Paw: "42,847 visitors so far. Up 23% from yesterday.
      ...It won't last. Enjoy it."
 ```
 
+## Prerequisites
+
+- **Node.js 22+** — [Download](https://nodejs.org/) or use `nvm install 22`
+- **pnpm** — `npm install -g pnpm`
+
 ## Quick Start
 
 ```bash
 # Clone OpenPaw
 git clone https://github.com/Flexasaurusrex/OpenPaw.git
-cd openpaw
+cd OpenPaw
+
+# Install dependencies
+pnpm install
 
 # Copy your environment config
 cp .env.example .env
 
 # Add your API key (Claude recommended, works with any LLM)
-echo "ANTHROPIC_API_KEY=your_key_here" >> .env
+# Edit .env and set: ANTHROPIC_API_KEY=your_key_here
 
-# Start Paw
-npm install && npm start
+# Build and start
+pnpm build
+pnpm start
 
-# Connect via Telegram, Discord, or WhatsApp
-# Instructions in /docs/setup.md
+# Or use the onboarding wizard for guided setup
+pnpm openpaw onboard
 ```
+
+### Connect a messaging channel
+
+Once running, connect Telegram, Discord, WhatsApp, or any supported channel. See [docs/setup.md](docs/setup.md) for full instructions.
 
 Or skip setup entirely → **PawHub Cloud** (launching soon) — Deploy your Paw in 1 click. [Join waitlist →](https://pawhub.io)
 
