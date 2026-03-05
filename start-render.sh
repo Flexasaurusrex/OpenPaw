@@ -11,29 +11,38 @@ mkdir -p "$OPENPAW_WORKSPACE"
 ln -sf "$OPENPAW_WORKSPACE" /opt/render/.openpaw || true
 
 # Ensure bundled skills directory is found by the gateway
-for SKILLS_PATH in "./skills" "/opt/render/project/src/skills" "$(pwd)/skills"; do
+# Must use absolute path — relative paths break when cwd changes at runtime
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+for SKILLS_PATH in "$SCRIPT_DIR/skills" "/opt/render/project/src/skills" "$(pwd)/skills"; do
   if [ -d "$SKILLS_PATH" ]; then
-    export OPENPAW_BUNDLED_SKILLS_DIR="$SKILLS_PATH"
+    export OPENPAW_BUNDLED_SKILLS_DIR="$(cd "$SKILLS_PATH" && pwd)"
     echo "Bundled skills dir: $OPENPAW_BUNDLED_SKILLS_DIR"
+    echo "Skills found: $(ls "$OPENPAW_BUNDLED_SKILLS_DIR" | head -20)"
     break
   fi
 done
 
-# Sync bundled PawHub skills from repo to runtime directory
-echo "Syncing bundled PawHub skills..."
-mkdir -p "$OPENPAW_WORKSPACE/skills/pawhub"
+# Sync PawHub skills directly into managed skills dir (one level deep, not nested under pawhub/)
+echo "Syncing PawHub skills to managed dir..."
+mkdir -p "$OPENPAW_WORKSPACE/skills"
 
-# Try multiple possible repo locations
-for REPO_PATH in "./skills/pawhub" "/opt/render/project/src/skills/pawhub" "$(pwd)/skills/pawhub"; do
+for REPO_PATH in "$SCRIPT_DIR/skills/pawhub" "/opt/render/project/src/skills/pawhub" "$(pwd)/skills/pawhub"; do
   if [ -d "$REPO_PATH" ]; then
-    echo "Found skills at: $REPO_PATH"
-    cp -r "$REPO_PATH"/* "$OPENPAW_WORKSPACE/skills/pawhub/" 2>/dev/null || true
-    ls -la "$OPENPAW_WORKSPACE/skills/pawhub/" | head -5
+    echo "Found pawhub skills at: $REPO_PATH"
+    # Copy each skill dir directly into managed skills (not nested under pawhub/)
+    for SKILL_DIR in "$REPO_PATH"/*/; do
+      if [ -f "$SKILL_DIR/SKILL.md" ]; then
+        SKILL_NAME=$(basename "$SKILL_DIR")
+        cp -r "$SKILL_DIR" "$OPENPAW_WORKSPACE/skills/$SKILL_NAME"
+        echo "  Synced: $SKILL_NAME"
+      fi
+    done
     break
   fi
 done
 
-echo "PawHub skills sync complete"
+echo "Skills sync complete"
+echo "Managed skills: $(ls "$OPENPAW_WORKSPACE/skills/" 2>/dev/null | tr '\n' ' ')"
 
 # Setup Uber credentials for RandomRide skill
 if [ -f "./skills/pawhub/randomride/setup-credentials.sh" ]; then
