@@ -10,6 +10,15 @@ mkdir -p "$OPENPAW_WORKSPACE"
 # Create symlink from default location to persistent disk
 ln -sf "$OPENPAW_WORKSPACE" /opt/render/.openpaw || true
 
+# Ensure bundled skills directory is found by the gateway
+for SKILLS_PATH in "./skills" "/opt/render/project/src/skills" "$(pwd)/skills"; do
+  if [ -d "$SKILLS_PATH" ]; then
+    export OPENPAW_BUNDLED_SKILLS_DIR="$SKILLS_PATH"
+    echo "Bundled skills dir: $OPENPAW_BUNDLED_SKILLS_DIR"
+    break
+  fi
+done
+
 # Sync bundled PawHub skills from repo to runtime directory
 echo "Syncing bundled PawHub skills..."
 mkdir -p "$OPENPAW_WORKSPACE/skills/pawhub"
