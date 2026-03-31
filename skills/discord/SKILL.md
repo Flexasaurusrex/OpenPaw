@@ -1,8 +1,8 @@
 ---
 name: discord
-description: "Discord ops via the message tool (channel=discord)."
+description: "Discord messaging and channel management via the message tool (channel=discord). Use when: sending Discord messages, reading channels, creating threads, managing reactions, polls, or pins in Discord servers."
 metadata: { "openpaw": { "emoji": "🎮", "requires": { "config": ["channels.discord.token"] } } }
-allowed-tools: ["message"]
+allowed-tools: "message"
 ---
 
 # Discord (Via `message`)

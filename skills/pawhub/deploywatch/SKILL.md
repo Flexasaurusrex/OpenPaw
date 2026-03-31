@@ -1,7 +1,6 @@
 ---
 name: deploywatch
 description: "GitHub Actions and deployment monitoring. Get notified when builds fail, deploys succeed, or tests break. Use when: managing CI/CD pipelines, tracking deployments, or debugging build failures. NOT for: running CI/CD itself, managing infrastructure, or container orchestration."
-homepage: https://pawhub.ai/deploywatch
 metadata:
   {
     "openpaw":
@@ -18,147 +17,115 @@ metadata:
               "label": "Install DeployWatch (npm)",
             },
           ],
+        "homepage": "https://pawhub.ai/deploywatch",
       },
   }
 ---
 
-# DeployWatch 🚀
+# DeployWatch
 
-Know the second your deploy succeeds or fails. GitHub Actions monitoring with intelligent alerts. No more refreshing the Actions tab.
+GitHub Actions monitoring with intelligent alerts. Watch repositories for workflow failures, deploy completions, and test breakages — get notified without polling the Actions tab.
 
 ## When to Use
 
-✅ **USE when:**
-
-- Monitoring GitHub Actions workflows
-- Tracking deployment status
-- Getting notified of test failures
-- Debugging CI/CD issues
-- Managing multiple repos
+- Monitoring GitHub Actions workflows and deployment status
+- Getting notified of build/test failures in real time
+- Debugging CI/CD issues by inspecting run logs
+- Tracking deployments across multiple repositories
 
 ## When NOT to Use
 
-❌ **DON'T use when:**
-
-- Running CI/CD itself → use GitHub Actions directly
-- Managing infrastructure → use Terraform, Pulumi
-- Container orchestration → use Kubernetes
-
-## Example Interactions
-
-**You:** Watch my repo: owner/repo
-
-**Paw:** *connects to GitHub*
-
-✅ **Watching:** owner/repo
-
-**Active workflows:**
-- Deploy to production (last run: 2 hours ago, ✅ success)
-- Run tests (last run: 15 minutes ago, ✅ passed)
-- Build Docker image (last run: 3 days ago, ✅ success)
-
-**Notifications:**
-- 🚨 Failed workflows (instant)
-- ✅ Successful deploys (summary)
-- ⏱️ Long-running builds (>10 min)
-
-I'll ping you when something breaks. 🎯
-
----
-
-**Deploy notification:**
-
-**Paw:** 🚀 **Deploy started:** owner/repo
-
-**Workflow:** Deploy to production
-**Commit:** `abc1234` — "fix: resolve auth bug"
-**Branch:** main
-**Triggered by:** @you
-
-**ETA:** ~5 minutes (based on history)
-
-I'll let you know when it's done. 😺
-
----
-
-**5 minutes later:**
-
-**Paw:** ✅ **Deploy succeeded:** owner/repo
-
-**Status:** Production is live
-**Duration:** 4m 32s
-**Commit:** `abc1234`
-
-**Checks:**
-- ✅ Tests passed
-- ✅ Build succeeded
-- ✅ Deploy completed
-
-**Live URL:** https://app.example.com
-
-Ship it and forget it. 🚀
-
----
-
-**Failed build:**
-
-**Paw:** 🚨 **Build failed:** owner/repo
-
-**Workflow:** Run tests
-**Commit:** `def5678` — "feat: add new feature"
-**Failed step:** "Run unit tests"
-
-**Error:**
-```
-TypeError: Cannot read property 'foo' of undefined
-  at tests/feature.test.js:42:18
-```
-
-**Actions:**
-- `/deploy logs` (view full logs)
-- `/deploy rerun` (retry failed jobs)
-- `/deploy diff def5678` (show commit changes)
-
-What do you want to do? 🔧
+- Running CI/CD itself — use GitHub Actions directly
+- Managing infrastructure — use Terraform, Pulumi
+- Container orchestration — use Kubernetes
 
 ## Commands
 
 ```bash
-# Watch repository
+# Watch a repository for workflow events
 deploywatch add owner/repo
 
-# Configure alerts
-deploywatch alerts config --on failure,success
+# Remove a watched repository
+deploywatch remove owner/repo
 
-# Show recent runs
+# List all watched repositories
+deploywatch list
+
+# Configure which events trigger alerts
+deploywatch alerts config --on failure,success,timeout
+
+# Show recent workflow runs for a repo
 deploywatch runs --repo owner/repo
 
-# View logs
+# Show runs filtered by status
+deploywatch runs --repo owner/repo --status failure
+
+# View full logs for a specific run
 deploywatch logs <run-id>
 
-# Rerun failed jobs
+# Rerun only the failed jobs in a run
 deploywatch rerun <run-id> --failed
+
+# Rerun an entire workflow run
+deploywatch rerun <run-id> --all
+
+# Show the diff for the commit that triggered a run
+deploywatch diff <run-id>
 ```
 
-## Telegram Integration
+## Alert Configuration
 
-**You:** `/deploy status owner/repo`
+DeployWatch sends alerts based on configurable event types:
 
-**Paw:** **owner/repo:** Latest runs
+| Event | Default | Description |
+|-------|---------|-------------|
+| `failure` | on | Workflow run failed |
+| `success` | off | Workflow run succeeded |
+| `timeout` | on | Run exceeded expected duration |
+| `cancelled` | off | Run was manually cancelled |
 
-✅ Deploy to prod — 2h ago
-✅ Tests — 15m ago
-✅ Build — 3d ago
+Configure per-repo overrides:
 
-All green. 🟢
+```bash
+deploywatch alerts config --repo owner/repo --on failure,timeout --off success
+```
 
-## Pricing
+## Example Interaction
 
-- **Free tier:** 1 repo, basic alerts
-- **Pro:** $12/month — 10 repos, custom alerts, analytics
+**User:** Watch my repo: owner/repo
 
-Install: [pawhub.ai/deploywatch](https://pawhub.ai/deploywatch)
+**DeployWatch:**
 
----
+```
+Watching: owner/repo
 
-Deploy with confidence. Paw's got your back. 🚀🐾
+Active workflows:
+  Deploy to production  — last run: 2h ago (success)
+  Run tests             — last run: 15m ago (passed)
+  Build Docker image    — last run: 3d ago (success)
+
+Alerts enabled: failure, timeout
+```
+
+**Later — build failure notification:**
+
+```
+BUILD FAILED: owner/repo
+Workflow: Run tests
+Commit:   def5678 — "feat: add new feature"
+Failed:   "Run unit tests"
+
+Error: TypeError: Cannot read property 'foo' of undefined
+       at tests/feature.test.js:42:18
+
+Actions:
+  deploywatch logs <run-id>
+  deploywatch rerun <run-id> --failed
+  deploywatch diff <run-id>
+```
+
+## Prerequisites
+
+- `gh` CLI authenticated with access to target repositories
+- `curl` available on PATH
+- Install: `npm install -g @pawhub/deploywatch`

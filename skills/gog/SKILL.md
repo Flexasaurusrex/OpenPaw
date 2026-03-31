@@ -1,7 +1,6 @@
 ---
 name: gog
-description: Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.
-homepage: https://gogcli.sh
+description: "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs via the gog command. Use when: sending emails, searching Gmail, managing calendar events, accessing Google Drive files, reading/writing Google Sheets, or exporting Google Docs."
 metadata:
   {
     "openpaw":
@@ -26,13 +25,13 @@ metadata:
 
 Use `gog` for Gmail/Calendar/Drive/Contacts/Sheets/Docs. Requires OAuth setup.
 
-Setup (once)
+## Setup
 
 - `gog auth credentials /path/to/client_secret.json`
 - `gog auth add you@gmail.com --services gmail,calendar,drive,contacts,docs,sheets`
 - `gog auth list`
 
-Common commands
+## Common Commands
 
 - Gmail search: `gog gmail search 'newer_than:7d' --max 10`
 - Gmail messages search (per email, ignores threading): `gog gmail messages search "in:inbox from:ryanair.com" --max 20 --account you@example.com`
@@ -58,7 +57,7 @@ Common commands
 - Docs export: `gog docs export <docId> --format txt --out /tmp/doc.txt`
 - Docs cat: `gog docs cat <docId>`
 
-Calendar Colors
+## Calendar Colors
 
 - Use `gog calendar colors` to see all available event colors (IDs 1-11)
 - Add colors to events with `--event-color <id>` flag
@@ -75,7 +74,7 @@ Calendar Colors
   - 10: #51b749
   - 11: #dc2127
 
-Email Formatting
+## Email Formatting
 
 - Prefer plain text. Use `--body-file` for multi-paragraph messages (or `--body-file -` for stdin).
 - Same `--body-file` pattern works for drafts and replies.
@@ -106,7 +105,7 @@ Email Formatting
     --body-html "<p>Hi Name,</p><p>Thanks for meeting today. Here are the next steps:</p><ul><li>Item one</li><li>Item two</li></ul><p>Best regards,<br>Your Name</p>"
   ```
 
-Notes
+## Notes
 
 - Set `GOG_ACCOUNT=you@gmail.com` to avoid repeating `--account`.
 - For scripting, prefer `--json` plus `--no-input`.

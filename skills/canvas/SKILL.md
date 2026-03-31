@@ -1,4 +1,9 @@
-# Canvas Skill
+---
+name: canvas
+description: "Display HTML content on connected OpenPaw nodes (Mac, iOS, Android) via the canvas tool. Use when: presenting web content, games, visualizations, dashboards, or interactive demos on connected devices."
+---
+
+# Canvas
 
 Display HTML content on connected OpenPaw nodes (Mac app, iOS, Android).
 
